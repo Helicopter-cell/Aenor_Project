@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+body {
+    background: image(url("{{ url_for('static', filename=static_path('|imagePATH|wood')) }}"));
+}
+</style>
+
+<iframe src="https://app.xmind.com/embed/j7iXDeTk?sheet-id=e5e161a0-cb5e-4ec7-a7f8-f3291052155a" 
+width="850px" 
+height="440"
+frameborder="0" 
+scrolling="no" 
+allow="fullscreen"
+style="margin: auto;">
+</iframe>
+
+<div style="
+padding: 25px;"></div> <!-- Juste pour faire un espace entre les deux éléments; -->
+
+<img src="{{ url_for('static', filename=static_path('|imagePATH|Map')) }}" alt="Carte" style="
+width: 850px; 
+height: auto; 
+margin: 0 auto; 
+display: block;">
+{% endblock %}

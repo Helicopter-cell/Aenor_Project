@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Aënor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename=static_path('|staticPATH|style')) }}">
+</head>
+<body>
+
+<img src="{{ url_for('static', filename=static_path('|imagePATH|Wood-IA')) }}" class="background-image">
+
+<img src="{{ url_for('static', filename=static_path('|imagePATH|Corner')) }}" class="corner-right">
+<img src="{{ url_for('static', filename=static_path('|imagePATH|Corner-Copie')) }}" class="corner-left">
+
+
+<!-- 🌿 CONTENU -->
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+
+</body>
+<footer>Robin   LALUNG-BONNAIRE</footer>
+</html>

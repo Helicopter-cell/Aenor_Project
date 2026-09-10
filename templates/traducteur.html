@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method="POST">
+    <input  type="text"
+            name="answer"
+            required
+            spellcheck="false"
+            autocorrect="off"
+            autocapitalize="off"
+            autocomplete="off">
+
+    <!-- IMPORTANT : type="button" pour éviter le refresh -->
+        <div class="energy-container">
+                <br>
+                <br>
+                <button id="energy-btn">Traduire</button>
+                <canvas id="energy-canvas"></canvas>
+        </div>
+
+    <output id="energie" name="correct"></output>
+</form>
+
+<script>
+  const texte = "{{ correct }}";
+  let i = 0;
+
+  function ecrire() {
+    if (i < texte.length) {
+      document.getElementById("trad-result").innerHTML += texte.charAt(i);
+      i++;
+      setTimeout(ecrire, 100);
+    }
+  }
+
+  ecrire();
+</script>
+<iframe width="110" height="200" src="https://www.myinstants.com/instant/faaah-63455/embed/" frameborder="0" scrolling="no"></iframe>
+<!-- JS particules chargé en dernier -->
+<script src="{{ url_for('static', filename=static_path('|jsPATH|Particles')) }}"></script>
+
+{% endblock %}

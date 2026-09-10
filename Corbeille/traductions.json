@@ -1,0 +1,278 @@
+[
+    {
+        "id": 1,
+        "francais": "Vous êtes forts, c'est vrai, mais eux le sont encore plus.",
+        "aenor": "sinoy bègorè to, oµo to valèn borya linoy bègorè gor to.",
+        "date": "2026-07-14T16:27:30"
+    },
+    {
+        "id": 2,
+        "francais": "Traduit de l'Aënor au français cette phrase : sinoy bègorè to, oµo to valèn borya linoy bègorè gor to.",
+        "aenor": "Vous êtes forts, c'est la vérité, mais ils sont plus forts.",
+        "date": "2026-07-14T16:39:21"
+    },
+    {
+        "id": 3,
+        "francais": "Si je suis plus rapide que toi, alors tu n'a aucune chance.",
+        "aenor": "doy jénolutèn melèn roy viroè gor doy §a",
+        "date": "2026-07-14T17:01:05"
+    },
+    {
+        "id": 4,
+        "francais": "Il pleut tant que l'homme ne voit plus rien...",
+        "aenor": "y²uao s\\* var binoteni lutèn dèpa",
+        "date": "2026-07-15T11:04:34"
+    },
+    {
+        "id": 5,
+        "francais": "Traduit du Français vers l'Aënor :Il pleut tellement que l'homme ne voit plus rien...",
+        "aenor": "y²uao b§ébè var binolutèn-xpa",
+        "date": "2026-07-15T12:08:53"
+    },
+    {
+        "id": 6,
+        "francais": "Traduit de l'Aënor vers le français : y²uao b§ébè var binolutèn-xpa",
+        "aenor": "Que la pluie abondante n'est pas vue du tout par l'homme.",
+        "date": "2026-07-15T12:12:30"
+    },
+    {
+        "id": 7,
+        "francais": "Le jambon c'est délicieux.",
+        "aenor": "s* {JAMBON} {DÉLICIEUX}",
+        "date": "2026-07-15T12:17:59"
+    },
+    {
+        "id": 8,
+        "francais": "Le soleil brille abondament.",
+        "aenor": "valè {BRILLE} {ABONDAMMENT}",
+        "date": "2026-07-15T12:20:16"
+    },
+    {
+        "id": 9,
+        "francais": "Il fait chaud en montagne.",
+        "aenor": "§yérè nè {MONTAGNE}",
+        "date": "2026-07-15T12:20:41"
+    },
+    {
+        "id": 10,
+        "francais": "Le ciel est bleu.",
+        "aenor": "alyér l*yon",
+        "date": "2026-07-15T12:25:10"
+    },
+    {
+        "id": 11,
+        "francais": "J'aime les fraises !",
+        "aenor": "roy s*né {FRAISES} mélino =;",
+        "date": "2026-07-15T12:29:43"
+    },
+    {
+        "id": 12,
+        "francais": "Aujourd'huui, j'ai essayé des chaussure ?",
+        "aenor": "roy yuné cèbar bal{ESSAYER}enoca {AUJOURD'HUI}",
+        "date": "2026-07-16T17:03:31"
+    },
+    {
+        "id": 13,
+        "francais": "J'ai très mal dormi sur mon lit.",
+        "aenor": "roy balnoren²o mèl *djolèay paj noryel r;j",
+        "date": "2026-07-16T17:05:17"
+    },
+    {
+        "id": 14,
+        "francais": "J'ai crocheté des vêtements, c'était trop génial ! (mieux que la dèrniere fois)",
+        "aenor": "yuné sèlyar roy bal{CROCHETO}. loy balto bègor²val {GENIAL} =; (=afè {DERNIÈRE FOIS})",
+        "date": "2026-07-16T17:06:56"
+    },
+    {
+        "id": 15,
+        "francais": "J'aime énormément écouter de la musique dehors.",
+        "aenor": "roy mélino b§ébè {ÉCOUTER} {MUSIQUE} val²nè",
+        "date": "2026-07-16T17:09:27"
+    },
+    {
+        "id": 16,
+        "francais": "J'ai un gros glaçon sur la tête. Canicule !",
+        "aenor": "yu {GLAÇON} jip§è pazo val {TÊTE} r;j. [[=;]] {CANICULE}",
+        "date": "2026-07-16T17:14:13"
+    },
+    {
+        "id": 17,
+        "francais": "Je suis arrivé à temps ! La bataille n'est pas terminée.",
+        "aenor": "[[roy balnexeno {À TEMPS} =; zadca {TERMINER}ten]]",
+        "date": "2026-07-17T00:28:17"
+    },
+    {
+        "id": 18,
+        "francais": "Pense-tu que cette plante est dangereuse ?",
+        "aenor": "doy méno-ca s* {PLANTE} {DANGEREUSE}-èpa",
+        "date": "2026-07-17T00:31:18"
+    },
+    {
+        "id": 19,
+        "francais": "Pense-tu que cette plante est dangereuse ?",
+        "aenor": "doy méno-ca s* {PLANTE} {DANGEREUSE} -xpa",
+        "date": "2026-07-17T17:49:00"
+    },
+    {
+        "id": 20,
+        "francais": "Traduit en français cette phrase : doy méno-ca s* {PLANTE} {DANGEREUSE} -xpa",
+        "aenor": "Tu penses que la {PLANTE} {DANGEREUSE} ?",
+        "date": "2026-07-17T17:52:34"
+    },
+    {
+        "id": 21,
+        "francais": "Ce gateau à mauvais gout... Peut etre que j'aurais du le manger plus tôt.",
+        "aenor": "{GATEAU} {MAUVAIS GOÛT} to. melpa roy lon²rynµareno-dor {PLUS TOT}.",
+        "date": "2026-07-17T18:00:14"
+    },
+    {
+        "id": 22,
+        "francais": "Traduit en français : {GATEAU} {MAUVAIS GOÛT} to. melpa roy lon²rynµareno-dor {PLUS TOT}.",
+        "aenor": "{GATEAU} est de {MAUVAIS GOÛT}. Peut-être j'aurais dû le manger {PLUS TOT}.",
+        "date": "2026-07-17T18:03:55"
+    },
+    {
+        "id": 23,
+        "francais": "J'ai 13 pomme et j'ai 15 ans. C'est égale à 2 pommes de moins que l'âge que j'ai.",
+        "aenor": "roy 11 {POMME} jéno bèya roy 13 {AN} jéno. {C'EST ÉGALE À} {AGE} roy jéno xpa {MOINS} 2 {POMME}.",
+        "date": "2026-07-17T22:19:16"
+    },
+    {
+        "id": 24,
+        "francais": "J'aime regarder la lune.",
+        "aenor": "roy norè bino-ja§",
+        "date": "2026-07-18T20:48:04"
+    },
+    {
+        "id": 25,
+        "francais": "Il fait beau dehors",
+        "aenor": "melyè val²nè",
+        "date": "2026-07-18T20:50:08"
+    },
+    {
+        "id": 26,
+        "francais": "Je suis un ornithorynque",
+        "aenor": "roy yu {ORNITHORYNQUE} to",
+        "date": "2026-07-18T20:52:00"
+    },
+    {
+        "id": 27,
+        "francais": "Je marche en parlant fort.",
+        "aenor": "roy daro bèya roy ba²lbèdo bègorèay",
+        "date": "2026-07-30T21:20:24"
+    },
+    {
+        "id": 28,
+        "francais": "Je marche en parlant fort.",
+        "aenor": "roy daro roy bal²bèdiyo bègorèay vaypa",
+        "date": "2026-07-30T21:20:30"
+    },
+    {
+        "id": 29,
+        "francais": "Lorsque j'étais en train de parler fortement, je marchais.",
+        "aenor": "roy daro roy bal²bèdiyo bègorèay vaypa",
+        "date": "2026-07-30T21:21:47"
+    },
+    {
+        "id": 30,
+        "francais": "Je marche lorsque j'étais en train de parler fortement.",
+        "aenor": "roy daro roy bal²bèdiyo bègorèay vaypa",
+        "date": "2026-07-30T21:33:51"
+    },
+    {
+        "id": 31,
+        "input": "Je vais aller dormir, donc j'éteind la lumière.",
+        "aenor": "roy fonnoro bensya valyé roy nor§o",
+        "date": "2026-07-31T00:42:17"
+    },
+    {
+        "id": 32,
+        "input": "Je dormirai donc j'éteins la lumière.",
+        "aenor": "roy fonnoro bensya valyé roy nor§o",
+        "date": "2026-07-31T00:43:16"
+    },
+    {
+        "id": 33,
+        "input": "il est très grand",
+        "output": "loy mèl gorè",
+        "date": "2026-07-31T14:21:49"
+    },
+    {
+        "id": 34,
+        "input": "il est très grand",
+        "output": "loy mèl gorè",
+        "date": "2026-07-31T14:40:18"
+    },
+    {
+        "id": 35,
+        "input": "il pleut",
+        "output": "y²uabo",
+        "date": "2026-07-31T14:57:26"
+    },
+    {
+        "id": 36,
+        "input": "il pleut",
+        "output": "y²uao",
+        "date": "2026-08-02T01:06:39"
+    },
+    {
+        "id": 37,
+        "input": "il est très grand",
+        "output": "loy mèl gorè",
+        "date": "2026-08-02T01:13:27"
+    },
+    {
+        "id": 38,
+        "input": "l'arbre est joli",
+        "output": "{ARBRE} maylè",
+        "date": "2026-08-02T01:13:59"
+    },
+    {
+        "id": 39,
+        "input": "Je suis sûr de moi.",
+        "output": "roy valènè",
+        "date": "2026-08-03T00:50:25"
+    },
+    {
+        "id": 40,
+        "input": "J'ai gagné 1400€",
+        "output": "roy balmelco§eno 988 {EURO}",
+        "date": "2026-08-03T00:51:05"
+    },
+    {
+        "id": 41,
+        "input": "Je dormirai donc j'éteindrai la lumière.",
+        "output": "roy fonnoro bensya valyé roy nor§o",
+        "date": "2026-08-03T00:56:11"
+    },
+    {
+        "id": 42,
+        "input": "Est-ce que tu entends ce bruit étrange ?",
+        "output": "doy sbègo/ {ÉTRANGE} tado-ca",
+        "date": "2026-08-03T00:59:38"
+    },
+    {
+        "id": 43,
+        "input": "le ciel est bleu",
+        "output": "s* alyér l*yon",
+        "date": "2026-08-03T22:24:34"
+    },
+    {
+        "id": 44,
+        "input": "Ma famille habite dans une petite maison.",
+        "output": "vèlinar r;j pazo nè yu bèran nèlyè",
+        "date": "2026-08-03T22:28:32"
+    },
+    {
+        "id": 45,
+        "input": "Le soleil brille fort aujourd'hui.",
+        "output": "valè §yéro bègorèay cayrè",
+        "date": "2026-08-03T22:31:51"
+    },
+    {
+        "id": 46,
+        "input": "il pleut",
+        "output": "y²uabo",
+        "date": "2026-08-03T23:07:43"
+    }
+]

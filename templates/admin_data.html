@@ -1,0 +1,183 @@
+{% extends 'base_admin.html' %}
+
+{% block content %}
+<div class="admin-container">
+  {% if not authenticated %}
+    <div class="admin-login-shell">
+      <h2>Administration — Connexion</h2>
+      {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+      {% endif %}
+      <form method="POST" action="{{ url_for('admin') }}" class="admin-login">
+        <label for="admin_password">Code administrateur</label>
+        <input id="admin_password" name="admin_password" type="password" required />
+        <button type="submit" class="btn btn-primary">Se connecter</button>
+      </form>
+      <p class="admin-back-link"><a href="/">Retour</a></p>
+    </div>
+  {% else %}
+    <div class="admin-header">
+      <div>
+        <p class="eyebrow">Administration</p>
+        <h2>Tableau de bord</h2>
+      </div>
+      <a href="{{ url_for('admin_logout') }}" class="btn-logout">Se déconnecter</a>
+    </div>
+
+    <div id="shutdown-message" class="shutdown-message hidden">Le serveur est en cours d’arrêt…</div>
+
+    <div class="admin-grid">
+      <section class="card-admin">
+        <h3>Panneau de contrôle</h3>
+        <div class="control-row">
+          <label>CACHED_CONTEXTS_ACTIVATION</label>
+          <button class="toggle-btn" data-key="CACHED_CONTEXTS_ACTIVATION" data-value="{{ '1' if cached_flag else '0' }}">{{ 'ON' if cached_flag else 'OFF' }}</button>
+        </div>
+        <div class="control-row">
+          <label>POOL_API_KEYS_ACTIVATION</label>
+          <button class="toggle-btn" data-key="POOL_API_KEYS_ACTIVATION" data-value="{{ '1' if pool_flag else '0' }}">{{ 'ON' if pool_flag else 'OFF' }}</button>
+        </div>
+        <div class="control-row">
+          <label>Mode Payant (Pay-as-you-go)</label>
+          <button class="toggle-btn toggle-btn-paid" data-key="PAIEMENT_ACTIVE" data-value="{{ '1' if paiement_active else '0' }}">{{ 'ON' if paiement_active else 'OFF' }}</button>
+        </div>
+        <div class="control-row">
+          <label>PRINT_GLOBAL_PROMPT</label>
+          <button class="toggle-btn" data-key="PRINT_GLOBAL_PROMPT" data-value="{{ '1' if print_global_prompt else '0' }}">{{ 'ON' if print_global_prompt else 'OFF' }}</button>
+        </div>
+      </section>
+
+      <section class="card-admin danger-zone">
+        <h3>Actions système</h3>
+        <p>Arrête proprement le service Flask et met fin aux sessions actives.</p>
+        <button id="shutdown-server-btn" class="btn btn-danger" type="button">Éteindre le serveur</button>
+      </section>
+
+      <section class="card-admin">
+        <h3>Métriques API Gemini</h3>
+        <div class="metrics-stack">
+          <div>
+            <h4>Derniers jours</h4>
+            <ul>
+              {% for day, count in per_day %}
+                <li>{{ day }} : {{ count }} requêtes</li>
+              {% else %}
+                <li>Aucune donnée</li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div>
+            <h4>Par semaine</h4>
+            <ul>
+              {% for week, count in per_week %}
+                <li>Semaine {{ week }} : {{ count }} requêtes</li>
+              {% else %}
+                <li>Aucune donnée</li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div>
+            <h4>Répartition par provenance</h4>
+            <ul>
+              {% for provenance, c in provenance_stats %}
+                <li>{{ provenance }} : {{ c }}</li>
+              {% else %}
+                <li>Aucune donnée</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card-admin">
+        <h3>Statistiques IP</h3>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>IP</th><th>Visites</th><th>Dernière</th></tr></thead>
+            <tbody>
+              {% for ip, visits, last_seen in ip_stats %}
+                <tr><td>{{ ip }}</td><td>{{ visits }}</td><td>{{ last_seen }}</td></tr>
+              {% else %}
+                <tr><td colspan="3">Aucune donnée</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="card-admin large">
+        <h3>Historique des traductions</h3>
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr><th>ID</th><th>Texte entrée</th><th>Traduction sortie</th><th>Date</th></tr>
+            </thead>
+            <tbody>
+              {% for id, inp, outp, date in translations %}
+                <tr>
+                  <td>{{ id }}</td>
+                  <td>{{ inp }}</td>
+                  <td>{{ outp }}</td>
+                  <td>{{ date }}</td>
+                </tr>
+              {% else %}
+                <tr><td colspan="4">Aucune traduction</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          {% if page > 1 %}
+            <a href="{{ url_for('admin') }}?page={{ page-1 }}">Précédent</a>
+          {% endif %}
+          <span>Page {{ page }}</span>
+          <a href="{{ url_for('admin') }}?page={{ page+1 }}">Suivant</a>
+        </div>
+      </section>
+
+    </div>
+
+    <script>
+      document.querySelectorAll('.toggle-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          const key = btn.getAttribute('data-key');
+          const current = btn.getAttribute('data-value');
+          const newVal = current === '1' ? '0' : '1';
+          fetch('{{ url_for("admin_toggle_config") }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'key=' + encodeURIComponent(key) + '&value=' + encodeURIComponent(newVal)
+          }).then(r => r.json()).then(data => {
+            if(data.success){
+              btn.setAttribute('data-value', data.value ? '1' : '0');
+              btn.textContent = data.value ? 'ON' : 'OFF';
+            } else {
+              alert('Erreur: '+(data.error||''));
+            }
+          }).catch(() => alert('Erreur réseau'));
+        });
+      });
+
+      const shutdownBtn = document.getElementById('shutdown-server-btn');
+      const shutdownMessage = document.getElementById('shutdown-message');
+      if (shutdownBtn) {
+        shutdownBtn.addEventListener('click', function () {
+          if (!confirm('Êtes-vous sûr de vouloir éteindre le serveur ?')) {
+            return;
+          }
+          shutdownMessage.classList.remove('hidden');
+          fetch('{{ url_for("admin_shutdown") }}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+          }).then(r => r.json()).then(data => {
+            if (!data.success) {
+              shutdownMessage.textContent = data.error || 'Erreur lors de l\'arrêt du serveur.';
+            }
+          }).catch(() => {
+            shutdownMessage.textContent = 'La demande a été envoyée, mais la réponse est indisponible pendant l\'arrêt.';
+          });
+        });
+      }
+    </script>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Aënor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename=static_path('|staticPATH|style')) }}">
+</head>
+<body>
+
+<img src="{{ url_for('static', filename=static_path('|imagePATH|Wood-IA')) }}" class="background-image">
+
+<img src="{{ url_for('static', filename=static_path('|imagePATH|Corner')) }}" class="corner-right">
+<img src="{{ url_for('static', filename=static_path('|imagePATH|Corner-Copie')) }}" class="corner-left">
+
+<script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/hatch.js"></script>
+
+<!-- 🌿 NAVBAR -->
+<nav class="navbar">
+    <a href="/" class="nav-element">Accueil</a>
+    <a href="/cours" class="nav-element">Lexique</a>
+    <a href="/exercice" class="nav-element">Exercices</a>
+    <a href="/grammaire_3" class="nav-element">Grammaire</a>
+    <a href="/ia-trad" class="nav-element">Traducteur</a>
+    <a href="/scenario" class="nav-element">Scénario</a>
+    <a href="/admin" class="nav-element">Admin</a>
+</nav>
+
+<!-- 🌿 CONTENU -->
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+
+</body>
+<footer>Robin   LALUNG-BONNAIRE</footer>
+</html>

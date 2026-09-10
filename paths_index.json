@@ -1,0 +1,56 @@
+{
+  "|rootPATH|app": "app.py",
+  "|rootPATH|grammaire_aenor": "grammaire_aenor.md",
+
+  "|dataPATH|SQLite": "data/SQLite.db",
+  "|dataPATH|aenor_lexique": "data/aenor_lexique.json",
+  "|dataPATH|non_traduits": "data/non_traduits.json",
+  "|dataPATH|grammaire_aenor-IA": "data/grammaire_aenor-IA.md",
+  "|dataPATH|prompt_trad_fr2ae": "data/prompt_trad_fr2ae.txt",
+  "|dataPATH|prompt_trad_ae2fr": "data/prompt_trad_ae2fr.txt",
+  "|dataPATH|prompt_exercice": "data/prompt_exercice.txt",
+
+  "|modulesPATH|init": "modules/__init__.py",
+  "|modulesPATH|base_converter": "modules/base_converter.py",
+  "|modulesPATH|conlang-update": "modules/conlang-update.py",
+  "|modulesPATH|correction": "modules/correction.py",
+  "|modulesPATH|exercices": "modules/exercices.py",
+  "|modulesPATH|HTML_version": "modules/HTML_version.py",
+  "|modulesPATH|IA_version": "modules/IA_version.py",
+  "|modulesPATH|utils": "modules/utils.py",
+
+  "|htmlPATH|admin_data": "templates/admin_data.html",
+  "|htmlPATH|base_admin": "templates/base_admin.html",
+  "|htmlPATH|base_without_navbar": "templates/base_without_navbar.html",
+  "|htmlPATH|base": "templates/base.html",
+  "|htmlPATH|cours": "templates/cours.html",
+  "|htmlPATH|exercice": "templates/exercice.html",
+  "|htmlPATH|grammaire": "templates/grammaire.html",
+  "|htmlPATH|grammaire_2": "templates/grammaire_2.html",
+  "|htmlPATH|grammaire_3": "templates/grammaire_3.html",
+  "|htmlPATH|IA-trad": "templates/IA-trad.html",
+  "|htmlPATH|index": "templates/index.html",
+  "|htmlPATH|result": "templates/result.html",
+  "|htmlPATH|scenario": "templates/scenario.html",
+  "|htmlPATH|traducteur": "templates/traducteur.html",
+
+  "|staticPATH|style": "static/CSS/style.css",
+
+  "|jsPATH|IA_trad": "static/js/IA_trad.js",
+  "|jsPATH|Particles": "static/js/Particles.js",
+
+  "|imagePATH|wood": "static/images/wood.webp",
+  "|imagePATH|Wood-IA": "static/images/Wood-IA.png",
+  "|imagePATH|Map": "static/images/Map.svg",
+  "|imagePATH|Logo-Aenor": "static/images/Logo-Aenor.png",
+  "|imagePATH|Corner": "static/images/Corner.png",
+  "|imagePATH|Corner-right": "static/images/Corner-right.svg",
+  "|imagePATH|Corner-left": "static/images/Corner-left.svg",
+  "|imagePATH|Corner-Copie": "static/images/Corner - Copie.png",
+
+  "|fontPATH|Aenor": "static/fonts/Aenor.ttf",
+  "|fontPATH|Aenor-sauv-1": "static/fonts/Aenor-sauv (1).ttf",
+  "|fontPATH|Aenor-sauv-2": "static/fonts/Aenor-sauv (2).ttf",
+  "|fontPATH|Aenor-sauv-3": "static/fonts/Aenor-sauv (3).ttf",
+  "|fontPATH|Aenor-sauv-4": "static/fonts/Aenor-sauv (4).ttf"
+}

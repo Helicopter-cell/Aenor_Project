@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="section-heading">Traducteur Aënor</h1>
+
+<div class="center-column">
+    <div class="direction-toggle">
+        <span class="direction-glider" aria-hidden="true"></span>
+
+        <label class="direction-option">
+            <input type="radio" name="direction" value="fr2aenor" checked>
+            <span class="direction-label">Français → Aënor</span>
+        </label>
+        
+        <label class="direction-option">
+            <input type="radio" name="direction" value="aenor2fr">
+            <span class="direction-label">Aënor → Français</span>
+        </label>
+    </div>
+
+    <div class="form-wrapper">
+        <input
+            id="prompt-fr"
+            type="text"
+            name="answer"
+            class="aenor"
+            required
+            spellcheck="false"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            placeholder="Écrivez votre phrase à traduire ici...">
+
+        <div class="button-row">
+            <button onclick="sendPrompt()" class="btn-IA-trad">Envoyer</button>
+        </div>
+    </div>
+</div>
+
+<div id="response"></div>
+
+<script src="{{ url_for('static', filename=static_path('|jsPATH|IA_trad')) }}"></script>
+
+{% endblock %}

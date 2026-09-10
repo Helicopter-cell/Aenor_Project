@@ -1,0 +1,55 @@
+{% extends 'base_without_navbar.html' %}
+
+{% block content %}
+<h1 class="Index-title">Où souhaitez-vous aller ?</h1>
+<div class="grid">
+    <a href="/grammaire_3" class="card-link">
+        <div class="card">
+            <span class="card-icon" id="svg-grm" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path pathLength="100" d="M12 3l-5 6h3l-5 6h4l-4 6h14l-4-6h4l-5-6h3z"/></svg>
+            </span>
+            <div class="card-content">
+                <h2>Grammaire</h2>
+                <p>Fonctionnement de ma langue, de A à Z</p>
+            </div>
+        </div>
+    </a>
+
+    <a href="/ia-trad" class="card-link">
+        <div class="card">
+            <span class="card-icon" id="svg-tra" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path pathLength="100" d="M4 8h13 M13 4l4 4-4 4 M20 16H7 M11 20l-4-4 4-4"/></svg>
+            </span>
+            <div class="card-content">
+                <h2>Traducteur</h2>
+                <p>Traducteur intelligent du Français à l'Aënor</p>
+            </div>
+        </div>
+    </a>
+
+    <a href="/exercice" class="card-link">
+        <div class="card">
+            <span class="card-icon" id="svg-exe" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path pathLength="100" d="M 12 3 a 9 9 0 1 0 0 18 a 9 9 0 1 0 0 -18 M8 12l3 3 5-6"/></svg>
+            </span>
+            <div class="card-content">
+                <h2>Exercices</h2>
+                <p>Pour tester vos connaissances</p>
+            </div>
+        </div>
+    </a>
+
+    <a href="/cours" class="card-link">
+        <div class="card">
+            <span class="card-icon" id="svg-lex" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path pathLength="100" d="M12 6c-2-1.5-5-2-8-1v13c3-1 6-0.5 8 1 2-1.5 5-2 8-1V5c-3-1-6-0.5-8 1z"/><path pathLength="100" d="M12 6v13"/></svg>
+            </span>
+            <div class="card-content">
+                <h2>Lexique</h2>
+                <p>Pour apprendre le vocabulaire</p>
+            </div>
+        </div>
+    </a>
+</div>
+
+{% endblock %}
