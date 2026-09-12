@@ -121,7 +121,7 @@ contexte ; au mieux (requêtes groupées), on profite pleinement de la remise de
 """
 
 CACHE_TTL_SECONDS = 600
-CACHE_REFRESH_MARGIN_SECONDS = 120  # Marge avant expiration pour tenter une prolongation (caches.update) plutôt qu'une recréation
+CACHE_REFRESH_MARGIN_SECONDS = 150  # Marge avant expiration pour tenter une prolongation (caches.update) plutôt qu'une recréation
 
 
 # ===========================================================================
@@ -294,9 +294,15 @@ def init_db():
                 timestamp TEXT NOT NULL,
                 provenance TEXT NOT NULL,
                 tokens INTEGER,
-                ip TEXT
+                ip TEXT,
+                response_time_ms REAL
             )
         ''')
+        existing_columns = {
+            row[1] for row in cursor.execute('PRAGMA table_info(api_logs)').fetchall()
+        }
+        if 'response_time_ms' not in existing_columns:
+            cursor.execute('ALTER TABLE api_logs ADD COLUMN response_time_ms REAL')
 
         # Table pour statistiques IP (agrégat rapide)
         cursor.execute('''
@@ -550,10 +556,39 @@ def warmup_gemini() -> None:
             if context:
                 get_or_create_cache(client, api_key, direction, context)
 
-def _log_token_usage(response) -> None:
-    """Affiche dans les logs la consommation de tokens (prompt / cache / réponse) d'un appel Gemini."""
+def _get_token_count(response) -> Optional[int]:
+    """Calcule le nombre de tokens facturables d'une réponse Gemini."""
     usage = getattr(response, 'usage_metadata', None)
     if not usage:
+        return None
+
+    try:
+        cached_tokens = getattr(usage, 'cached_content_token_count', 0) or 0
+        prompt_tokens = getattr(usage, 'prompt_token_count', 0) or 0
+        response_tokens = getattr(usage, 'candidates_token_count', 0) or 0
+        return int((prompt_tokens - cached_tokens) + response_tokens)
+    except (TypeError, ValueError):
+        return None
+
+
+def _get_request_ip() -> Optional[str]:
+    try:
+        return request.remote_addr if request else None
+    except RuntimeError:
+        return None
+
+
+def _log_token_usage(response, response_time_ms: Optional[float] = None) -> None:
+    """Affiche les tokens et la latence d'un appel Gemini dans les logs."""
+    usage = getattr(response, 'usage_metadata', None)
+    
+    # Si la réponse n'a pas de métadonnées d'usage
+    if not usage:
+        logger.info(
+            f'{JAUNE}| Latence Gemini: {response_time_ms / 1000:.2f} s |{RESET}'
+            if response_time_ms is not None else
+            f'{JAUNE}| Latence Gemini: inconnue |{RESET}'
+        )
         return
 
     cached_tokens = getattr(usage, 'cached_content_token_count', 0) or 0
@@ -561,9 +596,26 @@ def _log_token_usage(response) -> None:
     logger.info(
         f'{JAUNE}|📊 TOKENS -> Prompt: {BOLD}{ORANGE}{usage.prompt_token_count} {RESET} '
         f'{JAUNE}| Cache: {RESET}{ROUGE}{BOLD}{cached_tokens}{RESET} '
-        f'{JAUNE}| Réponse: {BOLD}{usage.candidates_token_count} |{RESET}')
-
+        f'{JAUNE}| Réponse: {BOLD}{usage.candidates_token_count} |{RESET} '
+        f'{JAUNE}Latence: {BOLD}{response_time_ms / 1000:.2f} s{RESET}'
+        if response_time_ms is not None else
+        f'{JAUNE}| Réponse: {BOLD}{usage.candidates_token_count} |{RESET} '
+        f'{JAUNE}Latence: inconnue{RESET}'
+    )
     logger.info(f'{JAUNE}+----------------------------+----------+-------------+{RESET}')
+
+
+def _call_gemini_with_latency(generate_content, provenance: str):
+    """Exécute un appel Gemini et journalise sa durée, succès ou exception comprise."""
+    response = None
+    started_at = time.perf_counter()
+    try:
+        response = generate_content()
+        return response
+    finally:
+        response_time_ms = (time.perf_counter() - started_at) * 1000
+        _log_token_usage(response, response_time_ms)
+        insert_api_log(provenance, _get_token_count(response), _get_request_ip(), response_time_ms)
 
 
 def _print_global_prompt(role: str, prompt: str) -> None:
@@ -625,15 +677,21 @@ def traduire_avec_gemini(texte_utilisateur: str, direction: str = 'fr2aenor', pr
             cache = get_or_create_cache(client, api_key, direction, context)
 
             if cache is not None and getattr(cache, 'name', None):
-                response = client.models.generate_content(
-                    model=get_current_models()[0],
-                    contents=texte_utilisateur,
-                    config=types.GenerateContentConfig(cached_content=cache.name),
+                response = _call_gemini_with_latency(
+                    lambda: client.models.generate_content(
+                        model=get_current_models()[0],
+                        contents=texte_utilisateur,
+                        config=types.GenerateContentConfig(cached_content=cache.name),
+                    ),
+                    provenance,
                 )
             else:
-                response = client.models.generate_content(
-                    model=get_current_models()[0],
-                    contents=prompt_fallback,
+                response = _call_gemini_with_latency(
+                    lambda: client.models.generate_content(
+                        model=get_current_models()[0],
+                        contents=prompt_fallback,
+                    ),
+                    provenance,
                 )
 
 
@@ -644,22 +702,6 @@ def traduire_avec_gemini(texte_utilisateur: str, direction: str = 'fr2aenor', pr
             traduction = process_aenor_numbers(traduction_brute)
             # -----------------------------------------
             
-            _log_token_usage(response)
-            try:
-                usage = getattr(response, 'usage_metadata', None)
-                tokens = None
-                if usage:
-                    cached_tokens = getattr(usage, 'cached_content_token_count', 0) or 0
-                    prompt_tokens = getattr(usage, 'prompt_token_count', 0) or 0
-                    resp_tokens = getattr(usage, 'candidates_token_count', 0) or 0
-                    tokens = int((prompt_tokens - cached_tokens) + resp_tokens)
-            except Exception:
-                tokens = None
-            try:
-                ip = request.remote_addr if request else None
-            except Exception:
-                ip = None
-            insert_api_log(provenance, tokens, ip)
             enregistrer_mots_non_traduits(traduction)
             # Sauvegarde en fonction du sens : sauvegarder_traduction(francais, aenor)
             if direction == 'aenor2fr':
@@ -689,7 +731,10 @@ def traduire_avec_gemini(texte_utilisateur: str, direction: str = 'fr2aenor', pr
     if legacy_client is not None and hasattr(legacy_client, 'GenerativeModel'):
         try:
             model = legacy_client.GenerativeModel(GEMINI_MODEL_LEGACY)
-            response = model.generate_content(prompt_fallback)
+            response = _call_gemini_with_latency(
+                lambda: model.generate_content(prompt_fallback),
+                provenance,
+            )
             
             # On récupère le texte brut de Gemini
             traduction_brute = getattr(response, 'text', str(response))
@@ -700,22 +745,6 @@ def traduire_avec_gemini(texte_utilisateur: str, direction: str = 'fr2aenor', pr
             
             # Le fallback legacy n'utilise pas de cache (aucun cached_content transmis),
             # mais on journalise quand même prompt/réponse pour garder une visibilité complète.
-            _log_token_usage(response)
-            try:
-                usage = getattr(response, 'usage_metadata', None)
-                tokens = None
-                if usage:
-                    cached_tokens = getattr(usage, 'cached_content_token_count', 0) or 0
-                    prompt_tokens = getattr(usage, 'prompt_token_count', 0) or 0
-                    resp_tokens = getattr(usage, 'candidates_token_count', 0) or 0
-                    tokens = int((prompt_tokens - cached_tokens) + resp_tokens)
-            except Exception:
-                tokens = None
-            try:
-                ip = request.remote_addr if request else None
-            except Exception:
-                ip = None
-            insert_api_log(provenance, tokens, ip)
             enregistrer_mots_non_traduits(traduction)
             if direction == 'aenor2fr':
                 sauvegarder_traduction(traduction, texte_utilisateur)
@@ -831,19 +860,24 @@ Traduction proposée par l'élève : "{reponse_user}"'''
         try:
             cache = get_or_create_cache(client, api_key, direction, context)
             if cache is not None and getattr(cache, 'name', None):
-                response = client.models.generate_content(
-                    model=get_current_models()[0],
-                    contents=prompt_evaluation,
-                    config=types.GenerateContentConfig(cached_content=cache.name),
+                response = _call_gemini_with_latency(
+                    lambda: client.models.generate_content(
+                        model=get_current_models()[0],
+                        contents=prompt_evaluation,
+                        config=types.GenerateContentConfig(cached_content=cache.name),
+                    ),
+                    'exercice',
                 )
             else:
-                response = client.models.generate_content(
-                    model=get_current_models()[0],
-                    contents=prompt_full,
+                response = _call_gemini_with_latency(
+                    lambda: client.models.generate_content(
+                        model=get_current_models()[0],
+                        contents=prompt_full,
+                    ),
+                    'exercice',
                 )
 
             reponse_brute = getattr(response, 'text', str(response))
-            _log_token_usage(response)
             # tenter d'extraire JSON
             json_text = _extract_json_text(reponse_brute)
             try:
@@ -855,22 +889,6 @@ Traduction proposée par l'élève : "{reponse_user}"'''
                     note = 0
                 note = max(0, min(10, note))
                 commentaire = str(parsed.get('commentaire', '') or '')
-                # log API
-                try:
-                    usage = getattr(response, 'usage_metadata', None)
-                    tokens = None
-                    if usage:
-                        cached_tokens = getattr(usage, 'cached_content_token_count', 0) or 0
-                        prompt_tokens = getattr(usage, 'prompt_token_count', 0) or 0
-                        resp_tokens = getattr(usage, 'candidates_token_count', 0) or 0
-                        tokens = int((prompt_tokens - cached_tokens) + resp_tokens)
-                except Exception:
-                    tokens = None
-                try:
-                    ip = request.remote_addr if request else None
-                except Exception:
-                    ip = None
-                insert_api_log('exercice', tokens, ip)
                 return {'note': note, 'commentaire': commentaire}
             except Exception as exc:
                 erreurs.append(f'Parsing JSON: {exc}')
@@ -889,7 +907,10 @@ Traduction proposée par l'élève : "{reponse_user}"'''
     if legacy_client is not None and hasattr(legacy_client, 'GenerativeModel'):
         try:
             model = legacy_client.GenerativeModel(GEMINI_MODEL_LEGACY)
-            response = model.generate_content(prompt_full)
+            response = _call_gemini_with_latency(
+                lambda: model.generate_content(prompt_full),
+                'exercice',
+            )
             reponse_brute = getattr(response, 'text', str(response))
             json_text = _extract_json_text(reponse_brute)
             try:
@@ -901,7 +922,6 @@ Traduction proposée par l'élève : "{reponse_user}"'''
                     note = 0
                 note = max(0, min(10, note))
                 commentaire = str(parsed.get('commentaire', '') or '')
-                insert_api_log('exercice', None, request.remote_addr if request else None)
                 return {'note': note, 'commentaire': commentaire}
             except Exception as exc:
                 erreurs.append(f'Parsing JSON (legacy): {exc}')
@@ -944,14 +964,22 @@ def before_request_log_ip():
         pass
 
 
-def insert_api_log(provenance: str, tokens: Optional[int], ip: Optional[str]) -> None:
+def insert_api_log(
+    provenance: str,
+    tokens: Optional[int],
+    ip: Optional[str],
+    response_time_ms: Optional[float] = None,
+) -> None:
     """Insère un enregistrement de log d'appel API dans la BDD (protégé contre injection)."""
     try:
         now = datetime.now().isoformat(timespec='seconds')
         with sqlite3.connect(DB_FILE) as conn:
             cur = conn.cursor()
-            cur.execute('INSERT INTO api_logs (timestamp, provenance, tokens, ip) VALUES (?, ?, ?, ?)',
-                        (now, provenance or 'autre', tokens, ip))
+            cur.execute(
+                'INSERT INTO api_logs '
+                '(timestamp, provenance, tokens, ip, response_time_ms) VALUES (?, ?, ?, ?, ?)',
+                (now, provenance or 'autre', tokens, ip, response_time_ms),
+            )
             conn.commit()
     except Exception as exc:
         logger.debug(f'Erreur insert_api_log: {exc}')

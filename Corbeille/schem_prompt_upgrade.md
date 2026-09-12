@@ -1,4 +1,4 @@
-# Architecture de gestion des prompts
+c# Architecture de gestion des prompts
 
 ## Fichiers sources et génération
 
