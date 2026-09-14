@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="feedback-page" aria-labelledby="feedback-title">
+    <header class="feedback-heading">
+        <p class="feedback-eyebrow">Le carnet d'Aënor</p>
+        <h1 id="feedback-title">Vos retours font évoluer l'application</h1>
+        <p>Une idée, une question ou un détail à améliorer ? Partagez-le avec la communauté.</p>
+    </header>
+
+    <section class="feedback-workspace">
+        <aside class="feedback-form-panel" aria-label="Publier un commentaire">
+            <span class="feedback-panel-mark" aria-hidden="true">✦</span>
+            <h2>Écrire un retour</h2>
+            {% if error %}<p class="feedback-error" role="alert">{{ error }}</p>{% endif %}
+            <form method="POST" class="feedback-form">
+                <label for="target_element">Cela concerne</label>
+                <select id="target_element" name="target_element" required>
+                    <option value="" disabled {% if not selected_target or selected_target == 'all' %}selected{% endif %}>Choisir un élément</option>
+                    {% for target in targets %}
+                    <option value="{{ target }}" {% if selected_target == target %}selected{% endif %}>{{ target }}</option>
+                    {% endfor %}
+                </select>
+                <label for="content">Votre commentaire</label>
+                <textarea id="content" name="content" rows="7" maxlength="2000" required placeholder="Ce qui fonctionne bien, ce qui pourrait être plus clair..."></textarea>
+                <div class="feedback-form-footer">
+                    <small>2000 caractères maximum</small>
+                    <button type="submit" class="btn btn-primary">Publier le retour</button>
+                </div>
+            </form>
+        </aside>
+
+        <section class="feedback-list-panel" aria-labelledby="feedback-list-title">
+            <div class="feedback-list-header">
+                <div>
+                    <p class="feedback-eyebrow">La voix des utilisateurs</p>
+                    <h2 id="feedback-list-title">Derniers commentaires</h2>
+                </div>
+                <span class="feedback-count">{{ comments|length }} retour{% if comments|length != 1 %}s{% endif %}</span>
+            </div>
+
+            <form class="feedback-toolbar" method="GET" aria-label="Filtrer et trier les commentaires">
+                <label for="feedback-filter">Filtrer</label>
+                <select id="feedback-filter" name="target">
+                    <option value="all" {% if selected_target == 'all' %}selected{% endif %}>Tous les éléments</option>
+                    {% for target in targets %}<option value="{{ target }}" {% if selected_target == target %}selected{% endif %}>{{ target }}</option>{% endfor %}
+                </select>
+                <label for="feedback-sort">Trier</label>
+                <select id="feedback-sort" name="sort">
+                    <option value="recent" {% if selected_sort == 'recent' %}selected{% endif %}>Plus récents</option>
+                    <option value="oldest" {% if selected_sort == 'oldest' %}selected{% endif %}>Plus anciens</option>
+                    <option value="popular" {% if selected_sort == 'popular' %}selected{% endif %}>Les plus aimés</option>
+                    <option value="longest" {% if selected_sort == 'longest' %}selected{% endif %}>Les plus détaillés</option>
+                </select>
+                <button type="submit" class="feedback-filter-submit">Appliquer</button>
+            </form>
+
+            {% if comments %}
+            <div class="feedback-cards" id="feedback-cards">
+                {% for comment in comments %}
+                <article class="feedback-card" tabindex="0" role="button" aria-expanded="false" data-comment-id="{{ comment['id'] }}" data-content="{{ comment['content']|e }}">
+                    <div class="feedback-card-topline"><span class="feedback-tag">{{ comment['target_element'] }}</span><time datetime="{{ comment['created_at'] }}">{{ comment['created_at'][:10] }}</time></div>
+                    <p class="feedback-excerpt">{{ comment['content'] }}</p>
+                    <div class="feedback-card-footer"><span class="feedback-expand-hint">Lire le commentaire</span><button type="button" class="feedback-like" data-like-id="{{ comment['id'] }}" aria-label="Aimer ce commentaire"><span aria-hidden="true">♡</span> <b>{{ comment['likes_count'] }}</b></button></div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="feedback-empty"><span aria-hidden="true">✦</span><p>Aucun retour ne correspond à ce filtre.</p></div>
+            {% endif %}
+        </section>
+    </section>
+</main>
+
+<dialog class="feedback-modal" id="feedback-modal" aria-labelledby="feedback-modal-title">
+    <button type="button" class="feedback-modal-close" aria-label="Fermer">×</button>
+    <span class="feedback-tag" id="feedback-modal-tag"></span>
+    <h2 id="feedback-modal-title">Commentaire</h2>
+    <p id="feedback-modal-content"></p>
+    <time id="feedback-modal-date"></time>
+</dialog>
+<script src="{{ url_for('static', filename=static_path('|jsPATH|feedback')) }}"></script>
+{% endblock %}

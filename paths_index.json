@@ -32,6 +32,7 @@
   "|htmlPATH|index": "templates/index.html",
   "|htmlPATH|result": "templates/result.html",
   "|htmlPATH|scenario": "templates/scenario.html",
+  "|htmlPATH|commentaires": "templates/commentaires.html",
   "|htmlPATH|traducteur": "templates/traducteur.html",
 
   "|staticPATH|style": "static/CSS/style.css",
@@ -39,6 +40,7 @@
 
   "|jsPATH|IA_trad": "static/js/IA_trad.js",
   "|jsPATH|Particles": "static/js/Particles.js",
+  "|jsPATH|feedback": "static/js/feedback.js",
 
   "|imagePATH|wood": "static/images/wood.webp",
   "|imagePATH|Wood-IA": "static/images/Wood-IA.png",

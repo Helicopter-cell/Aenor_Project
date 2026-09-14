@@ -160,6 +160,16 @@ LEGACY_CONFIGURED_KEY: Optional[str] = None  # Dernière clé utilisée pour con
 # --- Pour l'enregistrment des traductions ---
 DB_FILE = str(get_path('|dataPATH|SQLite'))
 
+FEEDBACK_TARGETS = (
+    'Grammaire',
+    'Lexique',
+    'Traducteur',
+    'Interface',
+    'Exercices',
+    'Problèmes techniques',
+    'Autre',
+)
+
 PRINT_GLOBAL_PROMPT = False
 
 
@@ -325,6 +335,15 @@ def init_db():
             CREATE TABLE IF NOT EXISTS app_config (
                 key TEXT PRIMARY KEY,
                 value TEXT
+            )
+        ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS feedback (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                target_element TEXT NOT NULL,
+                content TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                likes_count INTEGER NOT NULL DEFAULT 0
             )
         ''')
 
@@ -1216,6 +1235,85 @@ def ia_trad():
 def scenario():
     return render_template('scenario.html')
 
+@app.route('/commentaires', methods=['GET', 'POST'])
+def commentaires():
+    """Affiche et enregistre les retours publics des utilisateurs."""
+    if request.method == 'POST':
+        target_element = request.form.get('target_element', '').strip()
+        content = request.form.get('content', '').strip()
+        if target_element not in FEEDBACK_TARGETS or not content:
+            return render_template(
+                'commentaires.html',
+                comments=[],
+                targets=FEEDBACK_TARGETS,
+                selected_target=target_element,
+                selected_sort='recent',
+                error='Sélectionnez un élément et rédigez un commentaire.',
+            ), 400
+        if len(content) > 2000:
+            return render_template(
+                'commentaires.html',
+                comments=[],
+                targets=FEEDBACK_TARGETS,
+                selected_target=target_element,
+                selected_sort='recent',
+                error='Votre commentaire ne peut pas dépasser 2000 caractères.',
+            ), 400
+
+        with sqlite3.connect(DB_FILE) as conn:
+            conn.execute(
+                'INSERT INTO feedback (target_element, content, created_at) VALUES (?, ?, ?)',
+                (target_element, content, datetime.now().isoformat(timespec='seconds')),
+            )
+            conn.commit()
+        return redirect(url_for('commentaires'))
+
+    selected_target = request.args.get('target', 'all')
+    if selected_target not in FEEDBACK_TARGETS:
+        selected_target = 'all'
+    selected_sort = request.args.get('sort', 'recent')
+    sort_sql = {
+        'recent': 'created_at DESC, id DESC',
+        'oldest': 'created_at ASC, id ASC',
+        'popular': 'likes_count DESC, created_at DESC, id DESC',
+        'longest': 'LENGTH(content) DESC, created_at DESC, id DESC',
+    }.get(selected_sort, 'created_at DESC, id DESC')
+    if selected_sort not in ('recent', 'oldest', 'popular', 'longest'):
+        selected_sort = 'recent'
+
+    with sqlite3.connect(DB_FILE) as conn:
+        conn.row_factory = sqlite3.Row
+        query = 'SELECT id, target_element, content, created_at, likes_count FROM feedback'
+        params = []
+        if selected_target != 'all':
+            query += ' WHERE target_element = ?'
+            params.append(selected_target)
+        query += f' ORDER BY {sort_sql}'
+        comments = conn.execute(query, params).fetchall()
+
+    return render_template(
+        'commentaires.html',
+        comments=comments,
+        targets=FEEDBACK_TARGETS,
+        selected_target=selected_target,
+        selected_sort=selected_sort,
+    )
+
+@app.route('/api/like_comment/<int:comment_id>', methods=['POST'])
+def like_comment(comment_id):
+    """Ajoute un like à un commentaire existant sans recharger la page."""
+    with sqlite3.connect(DB_FILE) as conn:
+        cursor = conn.execute(
+            'UPDATE feedback SET likes_count = likes_count + 1 WHERE id = ?',
+            (comment_id,),
+        )
+        if cursor.rowcount == 0:
+            return jsonify({'success': False, 'error': 'Commentaire introuvable'}), 404
+        likes_count = conn.execute(
+            'SELECT likes_count FROM feedback WHERE id = ?', (comment_id,)
+        ).fetchone()[0]
+        conn.commit()
+    return jsonify({'success': True, 'likes_count': likes_count})
 
 
 
