@@ -1,0 +1,22 @@
+.background-image {
+    filter: contrast(1) sepia(0.001) opacity(1) brightness(1.0);
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    z-index: -1;
+}
+
+.corner-left {
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    width: 125px;
+}
+
+.corner-right {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    width: 125px;
+}

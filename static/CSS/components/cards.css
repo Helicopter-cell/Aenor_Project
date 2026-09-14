@@ -1,0 +1,164 @@
+.card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 22px;
+}
+
+.card-link:focus-visible {
+    outline: 2px solid #162d18;
+    outline-offset: 4px;
+}
+
+.card-admin {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 34px 28px;
+    border-radius: 22px;
+    background: linear-gradient(155deg, #00000033 0%, #00000050 100%);
+    border: 1px solid rgba(22, 45, 24, 0.25);
+    box-shadow:
+        6px 6px 14px rgba(47, 62, 47, 0.18),
+        -4px -4px 10px rgba(255, 255, 255, 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.card-admin::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 85% -10%, rgba(26, 26, 26, 0.25), transparent 60%);
+    pointer-events: none;
+}
+
+.card-admin:hover,
+.card-link:focus-visible .card-admin {
+    background: linear-gradient(155deg, rgba(20, 20, 20, 0.66) 0%, rgba(20, 20, 20, 0.66) 100%);
+    box-shadow:
+        10px 10px 22px rgba(47, 62, 47, 0.25),
+        -6px -6px 14px rgba(255, 255, 255, 0.45);
+}
+
+.card-admin:active {
+    box-shadow:
+        inset 3px 3px 8px rgba(0, 0, 0, 0.15),
+        inset -3px -3px 8px rgba(255, 255, 255, 0.25);
+}
+
+.card {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 34px 28px;
+    border-radius: 22px;
+    background: linear-gradient(155deg, #8fb37e 0%, #6f9760 100%);
+    border: 1px solid rgba(22, 45, 24, 0.25);
+    box-shadow:
+        6px 6px 14px rgba(47, 62, 47, 0.18),
+        -4px -4px 10px rgba(255, 255, 255, 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 85% -10%, rgba(255, 255, 255, 0.25), transparent 60%);
+    pointer-events: none;
+}
+
+.card:hover,
+.card-link:focus-visible .card {
+    transform: translateY(-6px);
+    background: linear-gradient(155deg, #9db07c 0%, #7fa06b 100%);
+    box-shadow:
+        10px 10px 22px rgba(47, 62, 47, 0.25),
+        -6px -6px 14px rgba(255, 255, 255, 0.45);
+}
+
+.card:active {
+    transform: translateY(-2px);
+    box-shadow:
+        inset 3px 3px 8px rgba(0, 0, 0, 0.15),
+        inset -3px -3px 8px rgba(255, 255, 255, 0.25);
+}
+
+.card-icon {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.card-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: #162d18;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.card-icon svg path {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+}
+
+#svg-tra svg path { transition: stroke-dashoffset 2.75s ease; }
+#svg-grm svg path { transition: stroke-dashoffset 1s ease; }
+#svg-lex svg path { transition: stroke-dashoffset 1.0s ease; }
+#svg-exe svg path { transition: stroke-dashoffset 1.0s ease; }
+
+.card:hover .card-icon svg path {
+    stroke-dashoffset: 0;
+}
+
+.card h2 {
+    font-family: 'Fraunces', 'Segoe UI', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.35em;
+    margin: 0;
+    color: #162d18;
+}
+
+.card p {
+    margin: 0;
+    font-size: 0.95em;
+    line-height: 1.45;
+    color: rgba(22, 45, 24, 0.82);
+}
+
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: 1fr;
+        padding: 16px;
+        gap: 18px;
+    }
+
+    .card {
+        padding: 26px 22px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .card,
+    .card-icon svg path {
+        transition: none;
+    }
+}

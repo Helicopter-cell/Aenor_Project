@@ -1,0 +1,18 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #e0e8ddf6;
+    color: #2f3e2f;
+    font-size: 1em;
+}
+
+.admin-body {
+    background:
+        radial-gradient(circle at top, rgba(75, 128, 92, 0.28), transparent 38%),
+        linear-gradient(180deg, #09110c 0%, #111a15 30%, #0c120e 100%);
+    color: #edf5ee;
+}
+
+.hidden {
+    display: none;
+}

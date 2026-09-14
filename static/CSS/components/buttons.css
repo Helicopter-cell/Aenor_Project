@@ -1,0 +1,54 @@
+.toggle-btn,
+.btn {
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.toggle-btn {
+    min-width: 78px;
+    background: rgba(82, 107, 86, 0.75);
+    color: #f4fbf4;
+}
+
+.toggle-btn-paid {
+    background: rgba(93, 126, 83, 0.9);
+}
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    min-height: 46px;
+}
+
+.btn:hover,
+.toggle-btn:hover,
+.btn-danger:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #90c48d, #6daa74);
+    color: #0f170f;
+}
+
+.btn-logout {
+    background: rgba(97, 121, 100, 0.35);
+    color: #edf5ee;
+    border: 1px solid rgba(178, 225, 186, 0.18);
+    border-radius: 999px;
+    padding: 10px 16px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff5a5a, #d32626);
+    color: white;
+    width: 100%;
+}

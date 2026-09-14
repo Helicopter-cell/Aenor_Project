@@ -1,0 +1,110 @@
+.result {
+    font-size: 2em;
+    margin-bottom: 15px;
+}
+
+#trad-result {
+    font-size: 3em;
+    font-weight: 550;
+    color: #303030;
+    font-family: 'Aenor', sans-serif;
+    background: #0ada481a;
+    padding: 0px 4px;
+    border-radius: 23px;
+    margin-top: 25px, auto;
+    max-width: 800px;
+    text-align: center;
+}
+
+a {
+    display: inline-block;
+    margin-top: 20px;
+    color: #588157;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+table {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    table-layout: auto;
+    border-collapse: collapse;
+    background-color: #ffffff7d;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #c7d7b7;
+}
+
+th {
+    background: linear-gradient(135deg, #588157db 0%, #3a5a40dd 100%);
+    color: white;
+    padding: 16px 12px;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #3a5a40;
+    font-size: 0.95em;
+}
+
+td {
+    border: 1px solid #e0e8dd;
+    padding: 14px 12px;
+    text-align: center;
+    color: #2f3e2f;
+    font-size: 0.95em;
+}
+
+tr:nth-child(even) {
+    background-color: #f5f8f3;
+}
+
+tr:hover:not(:first-child) {
+    background-color: #e8f0e5;
+    transition: background-color 0.2s ease;
+}
+
+.energy-container {
+    position: relative;
+    display: inline-block;
+}
+
+#energy-btn {
+    padding: 5px 10px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #0fbd43b5;
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 5;
+    transition: background-color 0.3s ease;
+}
+
+#energy-btn:hover {
+    background-color: #266300c7;
+}
+
+#energy-canvas {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 1;
+    width: 635px;
+    height: 285px;
+}
+
+footer {
+    background-color: rgba(50, 90, 50, 0.9);
+    color: rgb(205, 240, 205);
+    text-align: center;
+    padding: 10px;
+}

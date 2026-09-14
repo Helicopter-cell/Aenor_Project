@@ -35,6 +35,7 @@
   "|htmlPATH|traducteur": "templates/traducteur.html",
 
   "|staticPATH|style": "static/CSS/style.css",
+  "|staticPATH|main": "static/CSS/main.css",
 
   "|jsPATH|IA_trad": "static/js/IA_trad.js",
   "|jsPATH|Particles": "static/js/Particles.js",

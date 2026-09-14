@@ -1,0 +1,24 @@
+.admin-shell {
+    width: min(1280px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 36px 0 60px;
+}
+
+.admin-container {
+    background: rgba(14, 22, 17, 0.72);
+    border: 1px solid rgba(140, 185, 155, 0.2);
+    border-radius: 24px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+    padding: 28px;
+    backdrop-filter: blur(8px);
+}
+
+.container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 60px 10%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
