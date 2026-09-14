@@ -266,6 +266,106 @@ body {
     display: none;
 }
 
+#admin-dashboard .control-row .toggle-btn {
+    font-size: 0.86rem;
+}
+
+#admin-dashboard .admin-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: #edf5ee;
+    font-size: 0.88rem;
+}
+
+#admin-dashboard .admin-table th,
+#admin-dashboard .admin-table td {
+    padding: 9px 10px;
+    border-bottom: 1px solid rgba(184, 216, 191, 0.12);
+    vertical-align: top;
+    text-align: left;
+}
+
+#admin-dashboard .admin-table th {
+    color: #a9c8ad;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+#admin-dashboard .admin-table tbody tr:hover {
+    background: rgba(157, 208, 163, 0.07);
+}
+
+#admin-dashboard .pagination-pages {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+#admin-dashboard .pagination-pages a,
+#admin-dashboard .pagination-pages strong {
+    min-width: 28px;
+    padding: 5px 7px;
+    border-radius: 7px;
+    text-align: center;
+}
+
+#admin-dashboard .pagination-pages strong {
+    background: #9dd0a3;
+    color: #0f170f;
+}
+
+#admin-dashboard .admin-charts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(1, 2fr));
+    gap: 16px;
+}
+
+#admin-dashboard .admin-chart {
+    min-height: 230px;
+}
+
+#admin-dashboard .admin-chart canvas {
+    width: 100% !important;
+    height: 190px !important;
+}
+
+#admin-dashboard .admin-log-wrap {
+    max-height: 360px;
+    overflow: auto;
+}
+
+#admin-dashboard .admin-log-table {
+    min-width: 680px;
+}
+
+#admin-dashboard .log-status {
+    display: inline-block;
+    padding: 3px 7px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+#admin-dashboard .log-status-success {
+    background: rgba(100, 190, 123, 0.18);
+    color: #a9e3b1;
+}
+
+#admin-dashboard .log-status-error {
+    background: rgba(236, 105, 105, 0.18);
+    color: #ffb0b0;
+}
+
+#admin-dashboard .admin-log-note {
+    margin: 10px 0 0;
+    color: #9eb9a2;
+    font-size: 0.78rem;
+}
+
 @media (max-width: 700px) {
     .admin-container {
         padding: 18px 14px;
@@ -278,6 +378,10 @@ body {
 
     .card-admin.large {
         grid-column: auto;
+    }
+
+    #admin-dashboard .admin-charts {
+        grid-template-columns: 1fr;
     }
 }
 

@@ -1,7 +1,11 @@
 {% extends 'base_admin.html' %}
 
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
+{% endblock %}
+
 {% block content %}
-<div class="admin-container">
+<div id="admin-dashboard" class="admin-container">
   {% if not authenticated %}
     <div class="admin-login-shell">
       <h2>Administration — Connexion</h2>
@@ -45,54 +49,23 @@
           <label>PRINT_GLOBAL_PROMPT</label>
           <button class="toggle-btn" data-key="PRINT_GLOBAL_PROMPT" data-value="{{ '1' if print_global_prompt else '0' }}">{{ 'ON' if print_global_prompt else 'OFF' }}</button>
         </div>
-      </section>
-
-      <section class="card-admin danger-zone">
-        <h3>Actions système</h3>
-        <p>Arrête proprement le service Flask et met fin aux sessions actives.</p>
+        <br>
+        <br>
         <button id="shutdown-server-btn" class="btn btn-danger" type="button">Éteindre le serveur</button>
       </section>
 
-      <section class="card-admin">
+      <section class="card-admin large">
         <h3>Métriques API Gemini</h3>
-        <div class="metrics-stack">
-          <div>
-            <h4>Derniers jours</h4>
-            <ul>
-              {% for day, count in per_day %}
-                <li>{{ day }} : {{ count }} requêtes</li>
-              {% else %}
-                <li>Aucune donnée</li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div>
-            <h4>Par semaine</h4>
-            <ul>
-              {% for week, count in per_week %}
-                <li>Semaine {{ week }} : {{ count }} requêtes</li>
-              {% else %}
-                <li>Aucune donnée</li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div>
-            <h4>Répartition par provenance</h4>
-            <ul>
-              {% for provenance, c in provenance_stats %}
-                <li>{{ provenance }} : {{ c }}</li>
-              {% else %}
-                <li>Aucune donnée</li>
-              {% endfor %}
-            </ul>
-          </div>
+        <div class="admin-charts">
+          <div class="admin-chart"><h4>Latence des requêtes</h4><canvas id="latency-chart"></canvas></div>
+          <div class="admin-chart"><h4>Consommation de tokens</h4><canvas id="tokens-chart"></canvas></div>
         </div>
       </section>
 
       <section class="card-admin">
         <h3>Statistiques IP</h3>
         <div class="table-wrap">
-          <table class="table">
+          <table class="admin-table">
             <thead><tr><th>IP</th><th>Visites</th><th>Dernière</th></tr></thead>
             <tbody>
               {% for ip, visits, last_seen in ip_stats %}
@@ -107,7 +80,7 @@
       <section class="card-admin large">
         <h3>Historique des traductions</h3>
         <div class="table-wrap">
-          <table class="table">
+          <table class="admin-table">
             <thead>
               <tr><th>ID</th><th>Texte entrée</th><th>Traduction sortie</th><th>Date</th></tr>
             </thead>
@@ -126,12 +99,37 @@
           </table>
         </div>
         <div class="pagination">
-          {% if page > 1 %}
-            <a href="{{ url_for('admin') }}?page={{ page-1 }}">Précédent</a>
-          {% endif %}
-          <span>Page {{ page }}</span>
-          <a href="{{ url_for('admin') }}?page={{ page+1 }}">Suivant</a>
+          {% if page > 1 %}<a href="{{ url_for('admin') }}?page={{ page-1 }}">Précédent</a>{% else %}<span></span>{% endif %}
+          <div class="pagination-pages" aria-label="Pages des traductions">
+            {% for page_number in range(1, total_pages + 1) %}
+              {% if page_number == page %}<strong aria-current="page">{{ page_number }}</strong>{% else %}<a href="{{ url_for('admin') }}?page={{ page_number }}">{{ page_number }}</a>{% endif %}
+            {% endfor %}
+          </div>
+          {% if page < total_pages %}<a href="{{ url_for('admin') }}?page={{ page+1 }}">Suivant</a>{% else %}<span></span>{% endif %}
         </div>
+      </section>
+
+      <section class="card-admin large">
+        <h3>Journal des appels API</h3>
+        <div class="admin-log-wrap">
+          <table class="admin-table admin-log-table">
+            <thead><tr><th>Horodatage</th><th>Endpoint</th><th>Latence</th><th>Statut</th><th>Tokens</th></tr></thead>
+            <tbody>
+              {% for timestamp, endpoint, response_time_ms, status, tokens, prompt_tokens, cached_tokens, response_tokens in api_logs %}
+                <tr>
+                  <td>{{ timestamp }}</td>
+                  <td>{{ endpoint }}</td>
+                  <td>{{ '%.1f ms'|format(response_time_ms) if response_time_ms is not none else '—' }}</td>
+                  <td><span class="log-status log-status-{{ status|lower }}">{{ status }}</span></td>
+                  <td>{{ tokens if tokens is not none else '—' }}</td>
+                </tr>
+              {% else %}
+                <tr><td colspan="5">Aucun appel API enregistré</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p class="admin-log-note">Les 100 appels les plus récents sont affichés.</p>
       </section>
 
     </div>
@@ -177,6 +175,25 @@
           });
         });
       }
+
+      window.addEventListener('load', function () {
+        if (!window.Chart) return;
+        const labels = [];
+        const latencies = [];
+        const promptTokens = [];
+        const cachedTokens = [];
+        const responseTokens = [];
+        {% for timestamp, endpoint, response_time_ms, status, tokens, prompt_tokens, cached_tokens, response_tokens in api_logs %}
+          labels.push({{ timestamp|tojson }});
+          latencies.push({{ response_time_ms|default(0, true)|tojson }});
+          promptTokens.push({{ prompt_tokens|default(0, true)|tojson }});
+          cachedTokens.push({{ cached_tokens|default(0, true)|tojson }});
+          responseTokens.push({{ response_tokens|default(0, true)|tojson }});
+        {% endfor %}
+        const chartOptions = { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#dfeee0' } } }, scales: { x: { ticks: { color: '#a9c8ad', maxRotation: 45, autoSkip: true }, grid: { color: 'rgba(184, 216, 191, 0.08)' } }, y: { beginAtZero: true, ticks: { color: '#a9c8ad' }, grid: { color: 'rgba(184, 216, 191, 0.08)' } } } };
+        new Chart(document.getElementById('latency-chart'), { type: 'line', data: { labels, datasets: [{ label: 'ms', data: latencies, borderColor: '#9dd0a3', backgroundColor: 'rgba(157, 208, 163, 0.14)', fill: true, tension: 0.3 }] }, options: chartOptions });
+        new Chart(document.getElementById('tokens-chart'), { type: 'bar', data: { labels, datasets: [{ label: 'Prompt', data: promptTokens, backgroundColor: '#9dd0a3' }, { label: 'Cache', data: cachedTokens, backgroundColor: '#d6a85d' }, { label: 'Réponse', data: responseTokens, backgroundColor: '#d97878' }] }, options: chartOptions });
+      });
     </script>
   {% endif %}
 </div>

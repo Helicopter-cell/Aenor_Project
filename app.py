@@ -301,8 +301,15 @@ def init_db():
         existing_columns = {
             row[1] for row in cursor.execute('PRAGMA table_info(api_logs)').fetchall()
         }
-        if 'response_time_ms' not in existing_columns:
-            cursor.execute('ALTER TABLE api_logs ADD COLUMN response_time_ms REAL')
+        for column_name, column_type in (
+            ('response_time_ms', 'REAL'),
+            ('prompt_tokens', 'INTEGER'),
+            ('cached_tokens', 'INTEGER'),
+            ('response_tokens', 'INTEGER'),
+            ('status', "TEXT NOT NULL DEFAULT 'success'"),
+        ):
+            if column_name not in existing_columns:
+                cursor.execute(f'ALTER TABLE api_logs ADD COLUMN {column_name} {column_type}')
 
         # Table pour statistiques IP (agrégat rapide)
         cursor.execute('''
@@ -571,6 +578,22 @@ def _get_token_count(response) -> Optional[int]:
         return None
 
 
+def _get_token_usage(response) -> Tuple[Optional[int], Optional[int], Optional[int]]:
+    """Retourne les compteurs prompt, cache et réponse d'un appel Gemini."""
+    usage = getattr(response, 'usage_metadata', None)
+    if not usage:
+        return None, None, None
+
+    try:
+        return (
+            int(getattr(usage, 'prompt_token_count', 0) or 0),
+            int(getattr(usage, 'cached_content_token_count', 0) or 0),
+            int(getattr(usage, 'candidates_token_count', 0) or 0),
+        )
+    except (TypeError, ValueError):
+        return None, None, None
+
+
 def _get_request_ip() -> Optional[str]:
     try:
         return request.remote_addr if request else None
@@ -615,7 +638,17 @@ def _call_gemini_with_latency(generate_content, provenance: str):
     finally:
         response_time_ms = (time.perf_counter() - started_at) * 1000
         _log_token_usage(response, response_time_ms)
-        insert_api_log(provenance, _get_token_count(response), _get_request_ip(), response_time_ms)
+        prompt_tokens, cached_tokens, response_tokens = _get_token_usage(response)
+        insert_api_log(
+            provenance,
+            _get_token_count(response),
+            _get_request_ip(),
+            response_time_ms,
+            prompt_tokens,
+            cached_tokens,
+            response_tokens,
+            'success' if response is not None else 'error',
+        )
 
 
 def _print_global_prompt(role: str, prompt: str) -> None:
@@ -969,6 +1002,10 @@ def insert_api_log(
     tokens: Optional[int],
     ip: Optional[str],
     response_time_ms: Optional[float] = None,
+    prompt_tokens: Optional[int] = None,
+    cached_tokens: Optional[int] = None,
+    response_tokens: Optional[int] = None,
+    status: str = 'success',
 ) -> None:
     """Insère un enregistrement de log d'appel API dans la BDD (protégé contre injection)."""
     try:
@@ -977,8 +1014,13 @@ def insert_api_log(
             cur = conn.cursor()
             cur.execute(
                 'INSERT INTO api_logs '
-                '(timestamp, provenance, tokens, ip, response_time_ms) VALUES (?, ?, ?, ?, ?)',
-                (now, provenance or 'autre', tokens, ip, response_time_ms),
+                '(timestamp, provenance, tokens, ip, response_time_ms, '
+                'prompt_tokens, cached_tokens, response_tokens, status) '
+                'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                (
+                    now, provenance or 'autre', tokens, ip, response_time_ms,
+                    prompt_tokens, cached_tokens, response_tokens, status,
+                ),
             )
             conn.commit()
     except Exception as exc:
@@ -1047,12 +1089,24 @@ def admin():
             cur.execute('SELECT ip, visits, last_seen FROM ip_visits ORDER BY visits DESC LIMIT 200')
             ip_stats = cur.fetchall()
 
-            # Translations pagination (first page)
-            page = int(request.args.get('page', 1)) if request.args.get('page') else 1
-            per_page = 20
+            # Translations pagination (strictly 10 rows per page)
+            page = max(1, int(request.args.get('page', 1))) if request.args.get('page') else 1
+            per_page = 10
+            cur.execute('SELECT COUNT(*) FROM traductions')
+            translation_count = cur.fetchone()[0]
+            total_pages = max(1, (translation_count + per_page - 1) // per_page)
+            page = min(page, total_pages)
             offset = (page - 1) * per_page
             cur.execute('SELECT id, input, output, date FROM traductions ORDER BY date DESC LIMIT ? OFFSET ?', (per_page, offset))
             translations = cur.fetchall()
+
+            # Recent API logs feed both the charts and the compact log table.
+            cur.execute('''
+                SELECT timestamp, provenance, response_time_ms, status, tokens,
+                       prompt_tokens, cached_tokens, response_tokens
+                FROM api_logs ORDER BY timestamp DESC, id DESC LIMIT 100
+            ''')
+            api_logs = cur.fetchall()
 
     except Exception as exc:
         logger.error(f'Erreur lors du chargement des données admin: {exc}')
@@ -1076,6 +1130,8 @@ def admin():
         ip_stats=ip_stats,
         translations=translations,
         page=page,
+        total_pages=total_pages,
+        api_logs=api_logs,
     )
 
 
