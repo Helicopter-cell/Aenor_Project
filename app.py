@@ -16,6 +16,7 @@ Fournit :
 # --- Bibliothèque standard ---
 import json
 import hashlib
+import hmac
 import logging
 import os
 import re
@@ -1059,10 +1060,15 @@ def require_admin(fn):
     return wrapper
 
 
+def get_admin_password() -> str:
+    """Retourne le mot de passe partagé par la page admin et les actions protégées."""
+    return os.getenv('ADMIN_PASSWORD', 'admin123')
+
+
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     """Page d'administration principale (affiche login si non authentifié)."""
-    admin_password = os.getenv('ADMIN_PASSWORD', 'admin123')
+    admin_password = get_admin_password()
 
     if request.method == 'POST' and not session.get('admin_authenticated'):
         form_pw = request.form.get('admin_password', '')
@@ -1268,35 +1274,19 @@ def commentaires():
             conn.commit()
         return redirect(url_for('commentaires'))
 
-    selected_target = request.args.get('target', 'all')
-    if selected_target not in FEEDBACK_TARGETS:
-        selected_target = 'all'
-    selected_sort = request.args.get('sort', 'recent')
-    sort_sql = {
-        'recent': 'created_at DESC, id DESC',
-        'oldest': 'created_at ASC, id ASC',
-        'popular': 'likes_count DESC, created_at DESC, id DESC',
-        'longest': 'LENGTH(content) DESC, created_at DESC, id DESC',
-    }.get(selected_sort, 'created_at DESC, id DESC')
-    if selected_sort not in ('recent', 'oldest', 'popular', 'longest'):
-        selected_sort = 'recent'
-
     with sqlite3.connect(DB_FILE) as conn:
         conn.row_factory = sqlite3.Row
-        query = 'SELECT id, target_element, content, created_at, likes_count FROM feedback'
-        params = []
-        if selected_target != 'all':
-            query += ' WHERE target_element = ?'
-            params.append(selected_target)
-        query += f' ORDER BY {sort_sql}'
-        comments = conn.execute(query, params).fetchall()
+        comments = conn.execute(
+            'SELECT id, target_element, content, created_at, likes_count '
+            'FROM feedback ORDER BY created_at DESC, id DESC'
+        ).fetchall()
 
     return render_template(
         'commentaires.html',
         comments=comments,
         targets=FEEDBACK_TARGETS,
-        selected_target=selected_target,
-        selected_sort=selected_sort,
+        selected_target='all',
+        selected_sort='recent',
     )
 
 @app.route('/api/like_comment/<int:comment_id>', methods=['POST'])
@@ -1314,6 +1304,22 @@ def like_comment(comment_id):
         ).fetchone()[0]
         conn.commit()
     return jsonify({'success': True, 'likes_count': likes_count})
+
+
+@app.route('/api/delete_comment/<int:comment_id>', methods=['POST'])
+def delete_comment(comment_id):
+    """Supprime un commentaire après vérification du mot de passe admin."""
+    payload = request.get_json(silent=True) or request.form
+    password = str(payload.get('password', ''))
+    if not hmac.compare_digest(password, get_admin_password()):
+        return jsonify({'success': False, 'error': 'Code incorrect'}), 403
+
+    with sqlite3.connect(DB_FILE) as conn:
+        cursor = conn.execute('DELETE FROM feedback WHERE id = ?', (comment_id,))
+        if cursor.rowcount == 0:
+            return jsonify({'success': False, 'error': 'Commentaire introuvable'}), 404
+        conn.commit()
+    return jsonify({'success': True})
 
 
 

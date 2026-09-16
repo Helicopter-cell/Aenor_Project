@@ -3,4 +3,34 @@
 {% block content %}
 <h1>Lexiques</h1>
 {{ cours | render_cours_value }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const accordions = document.querySelectorAll('.cours-accordion');
+
+        accordions.forEach(function (details) {
+            details.open = false;
+            const summary = details.querySelector('.cours-summary');
+            const chevron = details.querySelector('.cours-chevron');
+
+            if (summary) {
+                summary.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    details.open = !details.open;
+                });
+            }
+
+            const syncState = function () {
+                const isOpen = details.open;
+                details.setAttribute('aria-expanded', String(isOpen));
+                if (chevron) {
+                    chevron.textContent = isOpen ? '▼' : '▶';
+                }
+            };
+
+            details.addEventListener('toggle', syncState);
+            syncState();
+        });
+    });
+</script>
 {% endblock %}

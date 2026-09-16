@@ -102,8 +102,13 @@ def render_cours_value(value, level=0):
                 margin_top = MARGIN_GRANDE_CATEGORIE if level == 0 else MARGIN_SOUS_CATEGORIE
 
                 html_parts.append(
-                    f'<div style="margin-top:{margin_top}; margin-left:{indent}em;">'
-                    f'<strong>{key_html}</strong>{nested}</div>'
+                    f'<details class="cours-accordion" style="margin-top:{margin_top}; margin-left:{indent}em;">'
+                    f'<summary class="cours-summary">'
+                    f'<span class="cours-chevron" aria-hidden="true">▶</span>'
+                    f'<span class="cours-summary-text">{key_html}</span>'
+                    f'</summary>'
+                    f'<div class="cours-content">{nested}</div>'
+                    f'</details>'
                 )
             
             # Sinon, si la valeur est une donnée simple (ex: la traduction d'un mot)

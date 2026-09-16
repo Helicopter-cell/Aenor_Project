@@ -5,6 +5,68 @@ h1 {
     color: #3a5a40;
 }
 
+.cours-accordion {
+    border: 1px solid rgba(58, 90, 64, 0.25);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 20px rgba(31, 47, 36, 0.06);
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.cours-accordion[open] {
+    border-color: rgba(58, 90, 64, 0.45);
+    box-shadow: 0 12px 24px rgba(31, 47, 36, 0.1);
+}
+
+.cours-summary {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    list-style: none;
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    color: #243b24;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+.cours-summary::-webkit-details-marker {
+    display: none;
+}
+
+.cours-summary:hover {
+    background-color: rgba(58, 90, 64, 0.06);
+}
+
+.cours-summary:focus-visible {
+    outline: 2px solid rgba(58, 90, 64, 0.5);
+    outline-offset: -2px;
+}
+
+.cours-chevron {
+    display: inline-block;
+    color: #3a5a40;
+    font-size: 0.9em;
+    transition: transform 0.25s ease;
+    transform: rotate(0deg);
+}
+
+.cours-accordion[open] > .cours-summary .cours-chevron {
+    transform: rotate(90deg);
+}
+
+.cours-summary-text {
+    display: inline-block;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.cours-content {
+    padding: 0 1rem 1rem;
+}
+
 .Index-title {
     font-family: 'Fraunces', 'Segoe UI', serif;
     font-weight: 600;
