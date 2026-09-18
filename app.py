@@ -28,12 +28,14 @@ from datetime import datetime
 import subprocess
 import sys
 from threading import Timer
+from pathlib import Path
 
 # --- Bibliothèques tierces ---
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 from flask import Flask, jsonify, render_template, request, session, redirect, url_for
 from google import genai
 from google.genai import types
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 try:
     import google.generativeai as legacy_genai
@@ -78,10 +80,18 @@ warnings.filterwarnings(
 # =============================
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+app.config.update(
+    DEBUG=False,
+    PREFERRED_URL_SCHEME='https',
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+)
 app.jinja_env.filters['render_cours_value'] = render_cours_value
 app.jinja_env.filters['clean_text'] = clean_text
 app.jinja_env.globals['static_path'] = static_path
-app.secret_key = os.getenv('FLASK_SECRET_KEY', os.urandom(24))
+app.secret_key = os.environ.get('SECRET_KEY') or os.environ.get('FLASK_SECRET_KEY') or 'dev-only-change-this-secret-key'
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -159,7 +169,8 @@ CACHE_EXPIRATIONS: Dict[CacheKey, float] = {}
 LEGACY_CONFIGURED_KEY: Optional[str] = None  # Dernière clé utilisée pour configurer le SDK legacy
 
 # --- Pour l'enregistrment des traductions ---
-DB_FILE = str(get_path('|dataPATH|SQLite'))
+PROJECT_ROOT = Path(__file__).resolve().parent
+DB_FILE = PROJECT_ROOT / 'data' / 'SQLite.db'
 
 FEEDBACK_TARGETS = (
     'Grammaire',
@@ -286,7 +297,7 @@ def create_cached_context(direction: str = 'fr2aenor') -> Optional[str]:
 
 def init_db():
     """Initialise la base de données SQLite et crée la table si elle n'existe pas."""
-    os.makedirs("data", exist_ok=True)
+    DB_FILE.parent.mkdir(parents=True, exist_ok=True)
     with sqlite3.connect(DB_FILE) as conn:
         cursor = conn.cursor()
         # On crée les colonnes : id (auto), input (fr), output (aenor) et date

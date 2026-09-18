@@ -172,28 +172,49 @@
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
+    overflow: hidden;
     color: #edf5ee;
     font-size: 0.88rem;
+    background: rgba(5, 12, 8, 0.32);
+    border: 1px solid rgba(161, 215, 177, 0.16);
+    border-radius: 10px;
 }
 
 #admin-dashboard .admin-table th,
 #admin-dashboard .admin-table td {
     padding: 9px 10px;
-    border-bottom: 1px solid rgba(184, 216, 191, 0.12);
+    border-bottom: 1px solid rgba(161, 215, 177, 0.12);
     vertical-align: top;
     text-align: left;
 }
 
+#admin-dashboard .admin-table thead {
+    background: rgba(55, 91, 63, 0.22);
+}
+
 #admin-dashboard .admin-table th {
-    color: #a9c8ad;
+    color: #b8d9bd;
     font-size: 0.72rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     white-space: nowrap;
 }
 
+#admin-dashboard .admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
 #admin-dashboard .admin-table tbody tr:hover {
-    background: rgba(157, 208, 163, 0.07);
+    background: rgba(157, 208, 163, 0.11);
+}
+
+#admin-dashboard .admin-table tbody tr:nth-child(even) {
+    background: rgba(9, 28, 10, 0.5);
+}
+
+/* Lignes impaires (teinte légèrement plus claire / ~blanche translucide) */
+#admin-dashboard .admin-table tbody tr:nth-child(odd) {
+   background: rgba(14, 32, 15, 0.5);
 }
 
 #admin-dashboard .admin-charts {
