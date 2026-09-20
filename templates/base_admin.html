@@ -10,7 +10,12 @@
 </head>
 <body class="admin-body">
 
-<nav class="navbar">
+<button class="mobile-menu-toggle" type="button" aria-controls="admin-navigation" aria-expanded="false">
+    <span aria-hidden="true">☰</span>
+    <span class="sr-only">Ouvrir le menu</span>
+</button>
+
+<nav class="navbar" id="admin-navigation">
     <a href="/" class="nav-element">Accueil</a>
     <a href="/cours" class="nav-element">Lexique</a>
     <a href="/exercice" class="nav-element">Exercices</a>
@@ -19,6 +24,15 @@
     <a href="/scenario" class="nav-element">Scénario</a>
     <a href="/admin" class="nav-element">Admin</a>
 </nav>
+
+<script>
+    document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function () {
+        const isOpen = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', String(!isOpen));
+        this.classList.toggle('open', !isOpen);
+        document.querySelector('#admin-navigation').classList.toggle('open', !isOpen);
+    });
+</script>
 
 <div class="admin-shell">
     {% block content %}{% endblock %}

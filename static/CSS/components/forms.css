@@ -21,6 +21,26 @@ form {
     align-items: center;
 }
 
+input::placeholder,
+textarea::placeholder {
+    color: #607264;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    opacity: 0.8;
+    text-align: left;
+}
+
+input[type="text"],
+textarea {
+    box-sizing: border-box;
+    min-height: 48px;
+    padding: 12px;
+    border: 2px solid rgba(69, 130, 82, 0.735);
+    border-radius: 16px;
+}
+
 .section-heading {
     text-align: center;
     font-size: 3em;

@@ -2,8 +2,13 @@ body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background: #e0e8ddf6;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
     color: #2f3e2f;
     font-size: 1em;
+    min-height: 100vh;
 }
 
 .admin-body {
@@ -15,4 +20,16 @@ body {
 
 .hidden {
     display: none;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }

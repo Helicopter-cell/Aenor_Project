@@ -17,7 +17,12 @@
 <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/hatch.js"></script>
 
 <!-- 🌿 NAVBAR -->
-<nav class="navbar">
+<button class="mobile-menu-toggle" type="button" aria-controls="main-navigation" aria-expanded="false">
+    <span aria-hidden="true">☰</span>
+    <span class="sr-only">Ouvrir le menu</span>
+</button>
+
+<nav class="navbar" id="main-navigation">
     <a href="/" class="nav-element">Accueil</a>
     <a href="/cours" class="nav-element">Lexique</a>
     <a href="/exercice" class="nav-element">Exercices</a>
@@ -34,6 +39,14 @@
     {% block content %}{% endblock %}
 </div>
 
+<script>
+    document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function () {
+        const isOpen = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', String(!isOpen));
+        this.classList.toggle('open', !isOpen);
+        document.querySelector('#main-navigation').classList.toggle('open', !isOpen);
+    });
+</script>
 
 </body>
 <footer>Robin   LALUNG-BONNAIRE</footer>
