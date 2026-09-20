@@ -1,0 +1,141 @@
+@media (max-width: 1024px) {
+    .container {
+        padding-right: 5%;
+        padding-left: 5%;
+    }
+
+    .navbar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-element {
+        margin: 8px 5px;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+        width: min(100%, 900px);
+        box-sizing: border-box;
+    }
+
+    .feedback-workspace {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767px) {
+    html,
+    body {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .container {
+        min-height: auto;
+        padding: 32px 16px 48px;
+    }
+
+    .navbar {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 8px 10px;
+        gap: 2px;
+    }
+
+    .nav-element {
+        flex: 1 1 calc(50% - 10px);
+        box-sizing: border-box;
+        min-width: 130px;
+        margin: 4px;
+        padding: 8px 6px;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .section-heading {
+        font-size: 2rem;
+    }
+
+    .form-wrapper,
+    .button-row,
+    .form-wrapper input[type="text"],
+    .form-wrapper textarea,
+    #prompt-fr,
+    #prompt-ae,
+    #response {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    #prompt-fr:focus,
+    #prompt-ae:focus {
+        width: 100%;
+    }
+
+    .btn-IA-trad,
+    .form-wrapper button {
+        width: 100%;
+        max-width: none;
+    }
+
+    .direction-toggle {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .direction-label {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0 8px;
+        font-size: 0.85rem;
+    }
+
+    .learning-toggle {
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 14px;
+        font-size: 0.9rem;
+    }
+
+    .exercise-header-row {
+        align-items: center;
+        gap: 10px;
+    }
+
+    .exercise-header-row .section-heading,
+    .exercise-header-row .phrase {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .admin-shell {
+        width: calc(100% - 24px);
+        padding: 20px 0 40px;
+    }
+
+    .admin-container {
+        padding: 18px;
+    }
+
+    .feedback-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    textarea,
+    select,
+    iframe,
+    canvas {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+}
