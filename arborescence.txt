@@ -1,0 +1,108 @@
+﻿
+Structure du dossier pour le volume Windows-SSD
+Le num�ro de s�rie du volume est F8A4-1503
+C:.
+|   app.py
+|   arborescence.txt
+|   DEPLOYMENT_PYTHONANYWHERE.md
+|   future-edit.md
+|   generate_tree.bat
+|   grammaire_aenor.md
+|   paths_index.json
+|   pythonanywhere_wsgi.py
+|   requirements.txt
+|   
+|       settings.json
+|       
++---Corbeille
+|       schem_prompt_upgrade.md
+|       terminal-renderer.py
+|       traducteur.py
+|       traductions.json
+|       
++---data
+|       aenor_lexique.json
+|       grammaire_aenor-IA.md
+|       non_traduits.json
+|       prompt_exercice.txt
+|       prompt_trad_ae2fr.txt
+|       prompt_trad_fr2ae.txt
+|       SQLite.db
+|       
++---modules
+|   |   base_converter.py
+|   |   conlang-update.py
+|   |   correction.py
+|   |   exercices.py
+|   |   HTML_version.py
+|   |   IA_version.py
+|   |   utils.py
+|   |   __init__.py
+|   |   
+|           
++---static
+|   |   favicon-512.png
+|   |   
+|   +---CSS
+|   |   |   main.css
+|   |   |   style.css
+|   |   |   
+|   |   +---components
+|   |   |       admin.css
+|   |   |       backgrounds.css
+|   |   |       buttons.css
+|   |   |       cards.css
+|   |   |       feedback.css
+|   |   |       forms.css
+|   |   |       navigation.css
+|   |   |       results.css
+|   |   |       typography.css
+|   |   |       
+|   |   +---generic
+|   |   |       base.css
+|   |   |       
+|   |   +---layout
+|   |   |       containers.css
+|   |   |       grids.css
+|   |   |       
+|   |   \---settings
+|   |           fonts.css
+|   |           
+|   +---fonts
+|   |       Aenor-sauv (1).ttf
+|   |       Aenor-sauv (2).ttf
+|   |       Aenor-sauv (3).ttf
+|   |       Aenor-sauv (4).ttf
+|   |       Aenor.ttf
+|   |       
+|   +---images
+|   |       Corner - Copie.png
+|   |       Corner-left.svg
+|   |       Corner-right.svg
+|   |       Corner.png
+|   |       Logo-Aenor.png
+|   |       Map.svg
+|   |       Wood-IA.png
+|   |       wood.webp
+|   |       
+|   \---js
+|           feedback.js
+|           IA_trad.js
+|           Particles.js
+|           
++---templates
+|       admin_data.html
+|       base.html
+|       base_admin.html
+|       base_without_navbar.html
+|       commentaires.html
+|       cours.html
+|       exercice.html
+|       grammaire.html
+|       grammaire_2.html
+|       grammaire_3.html
+|       IA-trad.html
+|       index.html
+|       result.html
+|       scenario.html
+|       traducteur.html
