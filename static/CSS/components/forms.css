@@ -235,6 +235,55 @@ input:focus {
     color: #ffffff;
 }
 
+.learning-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 auto 18px;
+    color: #365541;
+    font-family: 'Segoe UI', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.learning-toggle input {
+    position: absolute;
+    opacity: 0;
+}
+
+.learning-toggle-control {
+    width: 42px;
+    height: 24px;
+    border-radius: 999px;
+    background: #b8c5ba;
+    box-shadow: inset 0 0 0 2px rgba(40, 78, 54, 0.18);
+    transition: background 0.2s ease;
+}
+
+.learning-toggle-control::after {
+    display: block;
+    width: 18px;
+    height: 18px;
+    margin: 3px;
+    border-radius: 50%;
+    background: #ffffff;
+    content: '';
+    transition: transform 0.2s ease;
+}
+
+.learning-toggle input:checked + .learning-toggle-control {
+    background: #5d9d73;
+}
+
+.learning-toggle input:checked + .learning-toggle-control::after {
+    transform: translateX(18px);
+}
+
+.learning-toggle input:focus-visible + .learning-toggle-control {
+    outline: 3px solid rgba(93, 157, 115, 0.35);
+    outline-offset: 3px;
+}
+
 .direction-label small {
     display: block;
     font-size: 0.75rem;
@@ -297,4 +346,14 @@ input:focus {
     font-style: italic;
     font-family: 'Segoe UI', sans-serif;
     font-size: 1em;
+}
+
+.learning-comment {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(91, 111, 93, 0.35);
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: #365541;
 }

@@ -16,6 +16,15 @@ Traduire la phrase Aënor fournie par l'utilisateur vers un français correct et
 - N'ajoute aucune formule de politesse, ni d'introduction, ni d'explications.
 - EXCEPTION : Si et seulement si l'utilisateur demande explicitement une explication dans sa consigne, tu peux ajouter une brève analyse sous la traduction.
 
+### MODE APPRENTISSAGE
+La réponse doit respecter STRICTEMENT ce format, sans texte avant ni après :
+[Phrase traduite seule]
+|@|
+[Paragraphe 1 : explique brièvement les difficultés de traduction rencontrées : grammaire, lexique et éléments manquants.]
+[Paragraphe 2 : critique brièvement le biais de construction « trop facilement oriental », uniquement à partir des éléments présents dans la phrase traduite.]
+|@|
+La traduction doit rester seule avant le premier délimiteur. Les deux délimiteurs doivent être exactement `|@|`, chacun sur sa propre ligne. N'ajoute jamais d'autre occurrence de `|@|`.
+
 ---
 
 ## La prononciation

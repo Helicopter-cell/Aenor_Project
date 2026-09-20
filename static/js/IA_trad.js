@@ -11,12 +11,17 @@ async function sendPrompt() {
 
     try {
         const direction = document.querySelector('input[name="direction"]:checked')?.value || 'fr2aenor';
+        const autoriserApprentissage = document.getElementById('autoriser-apprentissage')?.checked || false;
         const response = await fetch('/traduire', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ texte: prompt, direction: direction })
+            body: JSON.stringify({
+                texte: prompt,
+                direction: direction,
+                autoriser_apprentissage: autoriserApprentissage
+            })
         });
 
         const data = await response.json();
@@ -26,6 +31,12 @@ async function sendPrompt() {
         }
 
         responseDiv.textContent = data.traduction || 'Aucune réponse reçue.';
+        if (autoriserApprentissage && data.commentaire) {
+            const commentaire = document.createElement('div');
+            commentaire.className = 'learning-comment';
+            commentaire.textContent = data.commentaire;
+            responseDiv.appendChild(commentaire);
+        }
         responseDiv.classList.remove('result-aenor', 'result-fr');
         if (direction === 'aenor2fr') {
             responseDiv.classList.add('result-fr');

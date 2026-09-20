@@ -8,6 +8,9 @@
   "|dataPATH|grammaire_aenor-IA": "data/grammaire_aenor-IA.md",
   "|dataPATH|prompt_trad_fr2ae": "data/prompt_trad_fr2ae.txt",
   "|dataPATH|prompt_trad_ae2fr": "data/prompt_trad_ae2fr.txt",
+  "|dataPATH|prompt_trad_fr2ae_comment": "data/prompt_trad_fr2ae_comment.txt",
+  "|dataPATH|prompt_trad_ae2fr_comment": "data/prompt_trad_ae2fr_comment.txt",
+  "|dataPATH|traductions_commentaires": "data/traductions_commentaires.json",
   "|dataPATH|prompt_exercice": "data/prompt_exercice.txt",
 
   "|modulesPATH|init": "modules/__init__.py",

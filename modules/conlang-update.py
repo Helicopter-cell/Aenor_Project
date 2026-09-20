@@ -72,6 +72,23 @@ Réponds EXCLUSIVEMENT sous la forme d'un objet JSON brut. Aucun texte avant ou 
 Format exact attendu :
 {"note": 8, "commentaire": "Excellente utilisation du vocabulaire ! Attention cependant au préfixe temporel du verbe qui doit se placer avant la racine."}"""}
 
+COMMENT_INSTRUCTIONS = """
+
+### MODE APPRENTISSAGE
+La réponse doit respecter STRICTEMENT ce format, sans texte avant ni après :
+[Phrase traduite seule]
+|@|
+[Paragraphe 1 : explique brièvement les difficultés de traduction rencontrées : grammaire, lexique et éléments manquants.]
+[Paragraphe 2 : critique brièvement le biais de construction « trop facilement oriental », uniquement à partir des éléments présents dans la phrase traduite.]
+|@|
+La traduction doit rester seule avant le premier délimiteur. Les deux délimiteurs doivent être exactement `|@|`, chacun sur sa propre ligne. N'ajoute jamais d'autre occurrence de `|@|`.
+"""
+
+COMMENT_ROLE_PROMPTS = {
+    '|dataPATH|prompt_trad_fr2ae_comment': ROLE_PROMPTS['|dataPATH|prompt_trad_fr2ae'] + COMMENT_INSTRUCTIONS,
+    '|dataPATH|prompt_trad_ae2fr_comment': ROLE_PROMPTS['|dataPATH|prompt_trad_ae2fr'] + COMMENT_INSTRUCTIONS,
+}
+
 
 
 def assembler_prompts():
@@ -85,7 +102,8 @@ def assembler_prompts():
         separators=(',', ':'),
     )
 
-    for alias, role_prompt in ROLE_PROMPTS.items():
+    prompts = {**ROLE_PROMPTS, **COMMENT_ROLE_PROMPTS}
+    for alias, role_prompt in prompts.items():
             output = get_path(alias)
             output.write_text(
                 f'{role_prompt.rstrip()}\n\n---\n\n{grammar}{"" if grammar.endswith(chr(10)) else chr(10)}\n---\n\n{lexicon}\n',

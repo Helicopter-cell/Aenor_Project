@@ -101,6 +101,14 @@ PROMPT_FILES = {
     'aenor2fr': '|dataPATH|prompt_trad_ae2fr',
     'exercice': '|dataPATH|prompt_exercice',
 }
+COMMENT_PROMPT_FILES = {
+    'fr2aenor': '|dataPATH|prompt_trad_fr2ae_comment',
+    'aenor2fr': '|dataPATH|prompt_trad_ae2fr_comment',
+}
+PROMPT_ALIASES = {
+    **PROMPT_FILES,
+    **{alias: alias for alias in COMMENT_PROMPT_FILES.values()},
+}
 PROMPT_CONTENTS: Dict[str, str] = {}
 PROMPT_SIGNATURES: Dict[str, str] = {}
 
@@ -190,8 +198,8 @@ PRINT_GLOBAL_PROMPT = False
 # =============================
 
 def prompt_path(role: str) -> str:
-    """Retourne le chemin absolu du prompt associé à un rôle Gemini."""
-    filename = PROMPT_FILES.get(role)
+    """Retourne le chemin absolu d'un prompt logique ou d'un alias de chemin."""
+    filename = PROMPT_ALIASES.get(role, role if role in PROMPT_ALIASES.values() else None)
     if not filename:
         raise ValueError(f'Rôle de prompt inconnu: {role}')
     return str(get_path(filename))
@@ -213,10 +221,36 @@ def load_prompt(role: str) -> str:
             if cache_key[1] == role:
                 GEMINI_CACHES.pop(cache_key, None)
                 CACHE_EXPIRATIONS.pop(cache_key, None)
-        logger.info(f'{CYAN}ℹ Prompt modifié, cache invalidé: {PROMPT_FILES[role]}{RESET}')
+        logger.info(f'{CYAN}ℹ Prompt modifié, cache invalidé: {role}{RESET}')
     PROMPT_SIGNATURES[role] = signature
     PROMPT_CONTENTS[role] = content
     return content
+
+
+def separer_traduction_commentaire(texte: str) -> Tuple[str, str]:
+    """Sépare une réponse pédagogique encadrée par deux délimiteurs `|@|`."""
+    morceaux = texte.split('|@|')
+    if len(morceaux) != 3:
+        return texte.strip(), ''
+    return morceaux[0].strip(), morceaux[1].strip()
+
+
+def enregistrer_traduction_commentaire(source: str, traduction: str, commentaire: str) -> None:
+    """Ajoute une traduction pédagogique au fichier JSON dédié."""
+    chemin = get_path('|dataPATH|traductions_commentaires')
+    try:
+        donnees = json.loads(chemin.read_text(encoding='utf-8')) if chemin.exists() else []
+        if not isinstance(donnees, list):
+            donnees = []
+        donnees.append({
+            'source': source,
+            'traduction': traduction,
+            'commentaire': commentaire,
+            'date': datetime.now().isoformat(timespec='seconds'),
+        })
+        chemin.write_text(json.dumps(donnees, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    except (OSError, json.JSONDecodeError) as exc:
+        logger.error(f'❌ Impossible de sauvegarder le commentaire pédagogique : {exc}')
 
 
 def get_api_keys_pool() -> List[str]:
@@ -686,14 +720,19 @@ def _print_global_prompt(role: str, prompt: str) -> None:
     """Affiche le fichier source et le prompt logique complet si demandé par l'admin."""
     if not PRINT_GLOBAL_PROMPT:
         return
-    print(f'\n===== PROMPT GEMINI: {PROMPT_FILES[role]} =====')
+    print(f'\n===== PROMPT GEMINI: {role} =====')
 
 
 # =============================
 # FONCTION DE TRADUCTION AVEC GEMINI
 # =============================
 
-def traduire_avec_gemini(texte_utilisateur: str, direction: str = 'fr2aenor', provenance: str = 'autre') -> str:
+def traduire_avec_gemini(
+    texte_utilisateur: str,
+    direction: str = 'fr2aenor',
+    provenance: str = 'autre',
+    autoriser_apprentissage: bool = False,
+) -> Tuple[str, str]:
     """
     Traduit un texte via l'API Gemini.
 
@@ -710,15 +749,16 @@ def traduire_avec_gemini(texte_utilisateur: str, direction: str = 'fr2aenor', pr
     que lorsqu'une traduction a effectivement été générée avec succès par
     Gemini (SDK officiel ou fallback legacy) — jamais en cas d'erreur.
     """
-    context = load_prompt(direction)
+    prompt_role = direction if not autoriser_apprentissage else COMMENT_PROMPT_FILES[direction]
+    context = load_prompt(prompt_role)
     if not context:
-        return "Erreur : le contexte de traduction n'a pas pu être construit."
+        return "Erreur : le contexte de traduction n'a pas pu être construit.", ''
 
     if not API_KEYS_POOL:
         return (
             "Erreur : aucune clé API Gemini n'a été configurée. "
             "Définissez GEMINI_API_KEY_1/2/3, GEMINI_API_KEY ou GOOGLE_API_KEY."
-        )
+        ), ''
 
     prompt_fallback = f'{context.rstrip()}\n\n{texte_utilisateur}'
     _print_global_prompt(direction, prompt_fallback)
@@ -738,7 +778,7 @@ def traduire_avec_gemini(texte_utilisateur: str, direction: str = 'fr2aenor', pr
             break  # Client officiel indisponible : on passe directement au fallback legacy
 
         try:
-            cache = get_or_create_cache(client, api_key, direction, context)
+            cache = get_or_create_cache(client, api_key, prompt_role, context)
 
             if cache is not None and getattr(cache, 'name', None):
                 response = _call_gemini_with_latency(
@@ -763,16 +803,16 @@ def traduire_avec_gemini(texte_utilisateur: str, direction: str = 'fr2aenor', pr
             traduction_brute = getattr(response, 'text', str(response))
             
             # --- APPLICATION DU FILTRE BASE 12 ICI ---
-            traduction = process_aenor_numbers(traduction_brute)
+            traduction, commentaire = separer_traduction_commentaire(traduction_brute) if autoriser_apprentissage else (traduction_brute.strip(), '')
+            traduction = process_aenor_numbers(traduction)
             # -----------------------------------------
             
             enregistrer_mots_non_traduits(traduction)
             # Sauvegarde en fonction du sens : sauvegarder_traduction(francais, aenor)
-            if direction == 'aenor2fr':
-                sauvegarder_traduction(traduction, texte_utilisateur)
-            else:
-                sauvegarder_traduction(texte_utilisateur, traduction)
-            return traduction
+            sauvegarder_traduction(texte_utilisateur, traduction)
+            if autoriser_apprentissage:
+                enregistrer_traduction_commentaire(texte_utilisateur, traduction, commentaire)
+            return traduction, commentaire
 
 
         except Exception as exc:
@@ -804,17 +844,17 @@ def traduire_avec_gemini(texte_utilisateur: str, direction: str = 'fr2aenor', pr
             traduction_brute = getattr(response, 'text', str(response))
             
             # --- APPLICATION DU FILTRE BASE 12 ICI ---
-            traduction = process_aenor_numbers(traduction_brute)
+            traduction, commentaire = separer_traduction_commentaire(traduction_brute) if autoriser_apprentissage else (traduction_brute.strip(), '')
+            traduction = process_aenor_numbers(traduction)
             # -----------------------------------------
             
             # Le fallback legacy n'utilise pas de cache (aucun cached_content transmis),
             # mais on journalise quand même prompt/réponse pour garder une visibilité complète.
             enregistrer_mots_non_traduits(traduction)
-            if direction == 'aenor2fr':
-                sauvegarder_traduction(traduction, texte_utilisateur)
-            else:
-                sauvegarder_traduction(texte_utilisateur, traduction)
-            return traduction
+            sauvegarder_traduction(texte_utilisateur, traduction)
+            if autoriser_apprentissage:
+                enregistrer_traduction_commentaire(texte_utilisateur, traduction, commentaire)
+            return traduction, commentaire
         
         except Exception as exc:
             erreurs_rencontrees.append(str(exc))
@@ -822,7 +862,7 @@ def traduire_avec_gemini(texte_utilisateur: str, direction: str = 'fr2aenor', pr
 
     logger.error(f'❌ Toutes les tentatives de traduction ont échoué: {erreurs_rencontrees}')
     detail = '; '.join(erreurs_rencontrees) or 'raison inconnue'
-    return f'Erreur : Impossible de générer la traduction. ({detail})'
+    return f'Erreur : Impossible de générer la traduction. ({detail})', ''
 
 def enregistrer_mots_non_traduits(texte_traduit: str) -> None:
     """
@@ -1403,18 +1443,26 @@ def traduire_api():
                 'erreur': 'Le texte à traduire ne peut pas être vide',
             }), 400
 
-        if not all(load_prompt(role) for role in ('fr2aenor', 'aenor2fr')):
+        autoriser_apprentissage = data.get('autoriser_apprentissage', False) is True
+        prompt_roles = COMMENT_PROMPT_FILES if autoriser_apprentissage else PROMPT_FILES
+        if not load_prompt(prompt_roles[direction]):
             logger.error('Contexte manquant pour la traduction')
             return jsonify({
                 'success': False,
                 'erreur': 'Erreur système : contexte de configuration manquant',
             }), 500
 
-        traduction = traduire_avec_gemini(texte, direction=direction, provenance='traduction')
+        traduction, commentaire = traduire_avec_gemini(
+            texte,
+            direction=direction,
+            provenance='traduction',
+            autoriser_apprentissage=autoriser_apprentissage,
+        )
 
         return jsonify({
             'success': True,
             'traduction': traduction,
+            'commentaire': commentaire,
         }), 200
 
     except Exception as exc:
