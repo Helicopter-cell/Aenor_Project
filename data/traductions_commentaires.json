@@ -4,5 +4,11 @@
     "traduction": "doy nèxo cayr gom-ca",
     "commentaire": "La difficulté principale réside dans la traduction de la question \"Combien de temps\" où \"combien\" (gom-ca) qualifie \"temps\" (cayr). Selon la structure Aënor, le verbe arrive en fin de proposition (nèxo), précédé par l'agent/sujet (doy), et la particule interrogative se place en fin de phrase pour les questions ouvertes.\nL'Aënor présente ici un biais de construction analytique direct, plaçant les notions de quantité directement après le nom sans article superflu, ce qui donne une structure épurée proche des langues dites orientales ou isolantes, bien que gérée ici par l'ordre strict des constituants (Thème/Objet + Agent + Verbe + Particule).",
     "date": "2026-09-20T17:09:07"
+  },
+  {
+    "source": "Pourquoi pleut-il autant à coté de toi ?",
+    "traduction": "doy fela l*var b§ébè",
+    "commentaire": "La traduction pose la question de l'absence de pronom impersonnel en Aënor (pas de \"il\" pour la météo), en remplacant la structure par \"pluie\" (l*var) agissant comme sujet-thème, combinée à l'adverbe de quantité \"beaucoup\" (b§ébè), et la préposition \"près de\" (fela) avec le pronom possessif/complément \"à toi\" (d;j ou don selon le cas). La difficulté réside ici dans le basculement d'une phrase impersonnelle française vers la philosophie naturelle de l'Aënor.\n\nLe biais de construction « trop facilement oriental » est visible dans la propension de la langue à fondre l'élément naturel (la pluie) directement dans le statut de thème actif sans passer par des artéfacts verbaux complexes, privilégiant l'immédiateté phénoménologique de l'environnement.",
+    "date": "2026-09-20T17:27:03"
   }
 ]

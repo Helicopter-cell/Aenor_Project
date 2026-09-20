@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="section-heading">Mon historique</h1>
+
+<section class="card">
+    <h2>Historique des traductions</h2>
+    <div class="table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr><th>Source</th><th>Traduction</th><th>Sens</th><th>Date</th></tr>
+            </thead>
+            <tbody>
+                {% for traduction in traductions %}
+                    <tr>
+                        <td>{{ traduction['source_text'] }}</td>
+                        <td>{{ traduction['target_text'] }}</td>
+                        <td>{{ traduction['direction'] }}</td>
+                        <td>{{ traduction['timestamp'] }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="4">Aucune traduction enregistrée.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+<br>
+<section class="card">
+    <h2>Historique des exercices</h2>
+    <div class="table-wrap">
+        <table class="admin-table">
+            <thead>
+                <tr><th>Consigne</th><th>Réponse</th><th>Correction / Feedback</th><th>Date</th></tr>
+            </thead>
+            <tbody>
+                {% for exercice in exercices %}
+                    <tr>
+                        <td>{{ exercice['intitule_exercice'] }}</td>
+                        <td>{{ exercice['reponse_utilisateur'] }}</td>
+                        <td><strong>{{ exercice['correction'] }}</strong>{% if exercice['feedback'] %}<br>{{ exercice['feedback'] }}{% endif %}</td>
+                        <td>{{ exercice['timestamp'] }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="4">Aucun exercice corrigé.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

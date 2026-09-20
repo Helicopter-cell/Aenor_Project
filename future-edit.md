@@ -22,7 +22,7 @@ Il faut donc prévoir :
 ---
 
 ## Idée 2 : 
-Rajouter une booléenne 'traductions fiable' controlable par les utilisateur dans 'traducteurs.html'.
+Rajouter une booléenne 'traductions fiable' controlable par les utilisateur dans 'IA-trad.html'.
     True :
         -> Enverra la traduction classique, (en prenant en compte la valeurs booléenne de 'autoriser l'apprentissage')
 
@@ -43,7 +43,7 @@ Rajouter une booléenne 'traductions fiable' controlable par les utilisateur dan
 ## Idée 3 :
 Créer un compte 'loginless' basée sur l'IP à chaque nouvelle utilisateur qui arrive sur le site.
 
-Il pourra ainsi voir les précédentes traductions que l'utilisateur, et uniquement lui (et l'admin) pourra voir ses anciennes traductions, et/ou ces anciens exercices corrigée.
+Il pourra ainsi voir les précédentes traductions que l'utilisateur, et uniquement lui-même (et l'admin) pourra voir ses anciennes traductions, et/ou ces anciens exercices corrigée.
 
 Il faut donc prévoir :
     - Un moyen de mémiriser les exercices ET leur correction

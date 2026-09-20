@@ -55,6 +55,38 @@
       </section>
 
       <section class="card-admin large">
+        <h3>Historique des traductions par utilisateur</h3>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Utilisateur</th><th>Source</th><th>Traduction</th><th>Sens</th><th>Date</th></tr></thead>
+            <tbody>
+              {% for user_uuid, source_text, target_text, direction, timestamp in user_translation_history %}
+                <tr><td>{{ user_uuid }}</td><td>{{ source_text }}</td><td>{{ target_text }}</td><td>{{ direction }}</td><td>{{ timestamp }}</td></tr>
+              {% else %}
+                <tr><td colspan="5">Aucune traduction dans l'historique loginless</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card-admin large">
+        <h3>Historique des exercices par utilisateur</h3>
+        <div class="table-wrap">
+          <table class="admin-table">
+            <thead><tr><th>Utilisateur</th><th>Consigne</th><th>Réponse</th><th>Correction / Feedback</th><th>Date</th></tr></thead>
+            <tbody>
+              {% for user_uuid, intitule, reponse, correction, feedback, timestamp in exercise_history %}
+                <tr><td>{{ user_uuid }}</td><td>{{ intitule }}</td><td>{{ reponse }}</td><td><strong>{{ correction }}</strong>{% if feedback %}<br>{{ feedback }}{% endif %}</td><td>{{ timestamp }}</td></tr>
+              {% else %}
+                <tr><td colspan="5">Aucun exercice dans l'historique loginless</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card-admin large">
         <h3>Métriques API Gemini</h3>
         <div class="admin-charts">
           <div class="admin-chart"><h4>Latence des requêtes</h4><canvas id="latency-chart"></canvas></div>

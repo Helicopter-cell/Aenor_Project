@@ -23,6 +23,7 @@ import re
 import time
 import warnings
 import sqlite3
+import uuid
 from typing import Dict, List, Optional, Tuple
 from datetime import datetime
 import subprocess
@@ -390,6 +391,28 @@ def init_db():
                 content TEXT NOT NULL,
                 created_at TEXT NOT NULL,
                 likes_count INTEGER NOT NULL DEFAULT 0
+            )
+        ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS traductions_historique (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_uuid TEXT NOT NULL,
+                source_text TEXT NOT NULL,
+                target_text TEXT NOT NULL,
+                direction TEXT NOT NULL CHECK (direction IN ('ae2fr', 'fr2ae')),
+                timestamp TEXT NOT NULL
+            )
+        ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS exercices_historique (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_uuid TEXT NOT NULL,
+                intitule_exercice TEXT NOT NULL,
+                reponse_utilisateur TEXT NOT NULL,
+                correction TEXT NOT NULL,
+                note INTEGER,
+                feedback TEXT,
+                timestamp TEXT NOT NULL
             )
         ''')
 
@@ -809,7 +832,7 @@ def traduire_avec_gemini(
             
             enregistrer_mots_non_traduits(traduction)
             # Sauvegarde en fonction du sens : sauvegarder_traduction(francais, aenor)
-            sauvegarder_traduction(texte_utilisateur, traduction)
+            sauvegarder_traduction(texte_utilisateur, traduction, direction)
             if autoriser_apprentissage:
                 enregistrer_traduction_commentaire(texte_utilisateur, traduction, commentaire)
             return traduction, commentaire
@@ -851,7 +874,7 @@ def traduire_avec_gemini(
             # Le fallback legacy n'utilise pas de cache (aucun cached_content transmis),
             # mais on journalise quand même prompt/réponse pour garder une visibilité complète.
             enregistrer_mots_non_traduits(traduction)
-            sauvegarder_traduction(texte_utilisateur, traduction)
+            sauvegarder_traduction(texte_utilisateur, traduction, direction)
             if autoriser_apprentissage:
                 enregistrer_traduction_commentaire(texte_utilisateur, traduction, commentaire)
             return traduction, commentaire
@@ -896,7 +919,7 @@ def enregistrer_mots_non_traduits(texte_traduit: str) -> None:
         logger.error(f'❌ Impossible de sauvegarder les mots non traduits : {exc}')
 
 
-def sauvegarder_traduction(francais, aenor):
+def sauvegarder_traduction(francais, aenor, direction='fr2aenor'):
     """
     Enregistre une traduction générée par l'API Gemini dans la base SQLite.
     """
@@ -910,6 +933,13 @@ def sauvegarder_traduction(francais, aenor):
             cursor.execute(
                 "INSERT INTO traductions (input, output, date) VALUES (?, ?, ?)",
                 (francais, aenor, date_actuelle)
+            )
+            historique_direction = 'ae2fr' if direction == 'aenor2fr' else 'fr2ae'
+            cursor.execute(
+                '''INSERT INTO traductions_historique
+                   (user_uuid, source_text, target_text, direction, timestamp)
+                   VALUES (?, ?, ?, ?, ?)''',
+                (session['user_uuid'], francais, aenor, historique_direction, date_actuelle),
             )
             conn.commit() # Valide l'enregistrement
 
@@ -1068,6 +1098,13 @@ def before_request_log_ip():
         pass
 
 
+@app.before_request
+def ensure_user_uuid():
+    """Attribue un identifiant persistant aux visiteurs sans compte."""
+    if 'user_uuid' not in session:
+        session['user_uuid'] = str(uuid.uuid4())
+
+
 def insert_api_log(
     provenance: str,
     tokens: Optional[int],
@@ -1109,6 +1146,20 @@ def require_admin(fn):
         return fn(*args, **kwargs)
 
     return wrapper
+
+
+def sauvegarder_exercice(phrase, reponse, note, commentaire):
+    """Enregistre une correction d'exercice pour l'utilisateur de la session."""
+    timestamp = datetime.now().isoformat(timespec='seconds')
+    correction = f'{note}/10'
+    with sqlite3.connect(DB_FILE) as conn:
+        conn.execute(
+            '''INSERT INTO exercices_historique
+               (user_uuid, intitule_exercice, reponse_utilisateur, correction, note, feedback, timestamp)
+               VALUES (?, ?, ?, ?, ?, ?, ?)''',
+            (session['user_uuid'], phrase, reponse, correction, note, commentaire, timestamp),
+        )
+        conn.commit()
 
 
 def get_admin_password() -> str:
@@ -1176,6 +1227,17 @@ def admin():
             cur.execute('SELECT id, input, output, date FROM traductions ORDER BY date DESC LIMIT ? OFFSET ?', (per_page, offset))
             translations = cur.fetchall()
 
+            cur.execute('''
+                SELECT user_uuid, source_text, target_text, direction, timestamp
+                FROM traductions_historique ORDER BY timestamp DESC, id DESC LIMIT 200
+            ''')
+            user_translation_history = cur.fetchall()
+            cur.execute('''
+                SELECT user_uuid, intitule_exercice, reponse_utilisateur, correction, feedback, timestamp
+                FROM exercices_historique ORDER BY timestamp DESC, id DESC LIMIT 200
+            ''')
+            exercise_history = cur.fetchall()
+
             # Recent API logs feed both the charts and the compact log table.
             cur.execute('''
                 SELECT timestamp, provenance, response_time_ms, status, tokens,
@@ -1205,6 +1267,8 @@ def admin():
         provenance_stats=prov,
         ip_stats=ip_stats,
         translations=translations,
+        user_translation_history=user_translation_history,
+        exercise_history=exercise_history,
         page=page,
         total_pages=total_pages,
         api_logs=api_logs,
@@ -1253,6 +1317,26 @@ def admin_shutdown():
 def admin_logout():
     session.pop('admin_authenticated', None)
     return redirect(url_for('admin'))
+
+
+@app.route('/historique')
+def historique():
+    """Affiche l'historique associé à la session courante."""
+    with sqlite3.connect(DB_FILE) as conn:
+        conn.row_factory = sqlite3.Row
+        traductions = conn.execute(
+            '''SELECT source_text, target_text, direction, timestamp
+               FROM traductions_historique
+               WHERE user_uuid = ? ORDER BY timestamp DESC, id DESC''',
+            (session['user_uuid'],),
+        ).fetchall()
+        exercices = conn.execute(
+            '''SELECT intitule_exercice, reponse_utilisateur, correction, feedback, timestamp
+               FROM exercices_historique
+               WHERE user_uuid = ? ORDER BY timestamp DESC, id DESC''',
+            (session['user_uuid'],),
+        ).fetchall()
+    return render_template('historique.html', traductions=traductions, exercices=exercices)
 
 # =============================
 # ROUTES - PAGES PRINCIPALES
@@ -1384,6 +1468,7 @@ def exercice():
         evaluation = evaluer_avec_gemini(phrase, user)
         note = evaluation.get('note', 0)
         commentaire = evaluation.get('commentaire', '')
+        sauvegarder_exercice(phrase, user, note, commentaire)
 
         return render_template(
             'result.html',
