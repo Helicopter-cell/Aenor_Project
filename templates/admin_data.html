@@ -58,12 +58,12 @@
         <h3>Historique des traductions par utilisateur</h3>
         <div class="table-wrap">
           <table class="admin-table">
-            <thead><tr><th>Utilisateur</th><th>Source</th><th>Traduction</th><th>Sens</th><th>Date</th></tr></thead>
+            <thead><tr><th>Utilisateur</th><th>Source</th><th>Traduction</th><th>Sens</th><th>Mode fiable</th><th>Date</th></tr></thead>
             <tbody>
-              {% for user_uuid, source_text, target_text, direction, timestamp in user_translation_history %}
-                <tr><td>{{ user_uuid }}</td><td>{{ source_text }}</td><td>{{ target_text }}</td><td>{{ direction }}</td><td>{{ timestamp }}</td></tr>
+              {% for user_uuid, source_text, target_text, direction, timestamp, traduction_fiable in user_translation_history %}
+                <tr><td>{{ user_uuid }}</td><td>{{ source_text }}</td><td>{{ target_text }}</td><td>{{ direction }}</td><td>{{ 'Oui' if traduction_fiable else 'Non' }}</td><td>{{ timestamp }}</td></tr>
               {% else %}
-                <tr><td colspan="5">Aucune traduction dans l'historique loginless</td></tr>
+                <tr><td colspan="6">Aucune traduction dans l'historique loginless</td></tr>
               {% endfor %}
             </tbody>
           </table>
@@ -145,18 +145,19 @@
         <h3>Journal des appels API</h3>
         <div class="admin-log-wrap">
           <table class="admin-table admin-log-table">
-            <thead><tr><th>Horodatage</th><th>Endpoint</th><th>Latence</th><th>Statut</th><th>Tokens</th></tr></thead>
+            <thead><tr><th>Horodatage</th><th>Endpoint</th><th>Latence</th><th>Statut</th><th>Tokens</th><th>Mode</th></tr></thead>
             <tbody>
-              {% for timestamp, endpoint, response_time_ms, status, tokens, prompt_tokens, cached_tokens, response_tokens in api_logs %}
+              {% for timestamp, endpoint, response_time_ms, status, tokens, prompt_tokens, cached_tokens, response_tokens, traduction_fiable in api_logs %}
                 <tr>
                   <td>{{ timestamp }}</td>
                   <td>{{ endpoint }}</td>
                   <td>{{ '%.1f ms'|format(response_time_ms) if response_time_ms is not none else '—' }}</td>
                   <td><span class="log-status log-status-{{ status|lower }}">{{ status }}</span></td>
                   <td>{{ tokens if tokens is not none else '—' }}</td>
+                  <td>{{ 'Fiable' if traduction_fiable else 'Standard' }}</td>
                 </tr>
               {% else %}
-                <tr><td colspan="5">Aucun appel API enregistré</td></tr>
+                <tr><td colspan="6">Aucun appel API enregistré</td></tr>
               {% endfor %}
             </tbody>
           </table>
@@ -215,7 +216,7 @@
         const promptTokens = [];
         const cachedTokens = [];
         const responseTokens = [];
-        {% for timestamp, endpoint, response_time_ms, status, tokens, prompt_tokens, cached_tokens, response_tokens in api_logs %}
+        {% for timestamp, endpoint, response_time_ms, status, tokens, prompt_tokens, cached_tokens, response_tokens, traduction_fiable in api_logs %}
           labels.push({{ timestamp|tojson }});
           latencies.push({{ response_time_ms|default(0, true)|tojson }});
           promptTokens.push({{ prompt_tokens|default(0, true)|tojson }});

@@ -106,9 +106,11 @@ COMMENT_PROMPT_FILES = {
     'fr2aenor': '|dataPATH|prompt_trad_fr2ae_comment',
     'aenor2fr': '|dataPATH|prompt_trad_ae2fr_comment',
 }
+REVISION_PROMPT_FILE = '|dataPATH|prompt_revision_traduction'
 PROMPT_ALIASES = {
     **PROMPT_FILES,
     **{alias: alias for alias in COMMENT_PROMPT_FILES.values()},
+    'revision': REVISION_PROMPT_FILE,
 }
 PROMPT_CONTENTS: Dict[str, str] = {}
 PROMPT_SIGNATURES: Dict[str, str] = {}
@@ -364,6 +366,7 @@ def init_db():
             ('cached_tokens', 'INTEGER'),
             ('response_tokens', 'INTEGER'),
             ('status', "TEXT NOT NULL DEFAULT 'success'"),
+            ('traduction_fiable', 'INTEGER NOT NULL DEFAULT 0'),
         ):
             if column_name not in existing_columns:
                 cursor.execute(f'ALTER TABLE api_logs ADD COLUMN {column_name} {column_type}')
@@ -400,9 +403,18 @@ def init_db():
                 source_text TEXT NOT NULL,
                 target_text TEXT NOT NULL,
                 direction TEXT NOT NULL CHECK (direction IN ('ae2fr', 'fr2ae')),
-                timestamp TEXT NOT NULL
+                timestamp TEXT NOT NULL,
+                traduction_fiable INTEGER NOT NULL DEFAULT 0
             )
         ''')
+        existing_history_columns = {
+            row[1] for row in cursor.execute('PRAGMA table_info(traductions_historique)').fetchall()
+        }
+        if 'traduction_fiable' not in existing_history_columns:
+            cursor.execute(
+                'ALTER TABLE traductions_historique '
+                'ADD COLUMN traduction_fiable INTEGER NOT NULL DEFAULT 0'
+            )
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS exercices_historique (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -716,7 +728,7 @@ def _log_token_usage(response, response_time_ms: Optional[float] = None) -> None
     logger.info(f'{JAUNE}+----------------------------+----------+-------------+{RESET}')
 
 
-def _call_gemini_with_latency(generate_content, provenance: str):
+def _call_gemini_with_latency(generate_content, provenance: str, traduction_fiable: bool = False):
     """Exécute un appel Gemini et journalise sa durée, succès ou exception comprise."""
     response = None
     started_at = time.perf_counter()
@@ -736,6 +748,7 @@ def _call_gemini_with_latency(generate_content, provenance: str):
             cached_tokens,
             response_tokens,
             'success' if response is not None else 'error',
+            traduction_fiable,
         )
 
 
@@ -750,11 +763,77 @@ def _print_global_prompt(role: str, prompt: str) -> None:
 # FONCTION DE TRADUCTION AVEC GEMINI
 # =============================
 
+def reviser_traduction_avec_gemini(
+    texte_source: str,
+    traduction_proposee: str,
+    direction: str,
+    autoriser_apprentissage: bool,
+    provenance: str,
+) -> str:
+    """Fait verifier la traduction initiale par Gemini et retourne la version finale."""
+    contexte_traduction = load_prompt(
+        COMMENT_PROMPT_FILES[direction] if autoriser_apprentissage else direction
+    )
+    prompt_revision = load_prompt('revision')
+    if not contexte_traduction or not prompt_revision:
+        raise RuntimeError('Contexte de revision introuvable')
+
+    demande = (
+        f'{prompt_revision.rstrip()}\n\n'
+        f'Phrase source :\n{texte_source}\n\n'
+        f'Traduction proposee :\n{traduction_proposee}\n\n'
+        f'Sens de traduction : {direction}\n'
+        f'Mode apprentissage : {"oui" if autoriser_apprentissage else "non"}'
+    )
+    prompt_complet = f'{contexte_traduction.rstrip()}\n\n{demande}'
+    _print_global_prompt('revision', prompt_complet)
+
+    erreurs: List[str] = []
+    nb_tentatives = len(API_KEYS_POOL) if POOL_API_KEYS_ACTIVATION else 1
+    for _ in range(nb_tentatives):
+        api_key = get_current_api_key()
+        client = get_gemini_client(api_key)
+        if client is None or not hasattr(client, 'models') or not hasattr(client.models, 'generate_content'):
+            break
+        try:
+            response = _call_gemini_with_latency(
+                lambda: client.models.generate_content(
+                    model=get_current_models()[0],
+                    contents=prompt_complet,
+                ),
+                f'{provenance}_revision',
+                True,
+            )
+            return getattr(response, 'text', str(response)).strip()
+        except Exception as exc:
+            erreurs.append(str(exc))
+            if is_quota_error(exc):
+                rotate_api_key()
+                continue
+            break
+
+    legacy_client = get_legacy_client(get_current_api_key())
+    if legacy_client is not None and hasattr(legacy_client, 'GenerativeModel'):
+        try:
+            model = legacy_client.GenerativeModel(GEMINI_MODEL_LEGACY)
+            response = _call_gemini_with_latency(
+                lambda: model.generate_content(prompt_complet),
+                f'{provenance}_revision',
+                True,
+            )
+            return getattr(response, 'text', str(response)).strip()
+        except Exception as exc:
+            erreurs.append(str(exc))
+
+    detail = '; '.join(erreurs) or 'raison inconnue'
+    raise RuntimeError(f'Impossible de verifier la traduction ({detail})')
+
 def traduire_avec_gemini(
     texte_utilisateur: str,
     direction: str = 'fr2aenor',
     provenance: str = 'autre',
     autoriser_apprentissage: bool = False,
+    traduction_fiable: bool = False,
 ) -> Tuple[str, str]:
     """
     Traduit un texte via l'API Gemini.
@@ -824,6 +903,15 @@ def traduire_avec_gemini(
 
             # On récupère le texte brut de Gemini
             traduction_brute = getattr(response, 'text', str(response))
+
+            if traduction_fiable:
+                traduction_brute = reviser_traduction_avec_gemini(
+                    texte_utilisateur,
+                    traduction_brute,
+                    direction,
+                    autoriser_apprentissage,
+                    provenance,
+                )
             
             # --- APPLICATION DU FILTRE BASE 12 ICI ---
             traduction, commentaire = separer_traduction_commentaire(traduction_brute) if autoriser_apprentissage else (traduction_brute.strip(), '')
@@ -832,7 +920,7 @@ def traduire_avec_gemini(
             
             enregistrer_mots_non_traduits(traduction)
             # Sauvegarde en fonction du sens : sauvegarder_traduction(francais, aenor)
-            sauvegarder_traduction(texte_utilisateur, traduction, direction)
+            sauvegarder_traduction(texte_utilisateur, traduction, direction, traduction_fiable)
             if autoriser_apprentissage:
                 enregistrer_traduction_commentaire(texte_utilisateur, traduction, commentaire)
             return traduction, commentaire
@@ -865,6 +953,15 @@ def traduire_avec_gemini(
             
             # On récupère le texte brut de Gemini
             traduction_brute = getattr(response, 'text', str(response))
+
+            if traduction_fiable:
+                traduction_brute = reviser_traduction_avec_gemini(
+                    texte_utilisateur,
+                    traduction_brute,
+                    direction,
+                    autoriser_apprentissage,
+                    provenance,
+                )
             
             # --- APPLICATION DU FILTRE BASE 12 ICI ---
             traduction, commentaire = separer_traduction_commentaire(traduction_brute) if autoriser_apprentissage else (traduction_brute.strip(), '')
@@ -874,7 +971,7 @@ def traduire_avec_gemini(
             # Le fallback legacy n'utilise pas de cache (aucun cached_content transmis),
             # mais on journalise quand même prompt/réponse pour garder une visibilité complète.
             enregistrer_mots_non_traduits(traduction)
-            sauvegarder_traduction(texte_utilisateur, traduction, direction)
+            sauvegarder_traduction(texte_utilisateur, traduction, direction, traduction_fiable)
             if autoriser_apprentissage:
                 enregistrer_traduction_commentaire(texte_utilisateur, traduction, commentaire)
             return traduction, commentaire
@@ -919,7 +1016,7 @@ def enregistrer_mots_non_traduits(texte_traduit: str) -> None:
         logger.error(f'❌ Impossible de sauvegarder les mots non traduits : {exc}')
 
 
-def sauvegarder_traduction(francais, aenor, direction='fr2aenor'):
+def sauvegarder_traduction(francais, aenor, direction='fr2aenor', traduction_fiable=False):
     """
     Enregistre une traduction générée par l'API Gemini dans la base SQLite.
     """
@@ -936,10 +1033,10 @@ def sauvegarder_traduction(francais, aenor, direction='fr2aenor'):
             )
             historique_direction = 'ae2fr' if direction == 'aenor2fr' else 'fr2ae'
             cursor.execute(
-                '''INSERT INTO traductions_historique
-                   (user_uuid, source_text, target_text, direction, timestamp)
-                   VALUES (?, ?, ?, ?, ?)''',
-                (session['user_uuid'], francais, aenor, historique_direction, date_actuelle),
+                     '''INSERT INTO traductions_historique
+                         (user_uuid, source_text, target_text, direction, timestamp, traduction_fiable)
+                         VALUES (?, ?, ?, ?, ?, ?)''',
+                     (session['user_uuid'], francais, aenor, historique_direction, date_actuelle, int(traduction_fiable)),
             )
             conn.commit() # Valide l'enregistrement
 
@@ -1114,6 +1211,7 @@ def insert_api_log(
     cached_tokens: Optional[int] = None,
     response_tokens: Optional[int] = None,
     status: str = 'success',
+    traduction_fiable: bool = False,
 ) -> None:
     """Insère un enregistrement de log d'appel API dans la BDD (protégé contre injection)."""
     try:
@@ -1123,11 +1221,12 @@ def insert_api_log(
             cur.execute(
                 'INSERT INTO api_logs '
                 '(timestamp, provenance, tokens, ip, response_time_ms, '
-                'prompt_tokens, cached_tokens, response_tokens, status) '
-                'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                'prompt_tokens, cached_tokens, response_tokens, status, traduction_fiable) '
+                'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 (
                     now, provenance or 'autre', tokens, ip, response_time_ms,
                     prompt_tokens, cached_tokens, response_tokens, status,
+                    int(traduction_fiable),
                 ),
             )
             conn.commit()
@@ -1228,7 +1327,7 @@ def admin():
             translations = cur.fetchall()
 
             cur.execute('''
-                SELECT user_uuid, source_text, target_text, direction, timestamp
+                SELECT user_uuid, source_text, target_text, direction, timestamp, traduction_fiable
                 FROM traductions_historique ORDER BY timestamp DESC, id DESC LIMIT 200
             ''')
             user_translation_history = cur.fetchall()
@@ -1240,8 +1339,8 @@ def admin():
 
             # Recent API logs feed both the charts and the compact log table.
             cur.execute('''
-                SELECT timestamp, provenance, response_time_ms, status, tokens,
-                       prompt_tokens, cached_tokens, response_tokens
+                  SELECT timestamp, provenance, response_time_ms, status, tokens,
+                      prompt_tokens, cached_tokens, response_tokens, traduction_fiable
                 FROM api_logs ORDER BY timestamp DESC, id DESC LIMIT 100
             ''')
             api_logs = cur.fetchall()
@@ -1325,7 +1424,7 @@ def historique():
     with sqlite3.connect(DB_FILE) as conn:
         conn.row_factory = sqlite3.Row
         traductions = conn.execute(
-            '''SELECT source_text, target_text, direction, timestamp
+            '''SELECT source_text, target_text, direction, timestamp, traduction_fiable
                FROM traductions_historique
                WHERE user_uuid = ? ORDER BY timestamp DESC, id DESC''',
             (session['user_uuid'],),
@@ -1529,6 +1628,7 @@ def traduire_api():
             }), 400
 
         autoriser_apprentissage = data.get('autoriser_apprentissage', False) is True
+        traduction_fiable = data.get('traduction_fiable', False) is True
         prompt_roles = COMMENT_PROMPT_FILES if autoriser_apprentissage else PROMPT_FILES
         if not load_prompt(prompt_roles[direction]):
             logger.error('Contexte manquant pour la traduction')
@@ -1542,6 +1642,7 @@ def traduire_api():
             direction=direction,
             provenance='traduction',
             autoriser_apprentissage=autoriser_apprentissage,
+            traduction_fiable=traduction_fiable,
         )
 
         return jsonify({

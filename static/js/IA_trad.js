@@ -12,6 +12,7 @@ async function sendPrompt() {
     try {
         const direction = document.querySelector('input[name="direction"]:checked')?.value || 'fr2aenor';
         const autoriserApprentissage = document.getElementById('autoriser-apprentissage')?.checked || false;
+        const traductionFiable = document.getElementById('traduction-fiable')?.checked || false;
         const response = await fetch('/traduire', {
             method: 'POST',
             headers: {
@@ -20,7 +21,8 @@ async function sendPrompt() {
             body: JSON.stringify({
                 texte: prompt,
                 direction: direction,
-                autoriser_apprentissage: autoriserApprentissage
+                autoriser_apprentissage: autoriserApprentissage,
+                traduction_fiable: traductionFiable
             })
         });
 

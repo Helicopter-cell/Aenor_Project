@@ -8,7 +8,7 @@
     <div class="table-wrap">
         <table class="admin-table">
             <thead>
-                <tr><th>Source</th><th>Traduction</th><th>Sens</th><th>Date</th></tr>
+                <tr><th>Source</th><th>Traduction</th><th>Sens</th><th>Mode fiable</th><th>Date</th></tr>
             </thead>
             <tbody>
                 {% for traduction in traductions %}
@@ -16,10 +16,11 @@
                         <td>{{ traduction['source_text'] }}</td>
                         <td>{{ traduction['target_text'] }}</td>
                         <td>{{ traduction['direction'] }}</td>
+                        <td>{{ 'Oui' if traduction['traduction_fiable'] else 'Non' }}</td>
                         <td>{{ traduction['timestamp'] }}</td>
                     </tr>
                 {% else %}
-                    <tr><td colspan="4">Aucune traduction enregistrée.</td></tr>
+                    <tr><td colspan="5">Aucune traduction enregistrée.</td></tr>
                 {% endfor %}
             </tbody>
         </table>
