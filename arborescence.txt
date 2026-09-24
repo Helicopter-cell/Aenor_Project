@@ -7,6 +7,7 @@ C:.
 |   DEPLOYMENT_PYTHONANYWHERE.md
 |   future-edit.md
 |   generate_tree.bat
+|   get_api_keys
 |   grammaire_aenor.md
 |   paths_index.json
 |   pythonanywhere_wsgi.py
@@ -15,7 +16,10 @@ C:.
 |       settings.json
 |       
 +---Corbeille
+|       grammaire.html
+|       grammaire_2.html
 |       schem_prompt_upgrade.md
+|       SQLite_old.db
 |       terminal-renderer.py
 |       traducteur.py
 |       traductions.json
@@ -25,9 +29,13 @@ C:.
 |       grammaire_aenor-IA.md
 |       non_traduits.json
 |       prompt_exercice.txt
+|       prompt_revision_traduction.txt
 |       prompt_trad_ae2fr.txt
+|       prompt_trad_ae2fr_comment.txt
 |       prompt_trad_fr2ae.txt
+|       prompt_trad_fr2ae_comment.txt
 |       SQLite.db
+|       traductions_commentaires.json
 |       
 +---modules
 |   |   base_converter.py
@@ -41,10 +49,9 @@ C:.
 |   |   
 |           
 +---static
-|   |   favicon-512.png
-|   |   
 |   +---CSS
 |   |   |   main.css
+|   |   |   responsive.css
 |   |   |   style.css
 |   |   |   
 |   |   +---components
@@ -80,6 +87,7 @@ C:.
 |   |       Corner-left.svg
 |   |       Corner-right.svg
 |   |       Corner.png
+|   |       favicon-512.png
 |   |       Logo-Aenor.png
 |   |       Map.svg
 |   |       Wood-IA.png
@@ -98,11 +106,14 @@ C:.
 |       commentaires.html
 |       cours.html
 |       exercice.html
-|       grammaire.html
-|       grammaire_2.html
 |       grammaire_3.html
+|       historique.html
 |       IA-trad.html
 |       index.html
 |       result.html
 |       scenario.html
 |       traducteur.html
+|       
+        
+
+

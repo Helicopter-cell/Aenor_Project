@@ -47,12 +47,116 @@ INDENTATION_PAR_NIVEAU = 2
 ESPACEMENT_ELEMENT_JSON = '0.25em'
 
 
+AENOR_LATIN_MAP = str.maketrans({
+    '§': 'š',
+    '/': 'r',
+    'µ': "m'",
+    '=': "l'",
+    ';': 'e',
+    '*': 'ou',
+    '²': '',
+})
+
+AENOR_PHONETIC_MAP = {
+    'a': 'a',
+    'b': 'b',
+    'c': 'k',
+    'd': 'd',
+    'e': 'e',
+    'f': 'f',
+    'g': 'g',
+    'h': 'h',
+    'i': 'i',
+    'j': 'ʒ',
+    'k': 'k',
+    'l': 'l',
+    'm': 'm',
+    'n': 'n',
+    'o': 'ɔ',
+    'p': 'p',
+    'q': 'k',
+    'r': 'ʁ',
+    's': 's',
+    't': 't',
+    'u': 'y',
+    'v': 'v',
+    'w': 'w',
+    'x': 'ks',
+    'y': 'j',
+    'z': 'z',
+    'à': 'a',
+    'â': 'ɑ',
+    'ä': 'a',
+    'é': 'e',
+    'è': 'ɛ',
+    'ê': 'ɛ',
+    'ë': 'ə',
+    'î': 'i',
+    'ï': 'i',
+    'ô': 'ɔ',
+    'ö': 'ɔ',
+    'ù': 'y',
+    'û': 'y',
+    'ü': 'y',
+    '§': 'ʃ',
+    '/': 'ɾ',
+    'µ': 'm',
+    '=': 'l',
+    ';': 'ə',
+    '*': 'u',
+    '²': '',
+}
+
+
+def convert_aenor_to_latin(mot_aenor):
+    """Convertit les caractères typographiques Aënor en alphabet occidental."""
+    if not isinstance(mot_aenor, str):
+        return mot_aenor
+    return mot_aenor.translate(AENOR_LATIN_MAP)
+
+
+def convert_aenor_to_phonetic(mot_aenor):
+    """Retourne la transcription IPA d'un mot Aënor, entre crochets."""
+    if not isinstance(mot_aenor, str):
+        return mot_aenor
+    transcription = ''.join(
+        AENOR_PHONETIC_MAP.get(character, character)
+        for character in mot_aenor
+    )
+    return f'[{transcription}]'
+
+
+def enrich_lexicon_entry(traduction_francaise, mot_aenor):
+    """Construit une entrée complète sans modifier la donnée source."""
+    return {
+        'french': traduction_francaise,
+        'aenor': mot_aenor,
+        'latin': convert_aenor_to_latin(mot_aenor),
+        'phonetic': convert_aenor_to_phonetic(mot_aenor),
+    }
+
+
+def enrich_lexicon(value):
+    """Transforme récursivement les paires feuille du lexique en entrées enrichies."""
+    if isinstance(value, dict):
+        enriched = {}
+        for key, val in value.items():
+            if not isinstance(val, (dict, list)) and clean_text(key) and clean_text(val):
+                enriched[key] = enrich_lexicon_entry(key, val)
+            else:
+                enriched[key] = enrich_lexicon(val)
+        return enriched
+    if isinstance(value, list):
+        return [enrich_lexicon(item) for item in value]
+    return value
+
+
 # Définition de la fonction chargée de charger le fichier JSON du lexique
 def load_cours():
     # Ouverture du lexique avec un encodage UTF-8 (pour gérer les accents)
     with get_path('|dataPATH|aenor_lexique').open(encoding='utf-8') as f:
         # Analyse (parse) du contenu JSON du fichier et renvoi sous forme de dictionnaire ou liste Python
-        return json.load(f)
+        return enrich_lexicon(json.load(f))
 
 
 # Définition de la fonction de nettoyage du texte brut du JSON
@@ -93,6 +197,19 @@ def render_cours_value(value, level=0):
         for key, val in value.items():
             # Nettoyage de la clé (nom de la catégorie/mot) puis protection contre les failles HTML
             key_html = escape(clean_text(key))
+
+            # Une feuille enrichie représente une entrée du lexique avec ses quatre champs.
+            if isinstance(val, dict) and set(val) == {'french', 'aenor', 'latin', 'phonetic'}:
+                html_parts.append(
+                    f'<div class="lexique-entry" style="margin-top:{ESPACEMENT_ELEMENT_JSON}; margin-left:{indent}em;">'
+                    f'<span class="lexique-aenor">{escape(clean_text(val["aenor"]))}</span>'
+                    f'<span class="lexique-latin">({escape(clean_text(val["latin"]))})</span>'
+                    f'<span class="lexique-phonetic">{escape(clean_text(val["phonetic"]))}</span>'
+                    f'<span class="lexique-separator" aria-hidden="true">:</span>'
+                    f'<strong class="lexique-french">{escape(clean_text(val["french"]))}</strong>'
+                    f'</div>'
+                )
+                continue
 
             # Si la valeur associée est elle-même un dictionnaire ou une liste (sous-catégorie)
             if isinstance(val, (dict, list)):

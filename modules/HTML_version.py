@@ -4,6 +4,11 @@ import re
 import sys
 import subprocess
 
+
+import markdown
+from bs4 import BeautifulSoup
+from modules.utils import get_path
+
 # 1. Vérification et installation automatique des bibliothèques requises
 REQUIRED_PACKAGES = {
     "markdown": "markdown",
@@ -21,11 +26,6 @@ for module_name, package_name in REQUIRED_PACKAGES.items():
         except Exception as e:
             print(f"Erreur lors de l'installation de {package_name} : {e}")
             sys.exit(1)
-
-import markdown
-from bs4 import BeautifulSoup
-from modules.utils import get_path
-
 
 def proteger_asterisques_dans_brackets(texte):
     """
@@ -57,6 +57,67 @@ def formater_aenor(html_content):
     return html_content
 
 
+def construire_accordeons(html_content):
+    """Transforme les titres Markdown en sections HTML imbriquees."""
+    soup = BeautifulSoup(html_content, "html.parser")
+    nodes = list(soup.contents)
+
+    def niveau_titre(node):
+        if node.name and re.fullmatch(r"h[1-6]", node.name):
+            return int(node.name[1])
+        return None
+
+    def construire_sections(position, niveau_parent):
+        resultat = []
+        while position < len(nodes):
+            niveau = niveau_titre(nodes[position])
+            if niveau is not None and niveau <= niveau_parent:
+                break
+
+            if niveau is None:
+                resultat.append(nodes[position])
+                position += 1
+                continue
+
+            titre = nodes[position]
+            position += 1
+            contenu = soup.new_tag("div", attrs={"class": "cours-content"})
+            titre_texte = titre.get_text(" ", strip=True)
+            summary = soup.new_tag("summary", attrs={"class": "cours-summary"})
+            chevron = soup.new_tag("span", attrs={"class": "cours-chevron", "aria-hidden": "true"})
+            chevron.string = "▶"
+            texte = soup.new_tag("span", attrs={"class": "cours-summary-text"})
+            texte.string = titre_texte
+            summary.extend([chevron, texte])
+
+            while position < len(nodes):
+                prochain_niveau = niveau_titre(nodes[position])
+                if prochain_niveau is not None and prochain_niveau <= niveau:
+                    break
+                if prochain_niveau is not None:
+                    sous_sections, position = construire_sections(position, niveau)
+                    for sous_section in sous_sections:
+                        contenu.append(sous_section)
+                else:
+                    contenu.append(nodes[position])
+                    position += 1
+
+            section = soup.new_tag("details", attrs={"class": "cours-accordion"})
+            section.extend([summary, contenu])
+            resultat.append(section)
+
+        return resultat, position
+
+    sections, position = construire_sections(0, 0)
+    resultat = BeautifulSoup("", "html.parser")
+    while sections:
+        resultat.append(sections.pop(0))
+    if position < len(nodes):
+        for node in nodes[position:]:
+            resultat.append(node)
+    return str(resultat)
+
+
 def generer_template_flask(fichier_md=None, fichier_html=None):
     fichier_md = fichier_md or str(get_path('|rootPATH|grammaire_aenor'))
     fichier_html = fichier_html or str(get_path('|htmlPATH|grammaire_3'))
@@ -85,7 +146,11 @@ def generer_template_flask(fichier_md=None, fichier_html=None):
     print("Formatage de l'Aënor et restauration des astérisques...")
     corps_html = formater_aenor(corps_html)
 
-    # --- ÉTAPE D : STRUCTURATION VISUELLE ---
+    # --- ÉTAPE D : STRUCTURATION DES SECTIONS ---
+    print("Transformation des titres en accordéons imbriqués...")
+    corps_html = construire_accordeons(corps_html)
+
+    # --- ÉTAPE E : STRUCTURATION VISUELLE ---
     print("Mise en forme visuelle du code HTML...")
     try:
         soup = BeautifulSoup(corps_html, "html.parser")
@@ -107,6 +172,33 @@ def generer_template_flask(fichier_md=None, fichier_html=None):
 <div class="conlang-documentation">
 {html_indente}
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {{
+        document.querySelectorAll('.cours-accordion').forEach(function (details) {{
+            details.open = false;
+            const summary = details.querySelector(':scope > .cours-summary');
+            const chevron = details.querySelector(':scope > .cours-summary .cours-chevron');
+
+            if (summary) {{
+                summary.addEventListener('click', function (event) {{
+                    event.preventDefault();
+                    details.open = !details.open;
+                }});
+            }}
+
+            const syncState = function () {{
+                const isOpen = details.open;
+                details.setAttribute('aria-expanded', String(isOpen));
+                if (chevron) {{
+                    chevron.textContent = isOpen ? '▼' : '▶';
+                }}
+            }};
+
+            details.addEventListener('toggle', syncState);
+            syncState();
+        }});
+    }});
+</script>
 {{% endblock %}}"""
 
     # Création du dossier de destination s'il n'existe pas
