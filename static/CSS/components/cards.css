@@ -119,10 +119,12 @@
     stroke-dashoffset: 100;
 }
 
-#svg-tra svg path { transition: stroke-dashoffset 2.75s ease; }
-#svg-grm svg path { transition: stroke-dashoffset 1s ease; }
+#svg-tra svg path { transition: stroke-dashoffset 2.5s ease; }
+#svg-grm svg path { transition: stroke-dashoffset 0.75s ease; }
 #svg-lex svg path { transition: stroke-dashoffset 1.0s ease; }
 #svg-exe svg path { transition: stroke-dashoffset 1.0s ease; }
+#svg-his svg path { transition: stroke-dashoffset 1.0s ease; }
+#svg-com svg path { transition: stroke-dashoffset 1.0s ease; }
 
 .card:hover .card-icon svg path {
     stroke-dashoffset: 0;
