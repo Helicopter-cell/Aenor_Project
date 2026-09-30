@@ -1,0 +1,19 @@
+{
+	"nodes":[
+		{"id":"b48485b979552cd5","type":"text","text":"Orèl a§amèb","x":-470,"y":-200,"width":250,"height":60},
+		{"id":"ef6aaf5ff3638915","type":"text","text":"Mèza a§amèb","x":30,"y":-200,"width":250,"height":60},
+		{"id":"dfdf4c74aebca1e8","type":"text","text":"Ondru a§amèb","x":-220,"y":-80,"width":250,"height":60},
+		{"id":"c434357b8254600d","type":"text","text":"A§o a§amèb","x":-720,"y":-320,"width":250,"height":60},
+		{"id":"712d00b14c80e2e8","type":"text","text":"Fé§a a§amèb","x":-470,"y":-440,"width":250,"height":60},
+		{"id":"7ef1318745976ab4","type":"text","text":"ouralif a§amèb","x":-220,"y":-320,"width":250,"height":60},
+		{"id":"19fefed1b67673eb","x":-970,"y":-440,"width":250,"height":60,"type":"text","text":"[[Dal-ifey]] a§amab"}
+	],
+	"edges":[
+		{"id":"9e7d038d7de6a1aa","fromNode":"ef6aaf5ff3638915","fromSide":"left","toNode":"dfdf4c74aebca1e8","toSide":"top"},
+		{"id":"e6e23ceef8b9cb53","fromNode":"b48485b979552cd5","fromSide":"right","toNode":"dfdf4c74aebca1e8","toSide":"top"},
+		{"id":"35b58226e03b77ff","fromNode":"c434357b8254600d","fromSide":"right","toNode":"b48485b979552cd5","toSide":"top"},
+		{"id":"820e86c1d0190be6","fromNode":"712d00b14c80e2e8","fromSide":"left","toNode":"c434357b8254600d","toSide":"top"},
+		{"id":"694f8e857641b42a","fromNode":"7ef1318745976ab4","fromSide":"left","toNode":"b48485b979552cd5","toSide":"top"},
+		{"id":"fa168f507c5a5775","fromNode":"19fefed1b67673eb","fromSide":"right","toNode":"c434357b8254600d","toSide":"top"}
+	]
+}

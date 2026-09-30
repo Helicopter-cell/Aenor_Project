@@ -1,27 +1,203 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<style>
-body {
-    background: image(url("{{ url_for('static', filename=static_path('|imagePATH|wood')) }}"));
-}
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/components/scenario-graph.css') }}">
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
-<iframe src="https://app.xmind.com/embed/j7iXDeTk?sheet-id=e5e161a0-cb5e-4ec7-a7f8-f3291052155a" 
-width="850px" 
-height="440"
-frameborder="0" 
-scrolling="no" 
-allow="fullscreen"
-style="margin: auto;">
-</iframe>
+<main class="scenario-page" aria-label="Carte du coffre Obsidian">
+    <section class="scenario-graph-panel" aria-label="Graphe des notes">
+        <header class="scenario-toolbar">
+            <div>
+                <p class="scenario-eyebrow">COFFRE OBSIDIAN</p>
+                <h1>Carte des connexions</h1>
+                <p class="scenario-count">{{ graph_data.nodes|length }} notes · {{ graph_data.edges|length }} liens</p>
+            </div>
+            <div class="scenario-controls" aria-label="Commandes du graphe">
+                <button type="button" id="zoom-out" aria-label="Zoom arrière" title="Zoom arrière">-</button>
+                <button type="button" id="zoom-in" aria-label="Zoom avant" title="Zoom avant">+</button>
+                <button type="button" id="fit-graph" class="fit-control">Recentrer</button>
+            </div>
+        </header>
+        <div class="scenario-graph-wrap">
+            <div id="scenario-network" role="application" aria-label="Graphe interactif des notes"></div>
+            {% if not graph_data.nodes %}
+            <p class="scenario-empty">Aucune note Markdown dans <code>data/obsidian_vault/</code>.</p>
+            {% endif %}
+        </div>
+    </section>
 
-<div style="
-padding: 25px;"></div> <!-- Juste pour faire un espace entre les deux éléments; -->
+    <aside class="scenario-preview" aria-live="polite" aria-label="Aperçu de la note">
+        <div class="preview-placeholder" id="preview-placeholder">
+            <span class="preview-mark" aria-hidden="true">+</span>
+            <h2>Explorer les notes</h2>
+            <p>Sélectionnez un noeud pour ouvrir son aperçu.</p>
+        </div>
+        <article id="note-preview" hidden>
+            <p class="scenario-eyebrow">APERÇU DE LA NOTE</p>
+            <h2 id="preview-title"></h2>
+            <p id="preview-summary" class="preview-summary"></p>
+            <div id="preview-content" class="preview-content"></div>
+        </article>
+    </aside>
+</main>
 
-<img src="{{ url_for('static', filename=static_path('|imagePATH|Map')) }}" alt="Carte" style="
-width: 850px; 
-height: auto; 
-margin: 0 auto; 
-display: block;">
+<script>
+(() => {
+    const graphData = {{ graph_data|tojson }};
+    const graphElement = document.getElementById('scenario-network');
+    const previewPlaceholder = document.getElementById('preview-placeholder');
+    const notePreview = document.getElementById('note-preview');
+    const previewTitle = document.getElementById('preview-title');
+    const previewSummary = document.getElementById('preview-summary');
+    const previewContent = document.getElementById('preview-content');
+    const minZoom = 0.2;
+    const maxZoom = 2.5;
+    const degreeByNode = new Map(graphData.nodes.map((node) => [node.id, 0]));
+    graphData.edges.forEach((edge) => {
+        degreeByNode.set(edge.from, (degreeByNode.get(edge.from) || 0) + 1);
+        degreeByNode.set(edge.to, (degreeByNode.get(edge.to) || 0) + 1);
+    });
+    const maxDegree = Math.max(1, ...degreeByNode.values());
+    const nodePalette = [
+        { background: '#92b9c6', border: '#c9e0e5' },
+        { background: '#80b89e', border: '#c1dfbd' },
+        { background: '#d0bb70', border: '#f1dfa0' },
+        { background: '#dc9166', border: '#f4c59b' },
+        { background: '#d86e76', border: '#f0a7a0' },
+    ];
+    const originalNodes = graphData.nodes.map((node) => ({
+        id: node.id,
+        label: node.title,
+        title: node.summary,
+        shape: 'dot',
+        size: 18,
+        borderWidth: 2,
+        color: nodePalette[Math.min(nodePalette.length - 1, Math.floor((degreeByNode.get(node.id) / maxDegree) * nodePalette.length))],
+        font: { color: '#fff8e8', size: 15, face: 'Georgia' },
+    }));
+    const nodes = new vis.DataSet(originalNodes);
+    const edges = new vis.DataSet(graphData.edges.map((edge) => ({
+        ...edge,
+    })));
+    const network = new vis.Network(graphElement, { nodes, edges }, {
+        autoResize: true,
+        nodes: { chosen: true },
+        edges: {
+            arrows: { to: { enabled: false } },
+            color: { inherit: 'both' },
+            scaling: { min: 1, max: 6 },
+            smooth: { type: 'continuous' },
+            selectionWidth: 2,
+            hoverWidth: 1.5,
+        },
+        interaction: {
+            hover: true,
+            hoverConnectedEdges: true,
+            zoomView: true,
+            dragView: true,
+            dragNodes: true,
+            navigationButtons: false,
+        },
+        physics: {
+            stabilization: { iterations: 180, fit: true },
+            barnesHut: { gravitationalConstant: -3800, springLength: 125, springConstant: 0.035 },
+        },
+    });
+
+    network.on('zoom', ({ scale }) => {
+        const boundedScale = Math.min(maxZoom, Math.max(minZoom, scale));
+        if (boundedScale !== scale) network.moveTo({ scale: boundedScale });
+    });
+
+    function constrainView() {
+        if (!graphData.nodes.length) return;
+        const positions = Object.values(network.getPositions());
+        if (!positions.length) return;
+
+        const bounds = positions.reduce((result, position) => ({
+            minX: Math.min(result.minX, position.x),
+            maxX: Math.max(result.maxX, position.x),
+            minY: Math.min(result.minY, position.y),
+            maxY: Math.max(result.maxY, position.y),
+        }), {
+            minX: Infinity,
+            maxX: -Infinity,
+            minY: Infinity,
+            maxY: -Infinity,
+        });
+        const scale = network.getScale();
+        const padding = 120 + Math.sqrt(graphData.nodes.length) * 18;
+        const halfWidth = graphElement.clientWidth / (2 * scale);
+        const halfHeight = graphElement.clientHeight / (2 * scale);
+        const view = network.getViewPosition();
+        const boundedPosition = {
+            x: Math.min(bounds.maxX + padding + halfWidth, Math.max(bounds.minX - padding - halfWidth, view.x)),
+            y: Math.min(bounds.maxY + padding + halfHeight, Math.max(bounds.minY - padding - halfHeight, view.y)),
+        };
+
+        if (boundedPosition.x !== view.x || boundedPosition.y !== view.y) {
+            network.moveTo({ position: boundedPosition, scale, animation: { duration: 280 } });
+        }
+    }
+
+    network.on('dragEnd', constrainView);
+
+    function setHighlight(nodeId) {
+        const linkedEdges = new Set(nodeId === null ? [] : network.getConnectedEdges(nodeId));
+        const linkedNodes = new Set(nodeId === null ? [] : network.getConnectedNodes(nodeId));
+        if (nodeId !== null) linkedNodes.add(nodeId);
+        nodes.update(originalNodes.map((node) => {
+            if (nodeId === null || linkedNodes.has(node.id)) return node;
+            return { id: node.id, color: { background: 'rgba(91, 105, 82, 0.42)', border: 'rgba(180, 179, 151, 0.35)' }, font: { color: 'rgba(255, 248, 232, 0.38)' } };
+        }));
+        edges.update(graphData.edges.map((edge) => ({
+            id: edge.id,
+            color: nodeId === null || linkedEdges.has(edge.id)
+                ? { inherit: 'both' }
+                : { color: 'rgba(150, 150, 130, 0.12)', inherit: false },
+        })));
+    }
+
+    function showPreview(nodeId) {
+        const node = graphData.nodes.find((candidate) => candidate.id === nodeId);
+        if (!node) return;
+        previewTitle.textContent = node.title;
+        previewSummary.textContent = node.summary;
+        previewContent.innerHTML = node.content_html;
+        previewPlaceholder.hidden = true;
+        notePreview.hidden = false;
+        setHighlight(nodeId);
+    }
+
+    function clearPreview() {
+        previewPlaceholder.hidden = false;
+        notePreview.hidden = true;
+        setHighlight(null);
+    }
+
+    network.on('hoverNode', ({ node }) => showPreview(node));
+    network.on('blurNode', () => {
+        const selected = network.getSelectedNodes();
+        if (selected.length) showPreview(selected[0]);
+        else clearPreview();
+    });
+    network.on('click', ({ nodes: selected }) => {
+        if (selected.length) showPreview(selected[0]);
+        else clearPreview();
+    });
+    previewContent.addEventListener('click', (event) => {
+        const link = event.target.closest('a[href^="#vault-"]');
+        if (!link) return;
+        event.preventDefault();
+        const nodeId = decodeURIComponent(link.getAttribute('href').slice('#vault-'.length));
+        network.selectNodes([nodeId]);
+        network.focus(nodeId, { scale: 1.15, animation: { duration: 350 } });
+        showPreview(nodeId);
+    });
+
+    document.getElementById('zoom-in').addEventListener('click', () => network.moveTo({ scale: Math.min(maxZoom, network.getScale() * 1.2) }));
+    document.getElementById('zoom-out').addEventListener('click', () => network.moveTo({ scale: Math.max(minZoom, network.getScale() / 1.2) }));
+    document.getElementById('fit-graph').addEventListener('click', () => network.fit({ animation: { duration: 400 } }));
+})();
+</script>
 {% endblock %}

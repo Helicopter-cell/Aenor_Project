@@ -47,6 +47,7 @@ except ImportError:
 from modules.base_converter import process_aenor_numbers
 from modules.exercices import get_random_phrase  # pour les exercices interactifs
 from modules.utils import load_cours, render_cours_value, clean_text, get_path, static_path  # pour les cours
+from modules.obsidian_vault import parse_obsidian_vault
 
 
 # =============================
@@ -1473,7 +1474,9 @@ def ia_trad():
 
 @app.route('/scenario')
 def scenario():
-    return render_template('scenario.html')
+    vault_path = Path(__file__).resolve().parent / 'data' / 'obsidian_vault'
+    graph_data = parse_obsidian_vault(vault_path)
+    return render_template('scenario.html', graph_data=graph_data)
 
 @app.route('/commentaires', methods=['GET', 'POST'])
 def commentaires():

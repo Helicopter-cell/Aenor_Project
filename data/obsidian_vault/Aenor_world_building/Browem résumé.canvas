@@ -1,0 +1,30 @@
+{
+	"nodes":[
+		{"id":"8c33f38cf6bfdebc","type":"text","text":"Régime politique : Monarchie constitutionnel.","x":-160,"y":-340,"width":250,"height":60},
+		{"id":"9ac75c87aad01ced","type":"text","text":"Le rôle clé politique appartient en réalité au 2nd. (*~1er ministre*)","x":-160,"y":-600,"width":250,"height":100},
+		{"id":"7d9e62f1e23c0342","type":"text","text":"Roi : Voir [[Généaogie chef Browem]]","x":-500,"y":-600,"width":250,"height":60},
+		{"id":"ce9adaa8624e8d03","type":"text","text":"Elections à démocratie directe :","x":200,"y":-340,"width":280,"height":60},
+		{"id":"355f1f731a5551ab","type":"text","text":"Système politique Browem","x":-160,"y":-180,"width":250,"height":60,"color":"3"},
+		{"id":"0adc7f5b669f7fbc","type":"text","text":"*A completer*","x":215,"y":-460,"width":250,"height":60},
+		{"id":"af212e337b7a97b6","type":"text","text":"Celui-ci est désigner par vote : Le peuples le choisis à 75%, le Roi à la main sur 25% des votes.\n\nPar exemples :\nSoit le peuples attribue 7 millions de votent au 2 seuls candidats\n- 4 millions de voient à *\"P1\"* \n- 3 millions de voient à *\"P2\"*\n\nLe Roi possède 25% des voient du peuples :\nDonc si il n'y a dans notre cas que 7 millions de votent : \nle Roi peut attribuer (25% x 7 000 000 ) = 1 750 000\n voient à qui il veut.Ainsi, ce n'est pas forcément *\"P1\"* qui remporte les éléctions.","x":-267,"y":-1120,"width":465,"height":380},
+		{"id":"3346635a0df9582d","type":"text","text":"Résumé du Royaume  [[Browem]]","x":-180,"y":-60,"width":290,"height":60,"color":"1"},
+		{"id":"0c207c54260c7a90","type":"text","text":"Environnement, biodiversité etc...","x":-180,"y":60,"width":290,"height":60,"color":"3"},
+		{"id":"5157e901152f63d3","x":-159,"y":180,"width":250,"height":80,"type":"text","text":"Plaines, Montagnes et légeres montagnes.\n"},
+		{"id":"5fe0ecb5ad862db2","x":-159,"y":400,"width":250,"height":60,"type":"text","text":"Flore"},
+		{"id":"230bfa8fe9d954a9","x":280,"y":400,"width":250,"height":60,"type":"text","text":"Faune"},
+		{"id":"b2507152a3286fe7","x":-560,"y":400,"width":250,"height":60,"type":"text","text":"Fonge"}
+	],
+	"edges":[
+		{"id":"40a318a85fb11a02","fromNode":"9ac75c87aad01ced","fromSide":"top","toNode":"af212e337b7a97b6","toSide":"bottom"},
+		{"id":"7621f341e6c60457","fromNode":"8c33f38cf6bfdebc","fromSide":"top","toNode":"7d9e62f1e23c0342","toSide":"bottom"},
+		{"id":"f58bcb2ecafe5a91","fromNode":"8c33f38cf6bfdebc","fromSide":"top","toNode":"9ac75c87aad01ced","toSide":"bottom"},
+		{"id":"188e126f7f61dd2c","fromNode":"355f1f731a5551ab","fromSide":"top","toNode":"8c33f38cf6bfdebc","toSide":"bottom"},
+		{"id":"75dda9d2e13290f3","fromNode":"355f1f731a5551ab","fromSide":"right","toNode":"ce9adaa8624e8d03","toSide":"bottom"},
+		{"id":"eec4a34797891452","fromNode":"ce9adaa8624e8d03","fromSide":"top","toNode":"0adc7f5b669f7fbc","toSide":"bottom"},
+		{"id":"60d1b2aa9c72bbe9","fromNode":"3346635a0df9582d","fromSide":"bottom","toNode":"0c207c54260c7a90","toSide":"top"},
+		{"id":"7adbd9c22ef47830","fromNode":"0c207c54260c7a90","fromSide":"bottom","toNode":"5157e901152f63d3","toSide":"top"},
+		{"id":"0de1c7a85b2e7715","fromNode":"5157e901152f63d3","fromSide":"bottom","toNode":"b2507152a3286fe7","toSide":"top"},
+		{"id":"8ee0ded5edcd3d65","fromNode":"5157e901152f63d3","fromSide":"bottom","toNode":"5fe0ecb5ad862db2","toSide":"top"},
+		{"id":"ee060c2dfc6331d2","fromNode":"5157e901152f63d3","fromSide":"bottom","toNode":"230bfa8fe9d954a9","toSide":"top"}
+	]
+}
