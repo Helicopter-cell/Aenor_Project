@@ -1,37 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Lexiques</h1>
-<p class="lexique-introduction">Chaque entrée présente la traduction française, l'écriture Aënor, sa translittération occidentale et sa prononciation.</p>
-{{ cours | render_cours_value }}
+<div class="lexique-page">
+    <h1>Lexiques</h1>
+    <p class="lexique-introduction">Chaque entrée présente la traduction française, l'écriture Aënor, sa translittération occidentale et sa prononciation.</p>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const accordions = document.querySelectorAll('.cours-accordion');
+    <form class="lexique-search" role="search" onsubmit="return false;">
+        <label class="lexique-search-label" for="lexique-search">Rechercher dans le lexique</label>
+        <div class="lexique-search-control">
+            <input id="lexique-search" name="lexique-search" type="search" autocomplete="off" placeholder="Rechercher un mot en français, Aënor, occidental ou phonétique...">
+        </div>
+    </form>
 
-        accordions.forEach(function (details) {
-            details.open = false;
-            const summary = details.querySelector('.cours-summary');
-            const chevron = details.querySelector('.cours-chevron');
+    <p id="lexique-no-results" class="lexique-no-results" role="status" hidden>Aucun mot trouvé dans le lexique pour cette recherche.</p>
 
-            if (summary) {
-                summary.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    details.open = !details.open;
-                });
-            }
+    {{ cours | render_cours_value }}
+</div>
 
-            const syncState = function () {
-                const isOpen = details.open;
-                details.setAttribute('aria-expanded', String(isOpen));
-                if (chevron) {
-                    chevron.textContent = isOpen ? '▼' : '▶';
-                }
-            };
-
-            details.addEventListener('toggle', syncState);
-            syncState();
-        });
-    });
-</script>
+<script src="{{ url_for('static', filename='js/lexique-search.js') }}"></script>
 {% endblock %}

@@ -1,0 +1,71 @@
+.lexique-search {
+    margin: 1.5rem 0 2rem;
+}
+
+.lexique-search-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #243b24;
+    font-weight: 600;
+}
+
+.lexique-search-control {
+    position: relative;
+    max-width: 48rem;
+}
+
+.lexique-search-control::before {
+    content: "⌕";
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    z-index: 1;
+    color: #3a5a40;
+    font-size: 1.35rem;
+    line-height: 1;
+    transform: translateY(-52%);
+    pointer-events: none;
+}
+
+#lexique-search {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.85rem 1rem 0.85rem 2.75rem;
+    border: 1px solid rgba(58, 90, 64, 0.3);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    color: #243b24;
+    font: inherit;
+    box-shadow: 0 6px 16px rgba(31, 47, 36, 0.06);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+#lexique-search::placeholder {
+    color: #6f796f;
+}
+
+#lexique-search:focus {
+    outline: none;
+    border-color: #3a5a40;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(58, 90, 64, 0.14), 0 8px 20px rgba(31, 47, 36, 0.1);
+}
+
+.lexique-no-results {
+    margin: 1.5rem 0;
+    padding: 1rem 1.2rem;
+    border-left: 3px solid #6b4f3a;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.55);
+    color: #243b24;
+}
+
+@media (max-width: 600px) {
+    .lexique-search {
+        margin-top: 1rem;
+    }
+
+    #lexique-search {
+        font-size: 0.95rem;
+    }
+}
