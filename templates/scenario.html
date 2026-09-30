@@ -3,8 +3,28 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/components/scenario-graph.css') }}">
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-autoloader"></script>
 
 <main class="scenario-page" aria-label="Carte du coffre Obsidian">
+    <section class="scenario-outline-panel" aria-label="Carte mentale hiérarchique">
+        <header class="scenario-toolbar">
+            <div>
+                <p class="scenario-eyebrow">VUE HIÉRARCHIQUE</p>
+                <h1>Carte mentale du coffre</h1>
+                <p class="scenario-count">Dossiers, documents et contenu détaillé</p>
+            </div>
+        </header>
+        <div class="scenario-outline-wrap" id="scenario-outline">
+            {% if graph_data.nodes %}
+            <div id="obsidian-mindmap">
+                <div class="markmap">{{ outline_markdown|e }}</div>
+            </div>
+            {% else %}
+            <p class="scenario-empty">Ajoutez des fichiers Markdown dans <code>data/obsidian_vault/</code> pour construire la carte mentale.</p>
+            {% endif %}
+        </div>
+    </section>
+
     <section class="scenario-graph-panel" aria-label="Graphe des notes">
         <header class="scenario-toolbar">
             <div>

@@ -5,7 +5,7 @@ powershell -Command "git add ."
 echo git add. effectué !
 pause
 
-powershell -Command "git commit -m 'Amélioration de `scenario.html` pour l` adapter à obsidian'"
+powershell -Command "git commit -m 'Ajout du deuxième graphe (Type XMind)'"
 echo git commit effectué !
 pause
 
