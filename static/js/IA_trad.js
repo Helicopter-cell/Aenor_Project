@@ -13,10 +13,12 @@ async function sendPrompt() {
         const direction = document.querySelector('input[name="direction"]:checked')?.value || 'fr2aenor';
         const autoriserApprentissage = document.getElementById('autoriser-apprentissage')?.checked || false;
         const traductionFiable = document.getElementById('traduction-fiable')?.checked || false;
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
         const response = await fetch('/traduire', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
             },
             body: JSON.stringify({
                 texte: prompt,
@@ -32,7 +34,21 @@ async function sendPrompt() {
             throw new Error(data.erreur || 'Erreur inconnue');
         }
 
-        responseDiv.textContent = data.traduction || 'Aucune réponse reçue.';
+        const translationText = data.traduction || 'Aucune réponse reçue.';
+        const resultContent = document.createElement('div');
+        resultContent.className = 'translation-result';
+        const translatedText = document.createElement('span');
+        translatedText.className = 'translation-text';
+        translatedText.textContent = translationText;
+        resultContent.appendChild(translatedText);
+
+        if (direction === 'fr2aenor' && data.traduction) {
+            const speakButton = document.getElementById('tts-button-template').content.firstElementChild.cloneNode(true);
+            speakButton.dataset.ipa = data.phonetic || '';
+            speakButton.dataset.text = data.traduction;
+            resultContent.appendChild(speakButton);
+        }
+        responseDiv.replaceChildren(resultContent);
         if (autoriserApprentissage && data.commentaire) {
             const commentaire = document.createElement('div');
             commentaire.className = 'learning-comment';

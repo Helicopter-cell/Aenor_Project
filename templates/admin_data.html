@@ -5,14 +5,18 @@
 {% endblock %}
 
 {% block content %}
-<div id="admin-dashboard" class="admin-container">
+<div id="admin-dashboard" class="admin-container"
+     data-toggle-url="{{ url_for('admin.admin_toggle_config') }}"
+     data-shutdown-url="{{ url_for('admin.admin_shutdown') }}"
+     data-cache-refresh-url="{{ url_for('admin.admin_refresh_content_cache') }}">
   {% if not authenticated %}
     <div class="admin-login-shell">
       <h2>Administration — Connexion</h2>
       {% if error %}
         <div class="alert alert-danger">{{ error }}</div>
       {% endif %}
-      <form method="POST" action="{{ url_for('admin') }}" class="admin-login">
+      <form method="POST" action="{{ url_for('admin.admin') }}" class="admin-login">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <label for="admin_password">Code administrateur</label>
         <input id="admin_password" name="admin_password" type="password" required />
         <button type="submit" class="btn btn-primary">Se connecter</button>
@@ -25,7 +29,10 @@
         <p class="eyebrow">Administration</p>
         <h2>Tableau de bord</h2>
       </div>
-      <a href="{{ url_for('admin_logout') }}" class="btn-logout">Se déconnecter</a>
+      <form method="POST" action="{{ url_for('admin.admin_logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn-logout">Se déconnecter</button>
+      </form>
     </div>
 
     <div id="shutdown-message" class="shutdown-message hidden">Le serveur est en cours d’arrêt…</div>
@@ -51,6 +58,7 @@
         </div>
         <br>
         <br>
+        <button id="refresh-content-cache-btn" class="btn" type="button">Actualiser les caches de contenu</button>
         <button id="shutdown-server-btn" class="btn btn-danger" type="button">Éteindre le serveur</button>
       </section>
 
@@ -131,13 +139,13 @@
           </table>
         </div>
         <div class="pagination">
-          {% if page > 1 %}<a href="{{ url_for('admin') }}?page={{ page-1 }}">Précédent</a>{% else %}<span></span>{% endif %}
+          {% if page > 1 %}<a href="{{ url_for('admin.admin') }}?page={{ page-1 }}">Précédent</a>{% else %}<span></span>{% endif %}
           <div class="pagination-pages" aria-label="Pages des traductions">
             {% for page_number in range(1, total_pages + 1) %}
-              {% if page_number == page %}<strong aria-current="page">{{ page_number }}</strong>{% else %}<a href="{{ url_for('admin') }}?page={{ page_number }}">{{ page_number }}</a>{% endif %}
+              {% if page_number == page %}<strong aria-current="page">{{ page_number }}</strong>{% else %}<a href="{{ url_for('admin.admin') }}?page={{ page_number }}">{{ page_number }}</a>{% endif %}
             {% endfor %}
           </div>
-          {% if page < total_pages %}<a href="{{ url_for('admin') }}?page={{ page+1 }}">Suivant</a>{% else %}<span></span>{% endif %}
+          {% if page < total_pages %}<a href="{{ url_for('admin.admin') }}?page={{ page+1 }}">Suivant</a>{% else %}<span></span>{% endif %}
         </div>
       </section>
 
@@ -167,6 +175,7 @@
 
     </div>
 
+    <script id="admin-chart-data" type="application/json">{{ api_logs|tojson }}</script>
     <script src="{{ url_for('static', filename='js/admin_data.js') }}"></script>
   {% endif %}
 </div>

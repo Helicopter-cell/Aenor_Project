@@ -17,6 +17,7 @@
 <div class="center-column">
     {% if phrase %}
         <form method="POST" class="form-wrapper">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input
             id="prompt-ae"
             placeholder="Ecrivez votre réponse ici :"

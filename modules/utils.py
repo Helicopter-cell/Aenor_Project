@@ -4,6 +4,7 @@
 
 # Importation du module natif pour manipuler les fichiers et données au format JSON
 import json
+from functools import lru_cache
 from pathlib import Path
 
 # Importation du module d'expressions régulières (RegEx) pour rechercher et remplacer des motifs de texte
@@ -151,12 +152,22 @@ def enrich_lexicon(value):
     return value
 
 
-# Définition de la fonction chargée de charger le fichier JSON du lexique
+@lru_cache(maxsize=8)
+def _load_cours_cached(path, modified_ns, size):
+    with Path(path).open(encoding='utf-8') as file_handle:
+        return enrich_lexicon(json.load(file_handle))
+
+
 def load_cours():
-    # Ouverture du lexique avec un encodage UTF-8 (pour gérer les accents)
-    with get_path('|dataPATH|aenor_lexique').open(encoding='utf-8') as f:
-        # Analyse (parse) du contenu JSON du fichier et renvoi sous forme de dictionnaire ou liste Python
-        return enrich_lexicon(json.load(f))
+    """Load and enrich the lexicon once per file version."""
+    path = get_path('|dataPATH|aenor_lexique')
+    stat = path.stat()
+    return _load_cours_cached(str(path.resolve()), stat.st_mtime_ns, stat.st_size)
+
+
+def clear_cours_cache():
+    """Invalidate cached lexicon data after the source JSON has changed."""
+    _load_cours_cached.cache_clear()
 
 
 # Définition de la fonction de nettoyage du texte brut du JSON
@@ -203,6 +214,14 @@ def render_cours_value(value, level=0):
                 html_parts.append(
                     f'<div class="lexique-entry" style="margin-top:{ESPACEMENT_ELEMENT_JSON}; margin-left:{indent}em;">'
                     f'<span class="lexique-aenor">{escape(clean_text(val["aenor"]))}</span>'
+                    f'<button class="btn-tts" type="button" data-ipa="{escape(clean_text(val["phonetic"]))}" '
+                    f'data-text="{escape(clean_text(val["aenor"]))}" aria-label="Écouter la prononciation" '
+                    f'aria-pressed="false" title="Écouter la prononciation">'
+                    '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
+                    '<path d="M11 5 6 9H3v6h3l5 4z"></path>'
+                    '<path d="M15.5 8.5a5 5 0 0 1 0 7"></path>'
+                    '<path d="M19 5a10 10 0 0 1 0 14"></path>'
+                    '</svg></button>'
                     f'<span class="lexique-latin">({escape(clean_text(val["latin"]))})</span>'
                     f'<span class="lexique-phonetic">{escape(clean_text(val["phonetic"]))}</span>'
                     f'<span class="lexique-separator" aria-hidden="true">:</span>'

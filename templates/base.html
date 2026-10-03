@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Aënor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename=static_path('|staticPATH|main')) }}">
     <link rel="icon" type="image/png" sizes="512x512" href="{{ url_for('static', filename='images/favicon-512.png') }}">
+    <script src="{{ url_for('static', filename='js/speech.js') }}" defer></script>
 </head>
 <body>
 
@@ -26,11 +28,11 @@
     <a href="/" class="nav-element">Accueil</a>
     <a href="/cours" class="nav-element">Lexique</a>
     <a href="/exercice" class="nav-element">Exercices</a>
-    <a href="{{ url_for('historique') }}" class="nav-element">Historique</a>
+    <a href="{{ url_for('main.historique') }}" class="nav-element">Historique</a>
     <a href="/grammaire_3" class="nav-element">Grammaire</a>
     <a href="/ia-trad" class="nav-element">Traducteur</a>
     <a href="/scenario" class="nav-element">Scénario</a>
-    <a href="{{ url_for('commentaires') }}" class="nav-element">Vos retours</a>
+    <a href="{{ url_for('main.commentaires') }}" class="nav-element">Vos retours</a>
     <a href="/admin" class="nav-element">Admin</a>
 </nav>
 

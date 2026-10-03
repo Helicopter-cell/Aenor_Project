@@ -16,5 +16,17 @@
     "traduction": "roy pazo sèn d;j borya roy rinto falir²cayr derè roy topo",
     "commentaire": "La principale difficulté réside dans l'expression de la localisation avec « être loin de toi » : en Aënor, la position statique s'exprime avec le verbe « pazo » (se trouver, exister physiquement) suivi de la préposition « sèn » (loin de) et du pronom possessif « d;j » (à toi), remplaçant avantageusement une copule simple. De plus, pour « je serais », on applique correctement le préfixe du conditionnel « rin- » au verbe « to » (être), ce qui donne « rinto ». Enfin, « j'espère » se traduit par « roy topo » sans suffixe modal superflu, car le verbe « topo » signifie déjà espérer.\nLa structure de la phrase présente une syntaxe très épurée où l'absence de flexions casuelles lourdes et le positionnement strict du thème et de l'agent rappellent une simplicité analytique, bien que l'utilisation de préfixes et de particules en fin de proposition ancre fermement la langue dans sa propre originalité typologique.",
     "date": "2026-09-20T17:54:35"
+  },
+  {
+    "source": "Tout fonctionne ?",
+    "traduction": "valènè melco§o-ca",
+    "commentaire": "La phrase française « Tout fonctionne ? » exprime une interrogation globale sur l'état de marche. « Tout » est rendu par l'adjectif « entier » ou « tout » (valènè) agissant comme thème, et « fonctionne » par le verbe de réussite ou d'action (melco§o, ou l'équivalent approprié selon le lexique, ici melco§o pour réussir/fonctionner). La question fermée est marquée par le suffixe interrogatif -ca collé au verbe.\nLa structure suit l'ordre minimal sans pronom sujet impersonnel, illustrant la sobriété de la langue, ce qui évite les lourdeurs de structures trop orientales complexes en restant centré sur le thème et le procès.",
+    "date": "2026-10-03T17:35:12"
+  },
+  {
+    "source": "valènè melco§o-ca",
+    "traduction": "Est-ce que l'entier réussit ?",
+    "commentaire": "La traduction utilise l'adjectif \"valènè\" (entier) en tant que thème, suivi du verbe \"melco§o\" (réussir) avec le suffixe interrogatif \"-ca\". La principale difficulté réside dans l'interprétation nominale d'un adjectif sans nom explicite pour constituer le thème de la phrase, ce qui est toutefois permis par l'ellipse contextuelle de la langue.\nLa construction syntaxique place l'élément central en tête de proposition et reporte la marque interrogative à la fin du verbe, ce qui reflète l'ergonomie thématique de l'Aënor sans artifice surajouté.",
+    "date": "2026-10-03T17:35:36"
   }
 ]

@@ -3,6 +3,95 @@
     margin-bottom: 15px;
 }
 
+.btn-tts {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0.4rem;
+    border: 1px solid rgba(58, 90, 64, 0.35);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    color: #315a3a;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.btn-tts svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.btn-tts:hover:not(:disabled) {
+    transform: translateY(-1px);
+    background: #e8f0e5;
+}
+
+.btn-tts:focus-visible {
+    outline: 3px solid rgba(58, 90, 64, 0.55);
+    outline-offset: 3px;
+}
+
+.btn-tts:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.btn-tts.is-speaking {
+    color: #fff;
+    background: #3a5a40;
+    animation: tts-pulse 1s ease-in-out infinite;
+}
+
+.btn-tts.is-speaking svg path:nth-child(n + 2) {
+    animation: tts-wave 0.8s ease-in-out infinite alternate;
+}
+
+.btn-tts.is-speaking svg path:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.lexique-entry .btn-tts {
+    margin-left: -0.4rem;
+}
+
+.translation-result {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+}
+
+.translation-text {
+    white-space: pre-wrap;
+}
+
+@keyframes tts-pulse {
+    50% { box-shadow: 0 0 0 5px rgba(58, 90, 64, 0.18); }
+}
+
+@keyframes tts-wave {
+    to { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-tts,
+    .btn-tts.is-speaking,
+    .btn-tts.is-speaking svg path {
+        animation: none;
+        transition: none;
+    }
+}
+
 #trad-result {
     font-size: 3em;
     font-weight: 550;

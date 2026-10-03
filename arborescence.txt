@@ -47,7 +47,7 @@ C:.
 |   |   utils.py
 |   |   __init__.py
 |   |   
-|           
+|
 +---static
 |   +---CSS
 |   |   |   main.css

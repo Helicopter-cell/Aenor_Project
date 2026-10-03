@@ -5,7 +5,7 @@ powershell -Command "git add ."
 echo git add. effectué !
 pause
 
-powershell -Command "git commit -m 'Ajout du deuxième graphe (Type XMind)'"
+powershell -Command "git commit -m 'Segmentation propre de `app.py` et première essaie pour ajout de la synthèse vocale.'"
 echo git commit effectué !
 pause
 
