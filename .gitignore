@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 .env
 *.db
+static/cache_audio/
 future-edit.md
 Corbeille/
 feature_backlog.md

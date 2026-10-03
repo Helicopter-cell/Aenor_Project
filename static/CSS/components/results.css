@@ -45,17 +45,28 @@
     opacity: 0.5;
 }
 
-.btn-tts.is-speaking {
+.btn-tts.is-playing {
     color: #fff;
     background: #3a5a40;
     animation: tts-pulse 1s ease-in-out infinite;
 }
 
-.btn-tts.is-speaking svg path:nth-child(n + 2) {
+.btn-tts.is-loading {
+    cursor: progress;
+    animation: tts-pulse 0.8s ease-in-out infinite;
+}
+
+.btn-tts.is-error {
+    border-color: #a1372f;
+    color: #a1372f;
+    background: #fff0ee;
+}
+
+.btn-tts.is-playing svg path:nth-child(n + 2) {
     animation: tts-wave 0.8s ease-in-out infinite alternate;
 }
 
-.btn-tts.is-speaking svg path:nth-child(3) {
+.btn-tts.is-playing svg path:nth-child(3) {
     animation-delay: 0.2s;
 }
 
@@ -85,8 +96,9 @@
 
 @media (prefers-reduced-motion: reduce) {
     .btn-tts,
-    .btn-tts.is-speaking,
-    .btn-tts.is-speaking svg path {
+    .btn-tts.is-loading,
+    .btn-tts.is-playing,
+    .btn-tts.is-playing svg path {
         animation: none;
         transition: none;
     }

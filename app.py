@@ -10,6 +10,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from extensions import csrf, limiter
 from modules.utils import clean_text, load_cours, render_cours_value, static_path
 from routes.admin import admin_bp
+from routes.audio import audio_bp
 from routes.main import main_bp
 from routes.scenario import scenario_bp
 from routes.translation import translation_bp
@@ -55,6 +56,7 @@ def create_app(config=None):
 
     app.register_blueprint(main_bp)
     app.register_blueprint(translation_bp)
+    app.register_blueprint(audio_bp)
     app.register_blueprint(scenario_bp)
     app.register_blueprint(admin_bp)
 

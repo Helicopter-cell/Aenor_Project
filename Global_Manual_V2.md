@@ -13,7 +13,7 @@
 ```
 can    gorè    na    var     µar-o
 chien  grand   PAT   homme   manger-FIN
-« Le grand chien mange l'homme. »
+« Le grand chien mange l'homme. » 
 ```
 
 Les **espaces** séparent les mots. Le **trait d'union** `-` sépare, dans les gloses, les morphèmes d'un même mot. Dans le texte aënor lui-même, il ne s'écrit que devant un enclitique (voir §1.10).
@@ -1120,4 +1120,1203 @@ loy    bro    vèrag    tir    nerac    vey-o
 
 ---
 
-*Fin de la Partie 1. La Partie 2 poursuit avec le complexe verbal (§2.5) et les sections suivantes.*
+## 2. Morphosyntaxe & grammaire (suite)
+
+> Cette partie poursuit la section 2 à partir du complexe verbal et conduit jusqu'à la fin du manuel.
+
+### Abréviations complémentaires
+
+| Abréviation | Signification |
+|---|---|
+| `PASS`, `FUT` | préfixes de temps `bal-` (antérieur) et `fon-` (postérieur) |
+| `IRR` | mode irréel `rin-` |
+| `DIRECT` | mode directif `zo-` |
+| `IPFV`, `PFV` | infixes d'aspect imperfectif `-iy-` et perfectif `-en-` |
+| `NÉG` | négation simple `-ten` |
+| `NÉG.TOUT` | `-lutèn` (pas du tout) |
+| `NÉG.PLUS` | `-teni` (ne… plus) |
+| `NÉG.VRAI` | `-tenè` (pas vraiment) |
+| `NÉG.ENC` | `-tena` (pas encore) |
+| `NÉG.JAM` | `-tenor` (jamais) |
+| `NÉG.PLJ` | `-atenor` (plus jamais) |
+| `VOUL`, `POUV`, `DEV`, `SOUH`, `OSER` | modaux `-ja§`, `-bap`, `-dor`, `-mil`, `-§ar` |
+| `RAPP`, `INFÉR`, `PROPH` | évidentiels `-sbè`, `-sil`, `-div` |
+| `Q` | enclitique interrogatif `-ca` |
+| `SEUL` | enclitique de restriction `-vèt` |
+| `EXCL` | particule d'exclamation `=ö` |
+| `SI`, `QUAND`, `CAUSE`, `CONC`, `BUT`, `JUSQ`, `DEPUIS`, `COMME` | subordonnants `§a`, `vaypa`, `bodpa`, `nèpa`, `nolpa`, `norvpa`, `decpa`, `valpa` |
+| `COMPL` | subordonnant complétif `acpa` |
+| `REL` | marqueur de relative `pa` |
+| `STAT` | verbe statif |
+| `COMPAR.+`, `COMPAR.-`, `COMPAR.=` | `tos`, `ixi`, `lem` |
+| `SUP.+`, `SUP.-` | `bëgo`, `pix` |
+
+---
+
+### 2.5 Le complexe verbal
+
+#### 2.5.1 Nature du verbe
+
+Le verbe est le dernier mot de la proposition. Seuls les enclitiques peuvent le suivre.
+
+**Le verbe est invariable pour la personne, le nombre et le genre.** Il ne s'accorde jamais avec ses arguments. La personne est donnée par le pronom ou par le GN, et la perspective par le choix du thème (§2.4). Il n'existe pas de voix : le même verbe sert à toutes les perspectives.
+
+**Forme de citation.** Tout verbe est un radical suivi de la voyelle finale `-o` : `µaro` (manger), `bino` (voir), `veyo` (aller, partir), `nèxo` (venir), `paco` (prendre), `bodzo` (protéger), `zadco` (attaquer), `reno` (savoir), `sbeno` (dire), `sereno` (promettre).
+
+**Valence.** La valence est lexicale. Les rôles des participants sont donnés par les relateurs (§2.4.8).
+
+#### 2.5.2 Le gabarit à onze positions
+
+Le complexe verbal est un mot unique construit selon un gabarit fixe de onze positions. L'ordre ne varie jamais. La négation apparaît à deux places (P7 et P9), de part et d'autre de la modalité.
+
+```
+[MODE][TEMPS][SOI] RACINE [ASPECT] -o [NÉG₁] [MODAL] [NÉG₂] [ÉVID] (-ca)
+  P1    P2     P3    P4      P5    P6   P7      P8     P9     P10   P11
+```
+
+| Position | Nom | Formes | Statut |
+|---|---|---|---|
+| P1 | Mode | `rin-` (irréel), `zo-` (directif), ∅ (réel) | facultatif ; les deux préfixes s'excluent |
+| P2 | Temps | `bal-` (antérieur), `fon-` (postérieur), ∅ (contemporain) | facultatif |
+| P3 | Réfléchi / réciproque | `lon-`, `linon-` | facultatif |
+| P4 | Racine | le radical du verbe | obligatoire |
+| P5 | Aspect (infixe) | `-iy-` (imperfectif), `-en-` (perfectif), ∅ (neutre) | facultatif |
+| P6 | Voyelle finale | `-o` | obligatoire |
+| P7 | Négation interne | `-ten`, `-lutèn`, `-teni`, `-tenè`, `-tena`, `-tenor`, `-atenor` | facultatif |
+| P8 | Modalité | `-ja§`, `-bap`, `-dor`, `-mil`, `-§ar` | facultatif ; un seul modal |
+| P9 | Négation externe | mêmes formes qu'en P7 | facultatif |
+| P10 | Évidentialité | `-sbè`, `-sil`, `-div` | facultatif |
+| P11 | Enclitique interrogatif | `-ca` (avec trait d'union) | facultatif |
+
+**Règles du gabarit.**
+
+1. Chaque position est occupée **au plus une fois**.
+2. P1 est exclusif : `rin-` et `zo-` ne se cumulent pas.
+3. Un complexe verbal contient **au plus un modal** (P8).
+4. **Sans modal**, une seule négation est possible, placée juste après `-o`.
+5. **Avec modal**, la négation placée avant le modal (P7) porte sur le verbe ; placée après (P9), elle porte sur le modal. Cette règle est détaillée en §2.5.9.
+6. Tous les éléments sont soudés au verbe, sans trait d'union, **sauf** l'enclitique `-ca` (§1.10.2).
+
+#### 2.5.3 Le radical et la voyelle finale
+
+Le **radical** est tout ce qui précède la voyelle finale `-o`, y compris les éléments dérivationnels figés du lexique. C'est à la fin du radical, juste devant `-o`, que se place l'infixe d'aspect.
+
+| Citation | Radical | Avec infixe imperfectif | Avec infixe perfectif |
+|---|---|---|---|
+| `µaro` | `µar` | `µariyo` | `µareno` |
+| `veyo` | `vey` | `veyiyo` | `veyeno` |
+| `bodzo` | `bodz` | `bodziyo` | `bodzeno` |
+| `sereno` | `seren` | `sereniyo` | `serenеno` |
+| `daro§o` | `daro§` | `daro§iyo` | `daro§eno` |
+| `to` | `t` | `tiyo` | `teno` |
+
+**Mots à soudure `²`.** Pour un verbe contenant `²`, les préfixes se placent devant le mot entier et l'infixe à la fin du mot entier. Le verbe `bal²bèdo` (parler) montre la raison d'être du signe : son passé s'écrit `balbal²bèdo`, où l'on distingue le préfixe de temps (`bal-`) du début du radical (`bal²`).
+
+**La voyelle finale reste.** Elle ne disparaît jamais, même devant un suffixe : `µaroja§` (vouloir manger), `µaroten` (ne pas manger).
+
+#### 2.5.4 Le temps (P2)
+
+L'Aënor connaît **trois repères temporels** :
+
+| Préfixe | Valeur | Exemple |
+|---|---|---|
+| ∅ | contemporain du repère ; vérités générales et habitudes | `loy µaro` : il mange |
+| `bal-` | antérieur au repère | `loy balµaro` : il mangea |
+| `fon-` | postérieur au repère | `loy fonµaro` : il mangera |
+
+**Le repère.**
+- Dans une **proposition principale**, le repère est le moment de l'énonciation.
+- Dans une **proposition subordonnée**, le repère est l'événement de la principale. Un verbe sans préfixe y est simultané de la principale, `bal-` y est antérieur, `fon-` y est postérieur.
+
+Le temps se précise par des adverbes (§2.5.14).
+
+#### 2.5.5 L'aspect (P5)
+
+L'aspect présente le déroulement du procès. Il est marqué par un **infixe** placé entre le radical et `-o`.
+
+| Infixe | Nom | Valeur |
+|---|---|---|
+| ∅ | neutre | simple énoncé de fait |
+| `-iy-` | imperfectif | action vue de l'intérieur : en cours, habituelle, répétée |
+| `-en-` | perfectif | action vue comme un tout borné et achevé |
+
+L'infixe n'est **jamais obligatoire**. Sans lui, le verbe est neutre. Sa présence apporte de la précision.
+
+**Combinaisons avec le temps** (exemple : `µaro`, manger) :
+
+| | Neutre | Imperfectif `-iy-` | Perfectif `-en-` |
+|---|---|---|---|
+| ∅ | `µaro` : il mange | `µariyo` : il est en train de manger ; il mange habituellement | `µareno` : il a mangé (c'est fait) |
+| `bal-` | `balµaro` : il mangea | `balµariyo` : il mangeait | `balµareno` : il avait mangé ; il mangea jusqu'au bout |
+| `fon-` | `fonµaro` : il mangera | `fonµariyo` : il sera en train de manger ; il mangera régulièrement | `fonµareno` : il aura mangé |
+
+**Le perfectif au contemporain** exprime le **résultat présent** : `µareno` signifie que l'action est achevée et que l'état résultant subsiste. **Avec un verbe statif**, le perfectif prend une valeur inchoative : `loy bègoreno` signifie « il est devenu fort » (§2.6.1).
+
+#### 2.5.6 Le mode irréel (P1)
+
+Le préfixe **`rin-`** marque l'**irréel** : tout ce qui n'est pas posé comme réel. Il couvre l'hypothétique, le potentiel, le contrefactuel et l'atténuation.
+
+| Exemple | Valeur |
+|---|---|
+| `loy rinµaro` | il mangerait |
+| `loy rinbalµareno` | il aurait mangé |
+| `loy rinfonµaro` | il mangerait plus tard |
+| `doy rinveyo-ca` | tu partirais ? (demande atténuée) |
+
+`rin-` se combine librement avec le temps, qui se place après lui (P2). Il précède le réfléchi. Dans une phrase conditionnelle, il apparaît dans la protase, dans l'apodose ou dans les deux (§2.8.4).
+
+#### 2.5.7 Le mode directif (P1)
+
+Le préfixe **`zo-`** marque le **directif** : il exprime l'ordre, la demande et l'exhortation à toutes les personnes.
+
+| Exemple | Valeur |
+|---|---|
+| `zoµaro` ou `doy zoµaro` | mange ! |
+| `µoy zoµaro` | mangeons ! (nous sans toi) |
+| `doµoy zoµaro` | mangeons ! (toi et moi) |
+| `loy zoveyo` | qu'il parte ! |
+| `zoµaroten` | ne mange pas ! |
+| `zolonbodzo` | protège-toi ! |
+
+**Règles.**
+- Sans sujet exprimé, le directif s'adresse à la **deuxième personne**. Pour les autres personnes, le pronom est exprimé.
+- Le directif accepte `fon-` (`zofonµaro` : mange plus tard) mais pas `bal-`.
+- Il accepte tous les suffixes de négation et se combine avec le réfléchi.
+- Il n'existe pas d'impératif spécifique à la première personne : le directif à la première personne du pluriel joue le rôle d'exhortation.
+
+#### 2.5.8 Le réfléchi et le réciproque (P3)
+
+`lon-` (réfléchi) et `linon-` (réciproque) se placent après le temps, juste devant le radical (§2.3.6). Ils rendent le verbe intransitif : le sujet est aussi le patient.
+
+```
+roy    fon-lon-bodz-o
+1SG    FUT-REFL-protéger-FIN
+« Je me protégerai. »
+
+linoy  linon-bin-o
+3PL    RECIP-voir-FIN
+« Ils se voient (l'un l'autre). »
+```
+
+Selon la règle R1 (§1.8), `fon-lon-bodzo` se prononce [fon.lom.bo.dzo].
+
+#### 2.5.9 La négation (P7, P9)
+
+La négation est un **suffixe verbal** de racine `ten-`, placé après la voyelle finale. Sept formes expriment des degrés et des nuances :
+
+| Suffixe | Sens | Exemple |
+|---|---|---|
+| `-ten` | ne… pas | `loy veyoten` : il ne part pas |
+| `-lutèn` | ne… pas du tout | `loy veyolutèn` : il ne part pas du tout |
+| `-teni` | ne… plus | `loy veyoteni` : il ne part plus |
+| `-tenè` | ne… pas vraiment | `loy veyotenè` : il ne part pas vraiment |
+| `-tena` | ne… pas encore | `loy veyotena` : il ne part pas encore |
+| `-tenor` | ne… jamais | `loy veyotenor` : il ne part jamais |
+| `-atenor` | ne… plus jamais | `loy veyoatenor` : il ne part plus jamais |
+
+**Nuances de sens.**
+- `-teni` et `-atenor` supposent que l'action a eu lieu auparavant.
+- `-tena` suppose que l'action est attendue.
+- `-tenor` nie sans limite de temps : l'idée de « jamais » se dit par ce suffixe, et il n'existe pas d'adverbe séparé.
+
+**La portée suit l'adjacence.** La négation porte sur ce qui la précède immédiatement :
+
+```
+roy    µaro-ten-ja§         « Je veux ne pas manger. »     (négation du manger)
+roy    µaro-ja§-ten         « Je ne veux pas manger. »     (négation du vouloir)
+```
+
+Sans modal, une seule négation est possible : `roy µaroten`. Avec un modal, on choisit entre P7 (verbe) et P9 (modal).
+
+**Autres règles.**
+- La négation s'applique aussi au directif (`zoµaroten`) et aux verbes statifs (`loy bègoroten` : il n'est pas fort).
+- Elle suit l'infixe d'aspect : `µarenoten` (il ne l'a pas mangé), `µariyoten` (il n'est pas en train de manger).
+- Les indéfinis nuls (§2.7.5) portent la négation : le verbe reste alors affirmatif. La négation n'est jamais exprimée deux fois.
+- La réponse « non » se dit `no/` (§2.7.2).
+- La restriction « ne… que » n'est pas une négation : elle se dit par l'enclitique `-vèt` (§2.12.2).
+
+#### 2.5.10 La modalité (P8)
+
+Cinq suffixes expriment la modalité. Ils se placent après `-o` et ne se séparent jamais du verbe :
+
+| Suffixe | Sens | Exemple |
+|---|---|---|
+| `-ja§` | vouloir | `roy µaroja§` : je veux manger |
+| `-bap` | pouvoir (capacité, permission, possibilité) | `doy veyobap` : tu peux partir |
+| `-dor` | devoir (obligation, nécessité) | `loy veyodor` : il doit partir |
+| `-mil` | souhaiter | `roy µaromil` : je souhaiterais manger |
+| `-§ar` | oser | `sinoy zadco§ar` : vous osez attaquer |
+
+**Règles.**
+- Un seul modal par complexe verbal.
+- Le temps, le mode et l'aspect s'appliquent à l'ensemble : `roy balµariyoja§` (je voulais manger de façon continue).
+- L'irréel donne la valeur conditionnelle : `roy rinµarobap` (je pourrais manger).
+- **Impersonnel.** Un modal sans sujet exprime une nécessité ou une possibilité générale : `veyodor` (il faut partir), `veyobap` (il est possible de partir).
+- La négation se place avant ou après le modal selon la portée voulue (§2.5.9).
+
+#### 2.5.11 L'évidentialité (P10)
+
+L'Aënor distingue la **source** de l'information. Le dernier suffixe du complexe verbal la marque :
+
+| Suffixe | Source | Racine motivante |
+|---|---|---|
+| ∅ | connaissance directe, vécue ou propre | |
+| `-sbè` | information rapportée (on m'a dit, on dit) | `sbè` (la voix) |
+| `-sil` | information inférée à partir d'indices | `sil-` (caché) |
+| `-div` | information prophétique ou destinale (il est écrit) | `div-` (mystique) |
+
+```
+loy    bal-vey-o                « Il est parti. »                 (j'en ai été témoin)
+loy    bal-vey-o-sbè            « On dit qu'il est parti. »
+loy    bal-vey-o-sil            « Il est sans doute parti. »      (d'après les traces)
+loy    fon-vey-o-div            « Il est écrit qu'il partira. »
+```
+
+**Règles.**
+- L'évidentiel est la **portée la plus large** : il suit les négations et le modal. `loy balveyotensbè` : on dit qu'il n'est pas parti.
+- Le témoin direct n'est pas marqué : c'est la forme neutre.
+- À la première personne, `-sil` exprime que le locuteur déduit sa propre action de ses traces (oubli, sommeil).
+- Dans une question (§2.7), l'évidentiel porte sur la source que le locuteur attribue à l'information en cause.
+
+#### 2.5.12 L'enclitique interrogatif (P11)
+
+L'enclitique `-ca` est la dernière position du complexe verbal. Il se lie au verbe par un trait d'union : `doy µaro-ca`. Il peut aussi se lier à un autre élément de la proposition (GN, mot interrogatif). Il est décrit en §2.7.
+
+#### 2.5.13 Construction d'un complexe verbal complet
+
+Voici la construction pas à pas d'un verbe qui occupe presque toutes les positions :
+
+```
+µaro                    manger
+balµaro                 mangea                                 + temps
+balµariyo               mangeait                               + aspect
+balµariyoja§            voulait manger (en continu)            + modal
+balµariyoja§ten         ne voulait pas manger                  + négation externe
+balµariyoja§tensbè      on dit qu'il ne voulait pas manger     + évidentiel
+balµariyoja§tensbè-ca   dit-on qu'il ne voulait pas manger ?   + interrogatif
+```
+
+Un verbe occupant presque toutes les positions :
+
+```
+loy    rin-bal-lon-bodz-en-o-ja§-ten-sbè-ca
+3      IRR-PASS-REFL-protéger-PFV-FIN-VOUL-NÉG-RAPP-Q
+« Dit-on qu'il n'aurait pas voulu se protéger (jusqu'au bout) ? »
+```
+
+Écrit : `rinballonbodzenoja§tensbè-ca`. Selon R1, `rin-bal` se prononce [rim.bal] et `lon-bodz` se prononce [lom.bo.dz].
+
+#### 2.5.14 Les adverbes
+
+**Les adverbes de manière** se forment à partir de l'adjectif par le suffixe **`-ay`** : adjectif + `-ay`. Ils sont invariables.
+
+| Adjectif | Adverbe |
+|---|---|
+| `vèlnè` (rapide) | `vèlnèay` (rapidement) |
+| `noroè` (lent) | `noroèay` (lentement) |
+| `bègorè` (fort) | `bègorèay` (fortement) |
+| `velinè` (doux, calme) | `velinèay` (doucement, calmement) |
+| `noryè` (sombre) | `noryèay` (sombrement) |
+| `bècè` (dur) | `bècèay` (difficilement) |
+
+**Position.** L'adverbe se place immédiatement **avant** le verbe qu'il modifie (§2.1.1) : `loy vèlnèay daro` (il court vite).
+
+**Les mots de degré** précèdent le mot qu'ils modifient (adjectif, adverbe ou verbe) :
+
+| Mot | Sens | Exemple |
+|---|---|---|
+| `mèl` | très | `mèl gorè` ; `loy mèl vèlnèay daro` |
+| `jab` | peu | `loy jab µaro` : il mange peu |
+| `dèrn` | assez, plutôt | `dèrn gorè` |
+| `vèlag` | trop | `doy vèlag vèlnèay bal²bèdo` : tu parles trop vite |
+| `b§ébè` | beaucoup | `loy b§ébè µaro` : il mange beaucoup |
+
+**Les adverbes de temps** sont des mots lexicaux :
+
+| Adverbe | Sens |
+|---|---|
+| `cayrè` | maintenant |
+| `cayrgor` | toujours |
+| `melcayr` | souvent |
+| `nècayr` | parfois |
+| `sèncayr` | rarement |
+| `fal²cayr` | déjà |
+| `falir²cayr` | bientôt |
+| `dar²cayr` | tard |
+| `gunim²cayr` | autrefois |
+
+Le sens « jamais » n'a pas d'adverbe : il est porté par le suffixe `-tenor` (§2.5.9).
+
+**Les adverbes de modalisation** sont des mots lexicaux : `melpa` (peut-être), `vamèn` (certainement), `derèn` (sûrement), `melèn` (probablement), `melgor` (heureusement). Ils se placent avant le verbe, ou en tête de proposition pour porter sur toute la proposition.
+
+**Les adverbes de lieu** sont des groupes relationnels (§2.2.6, §2.4.4) : `ne derè` (ici), `ne falè` (là), `ne sènè` (là-bas). La série des indéfinis fournit `jersal` (partout), `jeryu` (quelque part) et `jer²oro` (nulle part) (§2.7.5).
+
+#### 2.5.15 Récapitulatif
+
+| Position | Contenu | Exemple d'effet |
+|---|---|---|
+| P1 | mode | `rin-` : irréel ; `zo-` : directif |
+| P2 | temps | `bal-` : passé ; `fon-` : futur |
+| P3 | soi | `lon-` : réfléchi |
+| P4 | radical | `µar` |
+| P5 | aspect | `-iy-` : imperfectif |
+| P6 | finale | `-o` |
+| P7 | négation interne | `-ten` |
+| P8 | modalité | `-ja§` |
+| P9 | négation externe | `-tena` |
+| P10 | évidentiel | `-sbè` |
+| P11 | interrogatif | `-ca` |
+
+---
+
+### 2.6 Prédicats statifs, copule, existence et possession
+
+#### 2.6.1 Les verbes statifs
+
+Tout adjectif en `-è` a un **verbe statif** correspondant, formé en remplaçant `-è` par `-o`. Il exprime la propriété comme un état.
+
+| Adjectif | Verbe statif |
+|---|---|
+| `gorè` (grand) | `goro` (être grand) |
+| `bègorè` (fort) | `bègoro` (être fort) |
+| `melyè` (beau) | `melyo` (être beau) |
+| `velinè` (calme) | `velino` (être calme) |
+| `zèvarè` (rouge) | `zèvaro` (être rouge) |
+
+**Emploi.** L'adjectif en `-è` est toujours épithète (§2.2.5). Pour **prédiquer** une propriété, on emploie le statif. Ainsi `var gorè` est un GN (« le grand homme ») et `var goro` est une proposition (« l'homme est grand »).
+
+```
+loy    bègor-o              « Il est fort. »
+loy    bal-bègor-o          « Il était fort. »
+loy    bègor-en-o           « Il est devenu fort. »      (perfectif : inchoatif)
+loy    bègor-o-ten          « Il n'est pas fort. »
+loy    mèl    bègor-o       « Il est très fort. »
+```
+
+Un statif est un verbe comme les autres : il accepte les onze positions. Il n'a qu'un seul participant, le sujet.
+
+#### 2.6.2 La copule `to`
+
+Le verbe **`to`** exprime l'**identité** ou l'**appartenance à une classe** entre deux GN. Son attribut porte le relateur `na`.
+
+```
+loy    na    =ocval    to
+3      PAT   roi       être
+« Il est roi. »
+
+roy    na    var       to
+1SG    PAT   homme     être
+« Je suis un homme. »
+```
+
+**Règles.**
+- `to` ne s'emploie **pas** pour un adjectif (qui devient statif), ni pour un lieu (qui se dit par `pazo`), ni pour la possession (`jeno`).
+- Il prend le temps et le mode : `loy na =ocval balto` (il fut roi). Son radical est `t-` : l'imperfectif est `tiyo`, le perfectif `teno` (« il est devenu »). Le perfectif `teno` et la négation `-ten` ne se confondent pas : `teno` est un verbe à l'infixe, `toten` un verbe à la négation.
+- Négation : `loy na =ocval toten` (il n'est pas roi).
+
+#### 2.6.3 Existence et localisation : `pazo`
+
+Le verbe **`pazo`** (se trouver, résider, exister physiquement) exprime la présence dans l'espace. Il se construit avec un GR de lieu en `ne`.
+
+```
+roy    ne    bèran    paz-o
+1SG    LOC   maison   se-trouver-FIN
+« Je suis dans la maison. »
+
+=abi    ne    nor    tèpal    paz-o
+chat    LOC   dessous table   se-trouver-FIN
+« Le chat est sous la table. »
+```
+
+**Existence (« il y a »).** On prend le lieu comme thème marqué, et l'être qui existe comme sujet :
+
+```
+ne     bèran    ni    can    paz-o
+LOC    maison   AGT   chien  se-trouver-FIN
+« Dans la maison, il y a un chien. »
+```
+
+**Existence absolue.** `can pazo` signifie « un chien se trouve là, existe ».
+
+**Aspect et négation.** `paziyo` (il séjourne), `pazeno` (il s'y est établi), `balpazo` (il se trouvait), `pazoten` (il n'est pas là, il n'existe pas).
+
+**Question.** `can jer-ca pazo` (le chien est où ?).
+
+#### 2.6.4 La possession verbale : `jeno`
+
+Le verbe **`jeno`** (avoir) exprime la possession. L'objet possédé porte `na`.
+
+```
+roy    na    can    jen-o
+1SG    PAT   chien  avoir-FIN
+« J'ai un chien. »
+```
+
+**Construction alternative.** La possession peut aussi se dire par l'existence, avec `naraj` (chez) : `ne naraj roy ni can pazo` (chez moi, il y a un chien).
+
+**Négation et temps.** `roy na can jenoten` (je n'ai pas de chien), `roy na can baljeno` (j'avais un chien).
+
+#### 2.6.5 Phénomènes sans participant
+
+Les phénomènes météorologiques et les nécessités générales s'expriment **sans sujet** (§2.1.4) :
+
+```
+y²uao             « Il pleut. »
+baly²uao          « Il pleuvait. »
+lëmeo             « Il fait froid. »        (statif de lëmeè)
+veyodor           « Il faut partir. »
+```
+
+---
+
+### 2.7 Questions, indéfinis et exclamation
+
+#### 2.7.1 L'enclitique `-ca`
+
+L'Aënor n'a pas de ponctuation interrogative. Une question se marque par l'enclitique **`-ca`**, qui se lie par un trait d'union à l'**élément interrogé**. L'ordre des mots ne change pas, et le verbe reste en dernier.
+
+#### 2.7.2 Questions fermées (oui / non)
+
+L'enclitique se place sur le verbe.
+
+```
+doy    µaro-ca                     « Tu manges ? »
+loy    nèxoten-ca                  « Il ne vient pas ? »
+sinoy  veyoja§-ca                  « Vous voulez partir ? »
+loy    balveyosbè-ca               « Dit-on qu'il est parti ? »
+```
+
+**Réponses.** `ba` (oui), `no/` (non). On peut aussi répondre en reprenant le verbe.
+
+**Questions alternatives.** On coordonne les verbes avec `bavya`, et `-ca` se place sur le dernier :
+```
+doy    veyo    bavya    noro-ca
+2SG    partir  ou       dormir-Q
+« Tu pars ou tu dors ? »
+```
+
+**Question sur un autre élément.** `-ca` se lie au dernier mot du GN interrogé :
+```
+doy-ca    na    can    bin-o            « Est-ce toi qui vois le chien ? »
+doy       na    can-ca bin-o            « Est-ce le chien que tu vois ? »
+```
+
+#### 2.7.3 Questions ouvertes
+
+Un mot interrogatif prend `-ca` et se place **à l'endroit de l'élément demandé**. Il existe deux sortes de mots interrogatifs.
+
+**Interrogatifs nominaux** (ils prennent un relateur) :
+
+| Mot | Sens | Exemple |
+|---|---|---|
+| `µo-ca` | qui | `µo-ca nèxo` : qui vient ? |
+| `tè-ca` | quoi | `doy na tè-ca bino` : tu vois quoi ? |
+
+**Interrogatifs adverbiaux** (sans relateur obligatoire) :
+
+| Mot | Sens | Exemple |
+|---|---|---|
+| `jer-ca` | où | `doy jer-ca pazo` : tu es où ? |
+| `=aj-ca` | quand | `doy =aj-ca nèxo` : tu viens quand ? |
+| `ë§-ca` | pourquoi | `sinoy ë§-ca zadro` : pourquoi combattez-vous ? |
+| `tef-ca` | comment | `doy tef-ca veyo` : tu pars comment ? |
+| `gom-ca` | combien | `doy na can gom-ca bino` : tu vois combien de chiens ? |
+
+**Précisions.**
+- `jer-ca` peut recevoir un relateur pour préciser la direction ou l'origine : `no jer-ca` (vers où), `tir jer-ca` (d'où).
+- `tè-ca` fonctionne comme déterminant (« quel ») : `doy na can tè-ca bino` (tu vois quel chien ?). `gom-ca` se place dans le GN, après le nom.
+- Le mot interrogatif peut être thème : `µo-ca na can bino` (qui voit le chien ?).
+- Un relateur précède son GN interrogatif : `doy =em µo-ca bal²bèdo` (tu parles avec qui ?), `doy nu tè-ca na var zadco` (avec quoi attaques-tu l'homme ?).
+
+#### 2.7.4 L'élision à l'oral
+
+Dans la conversation, `-ca` peut être élidé lorsque le contexte rend la question évidente (« qui ? » se dit `µo`). L'élision ne concerne que l'oral. À l'écrit, la forme complète est la norme.
+
+#### 2.7.5 Les indéfinis
+
+Les indéfinis se forment à partir du radical interrogatif par suffixation :
+
+| Radical | + `yu` (quelque) | + `sal` (tout) | + `²oro` (nul) |
+|---|---|---|---|
+| `µo` (qui) | `µoyu` quelqu'un | `µosal` tout le monde | `µo²oro` personne |
+| `tè` (quoi) | `tèyu` quelque chose | `tèsal` tout | `tè²oro` rien |
+| `jer` (où) | `jeryu` quelque part | `jersal` partout | `jer²oro` nulle part |
+| `=aj` (quand) | `=ajyu` un jour | `=ajsal` à tout moment | (voir `-tenor`) |
+
+**Règles.**
+- Les indéfinis nominaux prennent des relateurs : `roy na µoyu bino` (je vois quelqu'un).
+- Un indéfini nul se construit avec un **verbe affirmatif** : la négation n'est jamais exprimée deux fois. `µo²oro nèxo` : personne ne vient. `doy na tè²oro bino` : tu ne vois rien.
+- La série temporelle ne comporte pas de forme nulle : « jamais » se dit par `-tenor`.
+
+#### 2.7.6 L'exclamation
+
+La particule **`=ö`** marque l'exclamation. Sa position indique l'affect :
+
+| Position | Affect | Exemple |
+|---|---|---|
+| Fin de phrase | positif (surprise, admiration, joie) | `µoy melco§eno =ö` : nous avons gagné ! |
+| Début de phrase | négatif (colère, indignation, panique) | `=ö doy na trèfèn röj croceno` : tu as cassé mon épée ! |
+
+```
+var    melyè    =ö                   « Quel bel homme ! »
+=ö     nerac    §yero                « Le village brûle ! »
+=ö                                   « Ah ! »
+```
+
+**Règles.**
+- `=ö` ne modifie pas la structure de la phrase : on peut donc exclamer une question (`doy nèxo-ca =ö` : tu viens vraiment ?! ; `=ö doy nèxoten-ca` : tu ne viens pas ?!).
+- Seul, `=ö` joue le rôle d'un « Ah ! » d'étonnement.
+
+---
+
+### 2.8 Subordination et coordination
+
+#### 2.8.1 Principe général
+
+Toute proposition subordonnée est **préposée** et **close** par un marqueur final :
+
+- Une subordonnée **adverbiale** précède la proposition principale et se ferme par un subordonnant.
+- Une **complétive** précède le verbe principal, avec son relateur, et se ferme par `acpa`.
+- Une **relative** précède le nom qu'elle qualifie et se ferme par `pa`.
+
+Le début d'une subordonnée est donc toujours lisible : c'est la fin de la proposition précédente ou le début de la phrase.
+
+**Sujet commun.** Quand le sujet de la subordonnée est le même que le thème de la principale, il est omis dans la subordonnée.
+
+#### 2.8.2 Les subordonnants
+
+Les subordonnants sont des mots autonomes (séparés par une espace) qui terminent la proposition subordonnée :
+
+| Subordonnant | Sens | Exemple |
+|---|---|---|
+| `vaypa` | quand, lorsque | `doy nèxo vaypa, roy µaro` : quand tu viens, je mange |
+| `bodpa` | parce que | `loy µaroten bodpa, roy na µarèl dilµo` : parce qu'il ne mange pas, je prépare le repas |
+| `nèpa` | bien que, même si | `doy sipco nèpa, doy varo` : bien que tu aies peur, tu restes |
+| `§a` | si (condition) | `doy nèxo §a, roy µaro` : si tu viens, je mange |
+| `nolpa` | afin que, pour que | `doy cavexo nolpa, roy daro§o` : afin que tu comprennes, je travaille |
+| `norvpa` | jusqu'à ce que | `can nèxo norvpa, var noro§o` : jusqu'à ce que le chien vienne, l'homme attend |
+| `decpa` | depuis que | `loy bal²bèdo decpa, roy reno` : depuis qu'il parle, je sais |
+| `valpa` | comme | `doy daro valpa, roy daro` : comme tu cours, je cours |
+| `acpa` | que (complétive) | voir §2.8.5 |
+| `pa` | marqueur de relative | voir §2.8.6 |
+
+Le subordonnant `§a` est la forme courte du subordonnant conditionnel. Il est la seule exception à la forme en `-pa`.
+
+#### 2.8.3 Le temps dans la subordonnée
+
+Le temps de la subordonnée se mesure par rapport à l'événement de la principale (§2.5.4) :
+
+```
+loy    vey-o        vaypa ,    roy    µar-o
+3      partir-FIN   QUAND      1SG    manger-FIN
+« Quand il part, je mange. »                          (simultané)
+
+loy    bal-vey-o    vaypa ,    roy    µar-o
+3      PASS-partir  QUAND      1SG    manger-FIN
+« Quand il est parti, je mange. »                     (antérieur)
+
+loy    fon-vey-o    vaypa ,    roy    µar-o
+3      FUT-partir   QUAND      1SG    manger-FIN
+« Quand il partira, je mange. »                       (postérieur)
+```
+
+#### 2.8.4 La condition
+
+La condition se construit avec `§a`. La subordonnée conditionnelle précède la principale. Le mode irréel `rin-` distingue trois degrés :
+
+| Type | Protase | Apodose | Exemple |
+|---|---|---|---|
+| Condition ouverte (réelle) | verbe sans `rin-` | verbe sans `rin-` | `doy nèxo §a, roy µaro` : si tu viens, je mange |
+| Condition hypothétique | verbe sans `rin-` | `rin-` | `doy nèxo §a, roy rinµaro` : si tu viens, je mangerais |
+| Condition improbable ou contrefactuelle | `rin-` | `rin-` | `doy rinnèxo §a, roy rinµaro` : si tu venais, je mangerais |
+| Contrefactuel passé | `rinbal-` | `rinbal-` | `doy rinbalnèxo §a, roy rinbalµaro` : si tu étais venu, j'aurais mangé |
+
+**Règles.**
+- `rin-` dans la protase marque que le locuteur ne tient pas la condition pour réelle ou probable.
+- `rin-` dans l'apodose marque la conséquence comme hypothétique.
+- Une condition réelle au passé se dit sans `rin-` : `doy balnèxo §a, roy balµaro` (si tu es venu, j'ai mangé).
+
+#### 2.8.5 Les complétives
+
+Une proposition complétive est un **GN** : elle porte un relateur, se ferme par `acpa`, et se place avant le verbe principal.
+
+```
+roy    na    [ loy    nèx-o    acpa ]    ren-o
+1SG    PAT     3      venir-FIN COMPL    savoir-FIN
+« Je sais qu'il vient. »
+
+roy    no    doy    na    [ loy    vey-o    acpa ]    sben-o
+1SG    DIR   2SG    PAT     3      partir-FIN COMPL   dire-FIN
+« Je te dis qu'il part. »
+```
+
+**Sujet commun.** Quand le sujet de la complétive est celui de la principale, il est omis : `roy na veyo acpa topo` (j'espère partir).
+
+**Causatif périphrastique.** Le verbe `ato` (faire) avec une complétive exprime la causation : `roy na var µaro acpa ato` (je fais manger l'homme, littéralement : je fais que l'homme mange).
+
+**Discours rapporté.**
+- *Indirect* : avec `acpa`, comme ci-dessus.
+- *Direct* : la citation est un GN entre guillemets avec `na` : `loy no doy na « roy veyo » sbeno`.
+- Un énoncé rapporté peut aussi porter l'évidentiel `-sbè` (§2.5.11).
+
+**But à sujet commun.** `µaro nolpa, roy veyo` (pour manger, je pars).
+
+#### 2.8.6 Les relatives
+
+Une proposition relative **précède** le nom qu'elle qualifie et se ferme par `pa`. Elle suit les règles de toute proposition (thème, relateurs, verbe final), avec une **lacune** : la place du nom relativisé reste vide.
+
+**Marquage de la lacune.**
+- **Sujet par défaut.** Si rien ne marque la lacune, le nom relativisé est le sujet de la relative.
+- **Autre rôle : le relateur orphelin.** Un relateur qui n'est suivi d'aucun GN marque la lacune et dit son rôle.
+
+```
+na     roy    bodz-o    pa    var            « l'homme qui me protège »   (lacune = sujet)
+roy    na     bodz-o    pa    var            « l'homme que je protège »   (lacune = patient)
+roy    ne     paz-o     pa    bèran          « la maison où je suis »     (lacune = lieu)
+doy    nu     na   var  zadc-o    pa    trèfèn    « l'épée avec laquelle tu attaques l'homme »
+roy    na   velin   no   seren-o   pa    nèran     « le peuple à qui je promets la paix »
+```
+
+**Le possesseur relativisé.** On le reprend par le possessif obviatif `lëj`, qui renvoie au nom relativisé :
+
+```
+can    lëj    na    niap    µar-o    pa    var
+chien  3OBV.POSS PAT pain    manger-FIN REL  homme
+« l'homme dont le chien mange le pain »
+```
+
+**Dans une proposition.** La relative occupe la place du début du GN, après son relateur :
+
+```
+na    [ roy    na    bodz-o    pa ]    var    ni    can    µar-o
+PAT     1SG    PAT   protéger  REL     homme  AGT   chien  manger-FIN
+« L'homme que je protège, le chien le mange. »
+```
+
+**Valeur.** La relative est restrictive. Une information non restrictive s'exprime par une proposition coordonnée.
+
+#### 2.8.7 Les coordonnants
+
+Quatre coordonnants relient des propositions ou des GN :
+
+| Coordonnant | Sens |
+|---|---|
+| `bèya` | et |
+| `borya` | mais |
+| `bavya` | ou |
+| `bensya` | donc |
+
+**Entre propositions.**
+```
+loy    veyo    bensya    roy    µaro          « Il part, donc je mange. »
+loy    bègoro  borya     µaroten               « Il est fort mais ne mange pas. »
+loy    veyo    bèya      noro                  « Il part et dort. »
+```
+Quand le thème est commun, il est omis dans la seconde proposition (§2.4.7).
+
+**Entre GN.** Un relateur placé devant des GN coordonnés vaut pour tous : `roy na can bèya var bino` (je vois le chien et l'homme). Pour plus de deux éléments, on met le coordonnant entre chaque paire ou seulement avant le dernier : `can, var bèya vor`.
+
+**Ni… ni.** Elle se dit par deux négations coordonnées : `roy na can binoten bèya na var binoten` (je ne vois ni le chien ni l'homme).
+
+#### 2.8.8 Les connecteurs de discours
+
+Quatre connecteurs de la famille `b…ya` relient des phrases ou des propositions. Ils se placent en tête, suivis d'une virgule :
+
+| Connecteur | Sens |
+|---|---|
+| `bèrya` | ensuite |
+| `banya` | pourtant, cependant |
+| `bèdya` | au contraire |
+| `bèmelya` | ainsi |
+
+```
+bèrya ,    roy    veyo           « Ensuite, je pars. »
+```
+
+---
+
+### 2.9 La comparaison
+
+#### 2.9.1 Les particules de degré
+
+| Particule | Valeur |
+|---|---|
+| `tos` | supériorité (plus) |
+| `ixi` | infériorité (moins) |
+| `lem` | égalité (aussi) |
+| `bëgo` | superlatif de supériorité (le plus) |
+| `pix` | superlatif d'infériorité (le moins) |
+
+Elles précèdent l'adjectif, le verbe statif, l'adverbe ou le quantificateur.
+
+#### 2.9.2 Le comparatif
+
+L'**étalon** de comparaison est un GR en `tir` (§2.4.3). Il est placé :
+- **avant le prédicat** dans une proposition ;
+- **après l'adjectif ou le quantificateur** dans un GN.
+
+```
+loy    tir    roy    tos    bègor-o
+3      ABL    1SG    COMPAR.+ être-fort-FIN
+« Il est plus fort que moi. »
+
+loy    tir    roy    ixi    bègor-o            « Il est moins fort que moi. »
+loy    tir    roy    lem    bègor-o            « Il est aussi fort que moi. »
+loy    tir    varg   lem    bègor-o            « Il est fort comme un loup. »
+
+doy    na    var    tos    gorè    tir    roy    bin-o
+2SG    PAT   homme  COMPAR.+ grand  ABL    1SG    voir-FIN
+« Tu vois un homme plus grand que moi. »
+
+loy    tir    roy    tos    vèlnèay    dar-o
+3      ABL    1SG    COMPAR.+ rapidement courir-FIN
+« Il court plus vite que moi. »
+
+roy    na    can    tos    b§ébè    tir    doy    jen-o
+1SG    PAT   chien  COMPAR.+ beaucoup ABL  2SG    avoir-FIN
+« J'ai plus de chiens que toi. »
+```
+
+**Règle.** Un GR en `tir` qui suit un terme au degré comparatif est son étalon.
+
+#### 2.9.3 Le superlatif
+
+`bëgo` (le plus) et `pix` (le moins) précèdent l'adjectif ou le statif. Le groupe de référence se marque par `ne`. Il peut être omis quand le contexte le donne.
+
+```
+var    bëgo    gorè    ne    talmor
+homme  SUP.+   grand   LOC   seigneur
+« Le plus grand homme parmi les seigneurs. »
+
+loy    bëgo    bègor-o    ne    nerac
+3      SUP.+   être-fort-FIN LOC village
+« Il est le plus fort du village. »
+
+trèfèn    bëgo    trèfè
+épée      SUP.+   tranchant
+« L'épée la plus tranchante. »                  (référence omise)
+```
+
+---
+
+### 2.10 Le système numérique
+
+#### 2.10.1 La base douze
+
+L'Aënor compte en **base douze**. Ce choix repose sur la grande divisibilité de douze (par 2, 3, 4 et 6), qui facilite les calculs et les fractions. Chaque nombre a aussi une valeur symbolique : les nombres sont des concepts autant que des outils de calcul.
+
+#### 2.10.2 Les chiffres
+
+| Valeur | Chiffre | Nom | Valeur symbolique |
+|---|---|---|---|
+| 0 | `0` | `oro` | le Vide, l'absence, le néant |
+| 1 | `1` | `val` | l'Origine, l'unité, le commencement |
+| 2 | `2` | `der` | le Reflet, la dualité, l'équilibre |
+| 3 | `3` | `vay` | le Chemin, la progression, le mouvement |
+| 4 | `4` | `drèb` | les Racines, la stabilité, les fondations |
+| 5 | `5` | `dar` | la Main, l'action, la création |
+| 6 | `6` | `mel` | l'Équilibre, l'harmonie parfaite |
+| 7 | `7` | `§yèl` | les Astres, le voyage, l'influence céleste |
+| 8 | `8` | `cayr` | le Cycle, le retour, le renouvellement |
+| 9 | `9` | `drav` | le Destin, les choix et leurs conséquences |
+| dix | `°` | `µar` | la Transformation, le changement profond |
+| onze | `¤` | `vèl` | l'Accomplissement, l'achèvement d'un cycle |
+
+**Remarque.** Les noms de nombres sont des mots à part entière, parfois homophones de noms communs (`dar` cinq et `dar` bois, `mel` six). La position dans le GN, après le nom, suffit à lever toute ambiguïté.
+
+#### 2.10.3 Les puissances
+
+Au-delà de onze, on utilise la notation positionnelle. Deux mots nomment les premières puissances de douze :
+
+| Valeur (base 10) | Écriture (base 12) | Nom | Valeur symbolique |
+|---|---|---|---|
+| 12 | `10` | `val²oro` | un cycle, le Premier Cycle complet |
+| 144 | `100` | `gor²oro` | un grand cycle (12²) |
+
+**Correspondances usuelles :**
+
+| Base 10 | Base 12 | Lecture |
+|---|---|---|
+| 12 | `10` | `val²oro` |
+| 13 | `11` | `val²oro val` |
+| 24 | `20` | `der val²oro` |
+| 36 | `30` | `vay val²oro` |
+| 144 | `100` | `gor²oro` |
+| 1728 | `1000` | `val²oro gor²oro` |
+
+#### 2.10.4 Composition des nombres
+
+Un nombre se lit en composant le **coefficient** et la **puissance** :
+
+1. Le coefficient précède son mot de puissance : `der val²oro` = 2 × 12 = 24.
+2. Le coefficient `1` devant un mot de puissance est omis : `gor²oro` = 144.
+3. Une suite de composants **décroissants s'additionne** ; une suite **croissante se multiplie**.
+
+```
+27   (base 10)  =  23   (base 12)      der val²oro vay              (24 + 3)
+171  (base 10)  =  123  (base 12)      gor²oro der val²oro vay      (144 + 24 + 3)
+143  (base 10)  =  ¤¤   (base 12)      vèl val²oro vèl              (132 + 11)
+288  (base 10)  =  200  (base 12)      der gor²oro                  (2 × 144)
+1728 (base 10)  =  1000 (base 12)      val²oro gor²oro              (12 × 144)
+```
+
+Les grands nombres peuvent se lire chiffre à chiffre dans un contexte technique.
+
+#### 2.10.5 Syntaxe des cardinaux
+
+Les cardinaux suivent le nom, après les adjectifs, en position de numéral (§2.2.1) :
+
+```
+can         vay             « trois chiens »
+can    gorè    vay          « trois grands chiens »
+can    der val²oro vay      « vingt-sept chiens »     (base 10)
+```
+
+Un numéral ne se combine pas avec un quantificateur dans le même GN. Un cardinal peut former un GN à lui seul : `na vay` (trois, en patient).
+
+#### 2.10.6 Les ordinaux
+
+Les ordinaux se forment par le suffixe **`-ayn`** ajouté au nom du nombre. Ils occupent la position du numéral dans le GN :
+
+| Cardinal | Ordinal |
+|---|---|
+| `val` | `valayn` : premier |
+| `der` | `derayn` : deuxième |
+| `vay` | `vayayn` : troisième |
+| `val²oro` | `val²oroayn` : douzième |
+
+```
+var     valayn            « le premier homme »
+can     vayayn            « le troisième chien »
+```
+
+Dans un nombre composé, `-ayn` s'ajoute au dernier composant : `der val²oro vayayn` (le vingt-septième, en base 10).
+
+#### 2.10.7 Les fractions
+
+Une fraction se dit par le numérateur suivi de l'ordinal du dénominateur : `val derayn` (une moitié), `val vayayn` (un tiers), `der vayayn` (deux tiers), `val drèbayn` (un quart).
+
+---
+
+### 2.11 La dérivation
+
+#### 2.11.1 Les morphèmes productifs
+
+| Morphème | Fonction | Exemple |
+|---|---|---|
+| `-è` | nom → adjectif | `dyad` (magie) → `dyadè` (magique) |
+| `-o` (statif) | adjectif → verbe d'état | `gorè` → `goro` |
+| `-ay` | adjectif → adverbe | `vèlnè` → `vèlnèay` |
+| `-èn` | racine → nom abstrait (état, qualité, résultat) | `silèn` (secret), `valèn` (vérité), `dravèn` (destin), `serèn` (promesse) |
+| `-ar` | racine → nom d'agent ou de profession | `limar` (pêcheur) |
+| `-ayn` | cardinal → ordinal | `valayn` |
+| `-öj` | pronom → possessif | `röj` |
+| `yu`, `sal`, `²oro` | radical interrogatif → indéfini | `µoyu` |
+
+Quelques noms d'agent figés utilisent d'autres finales (`-ec`, `-an` : `modec` boulanger, `aorec` berger, `doran` fermier, `vosec` chef).
+
+#### 2.11.2 Les familles de racines
+
+Le lexique est organisé en **familles de racines motivées**. Une racine porte un sens de base que l'on retrouve dans tous les mots de sa famille. Ces familles ne forment pas de mots à volonté : chaque mot est un élément du lexique.
+
+| Racine | Sens | Exemples |
+|---|---|---|
+| `val-` | origine, clarté, premier | `val` (un), `valè` (soleil), `valyè` (clair), `valèn` (vérité) |
+| `nor-` | bas, sommeil, nuit, passé | `noro` (dormir), `nor` (dessous), `noryè` (sombre), `noryel` (lit) |
+| `sil-` | caché, secret | `silèn` (secret), `silo§o` (cacher), `silxo` (chercher), `silè` (invisible) |
+| `sèn-` | loin | `sèn`, `sènè`, `sènor` (étranger) |
+| `cro-` | négatif, mauvais, brisé | `croè` (laid), `croco` (briser), `croxo` (trahir), `crovo` (mentir), `croko` (haïr), `croµo` (maudire) |
+| `lë-` | eau, liquide, froid | `lëme` (eau), `lëmezi` (rivière), `lëvar` (pluie), `lëmeè` (froid), `lëyon` (bleu) |
+| `div-` | mystique, prophétique | `divo` (invoquer), `divè` (mystique), `divexo` (prophétiser) |
+| `zad-` | combat, agitation | `zad` (contre), `zadca` (guerre), `zadco` (attaquer), `zadro` (combattre) |
+| `tir-` | passage, traversée | `tirxo` (traverser), `tirco` (tirer), `tir²nè`, `tir²val` |
+| `bè-` / `nè-` | plénitude / privation | `bègor` / `nègor` (force / faiblesse), `bèlyar` / `nèlyar` (plein / vide) |
+
+#### 2.11.3 Les composés
+
+Un composé est un mot formé de deux éléments soudés par `²` (§1.10.3) : `dar²norya` (forêt : bois + ombre), `val²dar` (clairière : lumière + bois), `val²tir`, `falir²cayr`. Leur sens est lexicalisé.
+
+#### 2.11.4 Les verbes dérivés
+
+Certains radicaux contiennent des éléments dérivationnels figés (`-§-`, `-c-`, `-x-`, `-z-`…), comme dans `daro§o`, `nexo§o`, `zadco`, `cavexo`. Ils forment des verbes à part entière, donnés au lexique avec leur sens. Pour la conjugaison, tout élément figé du radical se traite comme faisant partie du radical (§2.5.3).
+
+---
+
+### 2.12 Pragmatique du discours
+
+#### 2.12.1 Information et ordre
+
+Les informations connues se placent en premier (thème), les informations nouvelles en dernier, juste avant le verbe. Un GR de contraste ou de précision peut être déplacé en tête en le prenant pour thème.
+
+#### 2.12.2 La restriction `-vèt`
+
+L'enclitique **`-vèt`** (seulement, rien que) restreint la portée de ce qu'il suit. Il se lie par un trait d'union à n'importe quel GN, ou au verbe :
+
+```
+roy    na    can-vèt    bin-o            « Je ne vois que le chien. »
+roy    bino-vèt                          « Je ne fais que voir. »
+```
+
+Quand `-vèt` et `-ca` se suivent sur le verbe, `-vèt` précède `-ca` : `bino-vèt-ca`.
+
+#### 2.12.3 La politesse par le thème
+
+L'Aënor n'a pas de forme de politesse dans ses pronoms ni dans son verbe. Le respect se marque par la structure du discours.
+
+**Prendre l'autre pour thème.** On honore quelqu'un en le plaçant en tête et en se rangeant soi-même en position seconde :
+
+```
+roy    na    =ocval    bin-o            « Je vois le roi. »                  (neutre)
+na     =ocval    ni    roy    bin-o     « Le roi, je le vois. »              (le roi, honoré, est thème)
+```
+
+**Atténuer par l'irréel.** Une demande se fait plus déférente avec `rin-` (§2.5.6) :
+
+```
+zoveyo                « Pars ! »                    (directif)
+doy    rinveyo-ca     « Partirais-tu ? »            (demande atténuée)
+doy    rinveyobap-ca  « Pourrais-tu partir ? »      (demande très déférente)
+```
+
+**S'adresser à un supérieur.** On l'appelle par son titre, en thème-cadre, plutôt que par `doy`.
+
+#### 2.12.4 L'appel
+
+Un GN suivi d'une virgule en tête de phrase est un appel : `var, zoveyo` (homme, pars !). La personne appelée est le sujet du directif qui suit.
+
+#### 2.12.5 Anaphore zéro et chaîne de thèmes
+
+Un thème déjà établi s'omet dans les propositions suivantes (§2.4.7). Dans une chaîne de propositions au même thème, seule la première l'exprime. Quand le thème change, il est exprimé, éventuellement avec son relateur.
+
+#### 2.12.6 Particules de réponse et d'interjection
+
+| Particule | Emploi |
+|---|---|
+| `ba` | oui |
+| `no/` | non |
+| `=ö` | exclamation ; seul, « Ah ! » |
+
+#### 2.12.7 Oral et écrit
+
+À l'oral, `-ca` peut s'élider quand le contexte est clair, et les thèmes évidents s'omettent plus largement. À l'écrit, `-ca` est conservé.
+
+---
+
+## 3. Corpus de référence : cinq phrases glosées
+
+Chaque phrase est donnée en trois temps : la forme aënore avec sa transcription, la **grille d'analyse** (mot à mot, décomposition morphologique, glose, fonction), puis la **traduction française** avec l'explication syntaxique.
+
+---
+
+### 3.1 Phrase 1 : localisation
+
+**Aënor :**
+```
+=abi ne nor tèpal pazo
+```
+Transcription : /ˈθa.bi ne ˈnor ˈtɛ.pal ˈpa.zo/
+
+**Grille d'analyse :**
+
+| Forme | Décomposition | Glose | Catégorie et fonction |
+|---|---|---|---|
+| `=abi` | `=abi` | chat | nom ; thème nu, sujet |
+| `ne` | `ne` | `LOC` | relateur (lieu), ouvre le GR |
+| `nor` | `nor` | dessous | nom relationnel, tête du GN du GR |
+| `tèpal` | `tèpal` | table | nom ; possesseur de `nor` |
+| `pazo` | `paz-o` | se-trouver-`FIN` | verbe d'action statique ; clôt la proposition |
+
+**Traduction :** « Le chat est sous la table. »
+
+**Explication syntaxique.** Le premier GN, `=abi`, est le thème. Il est nu parce qu'il est sujet (§2.4.5). Le GR `ne nor tèpal` est formé du relateur de lieu `ne` et du GN `nor tèpal`, où le nom relationnel `nor` (le dessous) précède son possesseur `tèpal` (§2.2.8). La phrase n'a ni copule, ni article : la localisation se dit par `pazo` (§2.6.3), et la définitude du chat vient de sa position de thème. Le verbe clôt la proposition.
+
+---
+
+### 3.2 Phrase 2 : transitive et point de vue
+
+**Aënor :**
+```
+can gorè na var µaro
+```
+Transcription : /ˈkan ˈgo.rɛ na ˈvar ˈɲa.ro/
+
+**Grille d'analyse :**
+
+| Forme | Décomposition | Glose | Catégorie et fonction |
+|---|---|---|---|
+| `can` | `can` | chien | nom ; tête du thème |
+| `gorè` | `gor-è` | grand | adjectif épithète ; fait partie du thème |
+| `na` | `na` | `PAT` | relateur (patient) |
+| `var` | `var` | homme | nom ; patient |
+| `µaro` | `µar-o` | manger-`FIN` | verbe transitif ; clôt la proposition |
+
+**Traduction :** « Le grand chien mange l'homme. »
+
+**Explication syntaxique.** Le thème est le GN `can gorè` (nom + adjectif, §2.2.5). Il est nu : c'est le sujet. `na var` est un GR : `na` marque `var` comme patient. Les rôles sont donnés par les relateurs, jamais par l'ordre.
+
+**Autres perspectives sur la même scène :**
+
+| Perspective | Forme | Lecture |
+|---|---|---|
+| Thème = patient | `na var ni can gorè µaro` | l'homme, le grand chien le mange |
+| Agent omis | `na var µaro` | l'homme est mangé |
+| Forme pleine | `ni can gorè na var µaro` | le grand chien mange l'homme (forme explicite) |
+
+Le verbe `µaro` ne change jamais : seul le thème varie (§2.4.5).
+
+---
+
+### 3.3 Phrase 3 : le gabarit verbal et la coordination
+
+**Aënor :**
+```
+doy balveyoja§tena bensya roy balµariyo
+```
+Transcription : /ˈdoj bal.ve.jo.ʒaʃ.ˈte.na ˈben.sja ˈroj bal.ɲa.ˈri.jo/
+
+**Grille d'analyse :**
+
+| Forme | Décomposition | Glose | Catégorie et fonction |
+|---|---|---|---|
+| `doy` | `doy` | `2SG` | pronom ; thème nu, sujet de la 1ʳᵉ proposition |
+| `balveyoja§tena` | `bal-vey-o-ja§-tena` | `PASS`-partir-`FIN`-`VOUL`-`NÉG.ENC` | complexe verbal : P2 `bal-`, P4 `vey`, P6 `-o`, P8 `-ja§`, P9 `-tena` |
+| `bensya` | `bensya` | donc | coordonnant (conséquence) |
+| `roy` | `roy` | `1SG` | pronom ; thème nu, sujet de la 2ᵉ proposition |
+| `balµariyo` | `bal-µar-iy-o` | `PASS`-manger-`IPFV`-`FIN` | complexe verbal : P2 `bal-`, P4 `µar`, P5 `-iy-`, P6 `-o` |
+
+**Traduction :** « Tu ne voulais pas encore partir, donc je mangeais. »
+
+**Explication syntaxique.**
+- La phrase contient deux propositions complètes, reliées par `bensya`. Chacune a son thème (`doy`, `roy`), nu parce que sujet.
+- **Première proposition.** Le verbe occupe quatre positions du gabarit. La négation `-tena` est en P9, après le modal : elle porte donc sur le **vouloir** (« tu ne voulais pas encore »). Si elle précédait le modal (`balveyotenaja§`), elle porterait sur le départ (« tu voulais ne pas encore partir »). L'ordre fixe la portée (§2.5.9).
+- **Seconde proposition.** L'infixe `-iy-` donne un imperfectif passé : l'action de manger était en cours.
+- Le temps `bal-` apparaît dans les deux verbes, chacun portant sa propre marque.
+
+---
+
+### 3.4 Phrase 4 : trois participants et groupe nominal complexe
+
+**Aënor :**
+```
+talmor derè na velin no nèran nerac löj fonsereno
+```
+Transcription : /ˈtal.mor ˈde.rɛ na ˈve.lin no ˈnɛ.ran ˈne.rak ˈløʒ fon.se.ˈre.no/
+
+**Grille d'analyse :**
+
+| Forme | Décomposition | Glose | Catégorie et fonction |
+|---|---|---|---|
+| `talmor` | `talmor` | seigneur | nom ; tête du thème |
+| `derè` | `derè` | `DÉM.1` | démonstratif proche ; fait partie du thème |
+| `na` | `na` | `PAT` | relateur (patient) |
+| `velin` | `velin` | paix | nom ; patient |
+| `no` | `no` | `DIR` | relateur (destinataire) |
+| `nèran` | `nèran` | peuple | nom ; destinataire, tête du GN du GR |
+| `nerac` | `nerac` | village | nom ; possesseur de `nèran` |
+| `löj` | `l-öj` | `3`-`POSS` | possessif ; se rattache à `nerac` |
+| `fonsereno` | `fon-seren-o` | `FUT`-promettre-`FIN` | complexe verbal : P2 `fon-`, P4 `seren`, P6 `-o` |
+
+**Traduction :** « Ce seigneur promettra la paix au peuple de son village. »
+
+**Explication syntaxique.**
+- **Trois participants.** L'agent est le thème (`talmor derè`, nu). Le patient est `na velin`. Le destinataire est `no nèran nerac löj`. Les trois rôles sont portés par leurs relateurs (§2.4.8).
+- **Thème.** Le démonstratif `derè` (« celui-ci », proche du locuteur) suit le nom (§2.2.6).
+- **Groupe nominal emboîté.** Dans `nèran nerac löj`, chaque modificateur se rattache au nom qui le précède : `löj` se rattache à `nerac`, et `nerac` à `nèran` (§2.2.7). Le sens est « le peuple du village de lui ».
+- **Référence de `löj`.** Le possessif renvoie au thème proximal, ici le seigneur (§2.3.5).
+- **Autre perspective.** `na velin ni talmor derè no nèran nerac lëj fonsereno` (la paix, ce seigneur la promettra au peuple de son village) : le thème étant maintenant la paix, le seigneur devient un autre tiers et son possessif est `lëj`.
+
+---
+
+### 3.5 Phrase 5 : subordination, relative et irréel
+
+**Aënor :**
+```
+doy no nerac rinnèxo §a, roy na bodzo pa var rinlonsilo§o
+```
+Transcription : /ˈdoj no ˈne.rak rin.ˈnɛ.xo ʃa ˈroj na ˈbo.dzo pa ˈvar rin.lon.si.ˈlo.ʃo/
+
+**Grille d'analyse :**
+
+| Forme | Décomposition | Glose | Catégorie et fonction |
+|---|---|---|---|
+| `doy` | `doy` | `2SG` | pronom ; thème nu de la subordonnée |
+| `no` | `no` | `DIR` | relateur (direction) |
+| `nerac` | `nerac` | village | nom ; but du déplacement |
+| `rinnèxo` | `rin-nèx-o` | `IRR`-venir-`FIN` | complexe verbal : P1 `rin-`, P4 `nèx`, P6 `-o` |
+| `§a` | `§a` | `SI` | subordonnant conditionnel ; clôt la subordonnée |
+| `roy` | `roy` | `1SG` | pronom ; sujet de la relative |
+| `na` | `na` | `PAT` | relateur orphelin : marque la lacune (patient) |
+| `bodzo` | `bodz-o` | protéger-`FIN` | verbe de la relative |
+| `pa` | `pa` | `REL` | marqueur de relative ; clôt la relative |
+| `var` | `var` | homme | nom ; tête de la relative, thème nu de la principale |
+| `rinlonsilo§o` | `rin-lon-silo§-o` | `IRR`-`REFL`-cacher-`FIN` | complexe verbal : P1 `rin-`, P3 `lon-`, P4 `silo§`, P6 `-o` |
+
+**Traduction :** « Si tu venais au village, l'homme que je protège se cacherait. »
+
+**Explication syntaxique.**
+- **Structure d'ensemble.** La phrase se compose d'une subordonnée conditionnelle préposée (`doy no nerac rinnèxo §a`) et d'une proposition principale (`roy na bodzo pa var rinlonsilo§o`). La subordonnée se ferme par `§a` : on sait où commence et où finit chaque proposition (§2.8.1).
+- **Subordonnée.** Le thème `doy` est nu. `no nerac` est un GR de direction. Le verbe porte `rin-` : l'irréel marque la condition comme improbable ou hypothétique (§2.8.4).
+- **Relative.** `roy na bodzo pa` est une relative préposée à `var`. Elle comporte un thème (`roy`), un relateur orphelin `na` (pas de GN après lui : c'est la lacune du patient), le verbe `bodzo`, et se ferme par `pa`. On lit « l'homme que je protège ». En l'absence de `na`, la lacune serait le sujet (`na roy bodzo pa var` : l'homme qui me protège) (§2.8.6).
+- **Principale.** Le GN `[roy na bodzo pa] var` est le thème nu de la principale, sujet du verbe. Le verbe cumule irréel (`rin-`, P1) et réfléchi (`lon-`, P3) dans l'ordre du gabarit (§2.5.2). Le réfléchi rend le verbe intransitif : l'homme se cache lui-même.
+
+---
+
+### 3.6 Phénomènes illustrés
+
+| Phrase | Phénomènes principaux | Sections |
+|---|---|---|
+| 1 | thème nu, GR de lieu, nom relationnel, `pazo`, absence d'article | §2.2.8, §2.4.5, §2.6.3 |
+| 2 | adjectif épithète, `na`, point de vue, alternance de thème | §2.2.5, §2.4.5 |
+| 3 | gabarit verbal, négation et portée, aspect, coordination | §2.5.2, §2.5.9, §2.8.7 |
+| 4 | trois participants, démonstratif, possession emboîtée, obviation | §2.2.6, §2.2.7, §2.3.3, §2.4.8 |
+| 5 | subordonnée préposée, irréel, relative à lacune, réfléchi | §2.5.6, §2.8.4, §2.8.6, §2.3.6 |
+
+---
+
+## Annexe A. Inventaire des morphèmes grammaticaux
+
+| Forme | Catégorie | Fonction | Section |
+|---|---|---|---|
+| `roy` `doy` `loy` `µoy` `doµoy` `sinoy` `linoy` `lëy` | pronoms | personnes | §2.3.1 |
+| `-öj` | suffixe | possessif | §2.3.5 |
+| `lon-` `linon-` | préfixes | réfléchi, réciproque | §2.3.6, §2.5.8 |
+| `ni` | relateur | sujet, agent | §2.4.2 |
+| `na` | relateur | patient, attribut | §2.4.2 |
+| `no` | relateur | destinataire, direction | §2.4.2 |
+| `ne` | relateur | lieu, moment | §2.4.2 |
+| `nu` | relateur | instrument, moyen, cause | §2.4.2 |
+| `=em` `=as` `bro` `zad` `tir` | relateurs | compagnie, bénéficiaire, privation, opposition, origine | §2.4.3 |
+| `derè` `falè` `sènè` | déictiques | proche de moi, proche de toi, éloigné | §2.2.6 |
+| `yu` `jab` `b§ébè` `sal` `oro` | quantificateurs | un, peu, beaucoup, tout, aucun | §2.2.3 |
+| `mèl` `jab` `dèrn` `vèlag` | degrés | très, peu, assez, trop | §2.2.5, §2.5.14 |
+| `rin-` `zo-` | préfixes | irréel, directif | §2.5.6, §2.5.7 |
+| `bal-` `fon-` | préfixes | antérieur, postérieur | §2.5.4 |
+| `-iy-` `-en-` | infixes | imperfectif, perfectif | §2.5.5 |
+| `-o` | voyelle | finale du verbe | §2.5.3 |
+| `-ten` `-lutèn` `-teni` `-tenè` `-tena` `-tenor` `-atenor` | suffixes | négations | §2.5.9 |
+| `-ja§` `-bap` `-dor` `-mil` `-§ar` | suffixes | vouloir, pouvoir, devoir, souhaiter, oser | §2.5.10 |
+| `-sbè` `-sil` `-div` | suffixes | rapporté, inféré, prophétique | §2.5.11 |
+| `-ca` | enclitique | interrogation | §2.7 |
+| `-vèt` | enclitique | restriction | §2.12.2 |
+| `=ö` | particule | exclamation | §2.7.6 |
+| `ba` `no/` | particules | oui, non | §2.7.2 |
+| `-ay` | suffixe | adverbe de manière | §2.5.14 |
+| `-è` | suffixe | adjectif | §2.2.5 |
+| `-èn` `-ar` | suffixes | nom abstrait, nom d'agent | §2.11.1 |
+| `-ayn` | suffixe | ordinal | §2.10.6 |
+| `µo` `tè` `jer` `=aj` `ë§` `tef` `gom` | radicaux | interrogatifs | §2.7.3 |
+| `yu` `sal` `²oro` | suffixes | indéfinis | §2.7.5 |
+| `vaypa` `bodpa` `nèpa` `§a` `nolpa` `norvpa` `decpa` `valpa` | subordonnants | adverbiaux | §2.8.2 |
+| `acpa` | subordonnant | complétive | §2.8.5 |
+| `pa` | marqueur | relative | §2.8.6 |
+| `bèya` `borya` `bavya` `bensya` | coordonnants | et, mais, ou, donc | §2.8.7 |
+| `bèrya` `banya` `bèdya` `bèmelya` | connecteurs | ensuite, pourtant, au contraire, ainsi | §2.8.8 |
+| `tos` `ixi` `lem` | degrés | comparatifs | §2.9.1 |
+| `bëgo` `pix` | degrés | superlatifs | §2.9.3 |
+| `to` `pazo` `jeno` | verbes | copule, localisation, possession | §2.6 |
+| `val²oro` `gor²oro` | nombres | douze, cent quarante-quatre | §2.10.3 |
+| `²` | signe | soudure lexicale | §1.10.3 |
+
+---
+
+*Fin du Manuel de Référence & Grammaire Officielle de l'Aënor.*

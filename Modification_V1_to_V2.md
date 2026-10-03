@@ -539,4 +539,4 @@ Traduction : « Si tu venais au village, l'homme que je protège se cacherait. �
 - Documenter `-§o`, `-co`, `-xo`.
 - Reformater le JSON : retirer les `:` des clés et le champ `$COMMENTAIRE$`.
 
-Veux-tu que je mette tout ceci dans un fichier `.md` pour le projet ?
+Veux-tu que je mette tout ceci dans un fichier `.md` pour le projet ? 
