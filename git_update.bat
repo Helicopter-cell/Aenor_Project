@@ -5,7 +5,7 @@ powershell -Command "git add ."
 echo git add. effectué !
 pause
 
-powershell -Command "git commit -m 'Segmentation propre de `app.py` et première essaie pour ajout de la synthèse vocale.'"
+powershell -Command "git commit -m 'Récuperation de fichiers de travail de conlang (On s`en fout en fait)'"
 echo git commit effectué !
 pause
 
