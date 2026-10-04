@@ -407,7 +407,7 @@ L'accent n'est jamais noté. Les voyelles inaccentuées conservent leur timbre.
 | Élément | Écriture | Exemple |
 |---|---|---|
 | Mots autonomes (relateurs, subordonnants, coordonnants, degrés) | séparés par une espace | `na var`, `vaypa`, `mèl gorè` |
-| Affixes verbaux (préfixes, infixes, suffixes) | soudés au verbe, sans trait d'union | `balµariyojaʃ` |
+| Affixes verbaux (préfixes, infixes, suffixes) | soudés au verbe, sans trait d'union | `balµariyoja§` |
 | Enclitiques (`-ca`, `-vèt`) | précédés d'un trait d'union | `doy µaro-ca`, `can-vèt` |
 | Composés lexicalisés | soudés par `²` | `val²tir`, `dar²norya` |
 
@@ -418,7 +418,7 @@ Le trait d'union a donc **un seul emploi** : séparer un enclitique de son hôte
 `²` est un signe **muet** qui soude deux éléments en un seul mot lexical. Il ne se prononce pas et ne se transcrit pas dans l'API.
 
 **Fonctions.**
-1. **Composés figés.** Il lie les composants d'un mot construit : `val²tir` (avant : *val* + *tir*), `dar²norya` (forêt : bois + ombre), `falir²cayr` (bientôt : nouveau + temps), `tir²val` (autour), `tir²nè` (à travers), `oʃ²der` (après).
+1. **Composés figés.** Il lie les composants d'un mot construit : `val²tir` (avant : *val* + *tir*), `dar²norya` (forêt : bois + ombre), `falir²cayr` (bientôt : nouveau + temps), `tir²val` (autour), `tir²nè` (à travers), `o§²der` (après).
 2. **Faux préfixe.** Il marque qu'une suite initiale ne doit pas être lue comme un préfixe productif : `bal²bèdo` (parler) ne se lit pas *bal-bèdo*.
 3. **Mots-outils soudés.** Il apparaît aussi dans les séries lexicalisées : `val²oro`, `gor²oro`, `µo²oro`.
 
@@ -717,12 +717,12 @@ Les notions spatiales et temporelles (dessus, dessous, voisinage, avant, après�
 | `nor` | le dessous |
 | `fela` | le voisinage, la proximité |
 | `sèn` | l'éloignement |
-| `=öʃ` | le milieu, l'intervalle |
+| `=ö§` | le milieu, l'intervalle |
 | `naraj` | la demeure (chez) |
 | `tir²val` | le pourtour |
 | `tir²nè` | la traversée |
 | `val²tir` | l'antériorité |
-| `oʃ²der` | la postériorité |
+| `o§²der` | la postériorité |
 
 Employé dans une proposition, un nom relationnel est précédé d'un relateur (`ne`, `no` ou `tir`) :
 
@@ -735,7 +735,7 @@ ne     fela     lëmezi
 LOC    voisinage  rivière
 « Près de la rivière. »
 
-ne     oʃ²der   zadca
+ne     o§²der   zadca
 LOC    après    guerre
 « Après la guerre. »
 ```
@@ -954,7 +954,7 @@ roy    na    can    bin-o
 - But d'un déplacement : « vers, à ».
 
 ```
-=ocval    na    velin    no    nèran    serèn-o
+=ocval    na    velin    no    nèran    seren-o
 roi       PAT   paix     DIR   peuple   promettre-FIN
 « Le roi promet la paix au peuple. »
 

@@ -5,7 +5,7 @@ powershell -Command "git add ."
 echo git add. effectué !
 pause
 
-powershell -Command "git commit -m 'Enfin, Aënor v2 Whoooohohoo'"
+powershell -Command "git commit -m 'ae_2.1'"
 echo git commit effectué !
 pause
 
