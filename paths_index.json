@@ -1,9 +1,9 @@
 {
   "|rootPATH|app": "app.py",
-  "|rootPATH|grammaire_aenor": "grammaire_aenor.md",
+  "|rootPATH|grammaire_aenor": "Global_Manual_V2.md",
 
   "|dataPATH|SQLite": "data/SQLite.db",
-  "|dataPATH|aenor_lexique": "data/aenor_lexique.json",
+  "|dataPATH|aenor_lexique": "Lexique_ae_V2.json",
   "|dataPATH|non_traduits": "data/non_traduits.json",
   "|dataPATH|grammaire_aenor-IA": "data/grammaire_aenor-IA.md",
   "|dataPATH|prompt_trad_fr2ae": "data/prompt_trad_fr2ae.txt",

@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 .env
+.env.exemple
 *.db
 static/cache_audio/
 future-edit.md

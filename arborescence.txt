@@ -2,41 +2,128 @@
 Structure du dossier pour le volume Windows-SSD
 Le num�ro de s�rie du volume est F8A4-1503
 C:.
+|   .copilotignore
+|   .env
 |   app.py
 |   arborescence.txt
-|   DEPLOYMENT_PYTHONANYWHERE.md
+|   conlangV1_critiques
+|   extensions.py
 |   future-edit.md
+|   Future_feature.md
 |   generate_tree.bat
-|   get_api_keys
+|   git_update.bat
+|   Global_Manual_V2.md
 |   grammaire_aenor.md
+|   Lexique_ae_V2.json
+|   Modification_V1_to_V2.md
 |   paths_index.json
+|   print_api_keys.py
 |   pythonanywhere_wsgi.py
+|   requirements-dev.txt
 |   requirements.txt
 |   
++---.pytest_cache
+|   |   CACHEDIR.TAG
+|   |   README.md
+|   |   
+|   \---v
+|       \---cache
+|               lastfailed
+|               nodeids
+|               
 |       settings.json
 |       
 +---Corbeille
+|       DEPLOYMENT_PYTHONANYWHERE.md
 |       grammaire.html
 |       grammaire_2.html
 |       schem_prompt_upgrade.md
-|       SQLite_old.db
 |       terminal-renderer.py
 |       traducteur.py
 |       traductions.json
 |       
 +---data
-|       aenor_lexique.json
-|       grammaire_aenor-IA.md
-|       non_traduits.json
-|       prompt_exercice.txt
-|       prompt_revision_traduction.txt
-|       prompt_trad_ae2fr.txt
-|       prompt_trad_ae2fr_comment.txt
-|       prompt_trad_fr2ae.txt
-|       prompt_trad_fr2ae_comment.txt
-|       SQLite.db
-|       traductions_commentaires.json
-|       
+|   |   aenor_lexique.json
+|   |   grammaire_aenor-IA.md
+|   |   non_traduits.json
+|   |   prompt_exercice.txt
+|   |   prompt_revision_traduction.txt
+|   |   prompt_trad_ae2fr.txt
+|   |   prompt_trad_ae2fr_comment.txt
+|   |   prompt_trad_fr2ae.txt
+|   |   prompt_trad_fr2ae_comment.txt
+|   |   SQLite.db
+|   |   traductions_commentaires.json
+|   |   
+|   \---obsidian_vault
+|       |   
+|       \---Aenor_world_building
+|           |   Ask�a.md
+|           |   Browem r�sum�.canvas
+|           |   Browem.md
+|           |   Chakim.md
+|           |   Dal-ifey.md
+|           |   Gevrin.md
+|           |   G�n�alogie chef Chakim.canvas
+|           |   Lonades.md
+|           |   Ondru.md
+|           |   SaarMis.md
+|           |   Sph�re.md
+|           |   Zefre�ne.md
+|           |   _Index Chronologique.md
+|           |   
+|           +---.obsidian
+|           |   |   app.json
+|           |   |   appearance.json
+|           |   |   community-plugins.json
+|           |   |   core-plugins.json
+|           |   |   graph.json
+|           |   |   types.json
+|           |   |   workspace.json
+|           |   |   
+|           |   \---plugins
+|           |       +---dataview
+|           |       |       main.js
+|           |       |       manifest.json
+|           |       |       styles.css
+|           |       |       
+|           |       +---longform
+|           |       |       data.json
+|           |       |       main.js
+|           |       |       manifest.json
+|           |       |       styles.css
+|           |       |       
+|           |       +---obsidian-excalidraw-plugin
+|           |       |       data.json
+|           |       |       main.js
+|           |       |       manifest.json
+|           |       |       styles.css
+|           |       |       
+|           |       +---obsidian-git
+|           |       |       main.js
+|           |       |       manifest.json
+|           |       |       obsidian_askpass.sh
+|           |       |       styles.css
+|           |       |       
+|           |       +---obsidian-tasks-plugin
+|           |       |       main.js
+|           |       |       manifest.json
+|           |       |       styles.css
+|           |       |       
+|           |       +---obsidian-timeline
+|           |       |       main.js
+|           |       |       manifest.json
+|           |       |       styles.css
+|           |       |       
+|           |       \---various-complements
+|           |               histories.json
+|           |               main.js
+|           |               manifest.json
+|           |               styles.css
+|           |               
+|           \---Aenor_Longform
+|                   Index.md
+|                   
 +---modules
 |   |   base_converter.py
 |   |   conlang-update.py
@@ -44,11 +131,30 @@ C:.
 |   |   exercices.py
 |   |   HTML_version.py
 |   |   IA_version.py
+|   |   obsidian_vault.py
 |   |   utils.py
 |   |   __init__.py
 |   |   
-|
+|           
++---routes
+|   |   admin.py
+|   |   audio.py
+|   |   main.py
+|   |   scenario.py
+|   |   translation.py
+|   |   __init__.py
+|   |   
+|           
++---services
+|   |   audio_service.py
+|   |   cache_service.py
+|   |   gemini_service.py
+|   |   obsidian_service.py
+|   |   __init__.py
+|   |   
+|           
 +---static
+|   +---cache_audio
 |   +---CSS
 |   |   |   main.css
 |   |   |   responsive.css
@@ -61,8 +167,10 @@ C:.
 |   |   |       cards.css
 |   |   |       feedback.css
 |   |   |       forms.css
+|   |   |       lexique-search.css
 |   |   |       navigation.css
 |   |   |       results.css
+|   |   |       scenario-graph.css
 |   |   |       typography.css
 |   |   |       
 |   |   +---generic
@@ -94,9 +202,13 @@ C:.
 |   |       wood.webp
 |   |       
 |   \---js
+|           admin_data.js
 |           feedback.js
+|           grammaire.js
 |           IA_trad.js
+|           lexique-search.js
 |           Particles.js
+|           speech.js
 |           
 +---templates
 |       admin_data.html
@@ -112,8 +224,17 @@ C:.
 |       index.html
 |       result.html
 |       scenario.html
-|       traducteur.html
 |       
++---tests
+|   |   conftest.py
+|   |   test_audio_service.py
+|   |   test_content_cache.py
+|   |   test_converter.py
+|   |   test_gemini_service.py
+|   |   test_routes.py
+|   |   __init__.py
+|   |   
+|           
         
 
 

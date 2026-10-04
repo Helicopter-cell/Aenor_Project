@@ -1,7 +1,7 @@
 """
 Ce fichier n'est éxécuté nul part. Il ne sert qu'a l'administrateur, et ce
 fichier exécuté sur une autre machine ne servirait à rien. Ainsi, ce fichier
-ne sert qu'a aider l'administrateur a récupérer les clé très facilement et rapidement.
+ne sert qu'a aider l'administrateur a récupérer les clées très facilement et rapidement.
 """
 
 import os
