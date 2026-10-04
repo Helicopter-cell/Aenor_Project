@@ -33,24 +33,20 @@
 }
 
 #obsidian-mindmap,
-#obsidian-mindmap .markmap,
-#obsidian-mindmap svg {
+#obsidian-mindmap .vis-network {
     width: 100%;
     height: 100%;
 }
 
-#obsidian-mindmap .markmap {
-    color: #f5f0dc;
+.scenario-mindmap-controls {
+    position: absolute;
+    z-index: 2;
+    top: 12px;
+    right: 12px;
 }
 
-#obsidian-mindmap .markmap-node > circle {
-    cursor: pointer;
-}
-
-#obsidian-mindmap .markmap-node > foreignObject {
-    color: #f5f0dc;
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 14px;
+#obsidian-mindmap .vis-network canvas {
+    outline: none;
 }
 
 .scenario-graph-panel {
