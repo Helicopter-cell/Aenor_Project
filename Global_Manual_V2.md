@@ -585,7 +585,7 @@ Le nom ne distingue ni singulier ni pluriel : `can` désigne « un chien », « 
 |---|---|---|
 | `yu` | un (singulier précis) | `can yu` : un chien |
 | `jab` | peu, quelques | `can jab` : quelques chiens |
-| `b§ébè` | beaucoup | `can b§ébè` : beaucoup de chiens |
+| `bu§ebè` | beaucoup | `can bu§ebè` : beaucoup de chiens |
 | `sal` | tout, tous | `can sal` : tous les chiens |
 | `oro` | aucun, zéro | `can oro` : aucun chien |
 | numéral | nombre précis | `can vay` : trois chiens |
@@ -1429,7 +1429,7 @@ loy    rin-bal-lon-bodz-en-o-ja§-ten-sbè-ca
 | `jab` | peu | `loy jab µaro` : il mange peu |
 | `dèrn` | assez, plutôt | `dèrn gorè` |
 | `vèlag` | trop | `doy vèlag vèlnèay bal²bèdo` : tu parles trop vite |
-| `b§ébè` | beaucoup | `loy b§ébè µaro` : il mange beaucoup |
+| `bu§ebè` | beaucoup | `loy bu§ebè µaro` : il mange beaucoup |
 
 **Les adverbes de temps** sont des mots lexicaux :
 
@@ -1872,7 +1872,7 @@ loy    tir    roy    tos    vèlnèay    dar-o
 3      ABL    1SG    COMPAR.+ rapidement courir-FIN
 « Il court plus vite que moi. »
 
-roy    na    can    tos    b§ébè    tir    doy    jen-o
+roy    na    can    tos    bu§ebè    tir    doy    jen-o
 1SG    PAT   chien  COMPAR.+ beaucoup ABL  2SG    avoir-FIN
 « J'ai plus de chiens que toi. »
 ```
@@ -2287,7 +2287,7 @@ Transcription : /ˈdoj no ˈne.rak rin.ˈnɛ.xo ʃa ˈroj na ˈbo.dzo pa ˈvar r
 | `nu` | relateur | instrument, moyen, cause | §2.4.2 |
 | `=em` `=as` `bro` `zad` `tir` | relateurs | compagnie, bénéficiaire, privation, opposition, origine | §2.4.3 |
 | `derè` `falè` `sènè` | déictiques | proche de moi, proche de toi, éloigné | §2.2.6 |
-| `yu` `jab` `b§ébè` `sal` `oro` | quantificateurs | un, peu, beaucoup, tout, aucun | §2.2.3 |
+| `yu` `jab` `bu§ebè` `sal` `oro` | quantificateurs | un, peu, beaucoup, tout, aucun | §2.2.3 |
 | `mèl` `jab` `dèrn` `vèlag` | degrés | très, peu, assez, trop | §2.2.5, §2.5.14 |
 | `rin-` `zo-` | préfixes | irréel, directif | §2.5.6, §2.5.7 |
 | `bal-` `fon-` | préfixes | antérieur, postérieur | §2.5.4 |

@@ -1,0 +1,9 @@
+# --- Ici est stocké la lite de commandes à utiliser pour mettre à jour le site sur Python Anywhere.
+
+cd ~/aenor-app && \
+cp data/SQLite.db data/SQLite_backup.db && \
+git fetch --all && \
+git reset --hard origin/main && \
+cp data/SQLite_backup.db data/SQLite.db && \
+source ~/.virtualenvs/aenor-venv/bin/activate && \
+pip install -r requirements.txt
