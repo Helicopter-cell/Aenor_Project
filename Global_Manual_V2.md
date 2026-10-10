@@ -1,8 +1,4 @@
-# Manuel de Référence & Grammaire Officielle de l'Aënor
-
-> **Partie 1** : Principes fondamentaux, phonologie, orthographe, groupe nominal, pronoms et relateurs.
-
----
+<strong> Manuel de Référence & Grammaire Officielle de l'Aënor </strong>
 
 ## Conventions du manuel
 
@@ -313,7 +309,8 @@ où `V` est une voyelle ou une diphtongue (`ay`, `oy`).
 Les obstruantes sont : `p b t d c g f v s z § j x =` et les affriquées `ts dz dj`.
 
 **Coda.** Une seule consonne, de n'importe quelle nature à l'exception des affriquées : `jab`, `zad`, `bof`, `§ag`, `cel`, `gom`, `can`, `dèp`, `var`, `pix`, `no/`.
-*Cas particulier :* en fin de mot, un `y` peut suivre `l` ou `n` (`nèly` /nɛlj/).
+
+*Cas particulier :* en fin de mot, un `y` peut suivre `l` ou `n` (`nèly` /nɛlj/). La finale -ly n'est légale qu'en fin de mot. Un composé ne peut donc pas commencer par nèly quand une consonne suit : nèly²val se découperait en nèlyv…, une attaque illégale. C'est pourquoi nèly est toujours en dernière position dans les composés (valè²nèly, bèran²nèly, hameau) et pourquoi « bébé » se dit nèlyèl, avec une voyelle derrière.
 
 #### 1.7.2 Découpage des groupes consonantiques
 
@@ -1120,9 +1117,6 @@ loy    bro    vèrag    tir    nerac    vey-o
 
 ---
 
-## 2. Morphosyntaxe & grammaire (suite)
-
-> Cette partie poursuit la section 2 à partir du complexe verbal et conduit jusqu'à la fin du manuel.
 
 ### Abréviations complémentaires
 
@@ -2007,6 +2001,7 @@ Une fraction se dit par le numérateur suivi de l'ordinal du dénominateur : `va
 | `-è` | nom → adjectif | `dyad` (magie) → `dyadè` (magique) |
 | `-o` (statif) | adjectif → verbe d'état | `gorè` → `goro` |
 | `-ay` | adjectif → adverbe | `vèlnè` → `vèlnèay` |
+| `-a` | verbe → interjection | cavexo → cavexa |
 | `-èn` | racine → nom abstrait (état, qualité, résultat) | `silèn` (secret), `valèn` (vérité), `dravèn` (destin), `serèn` (promesse) |
 | `-ar` | racine → nom d'agent ou de profession | `limar` (pêcheur) |
 | `-ayn` | cardinal → ordinal | `valayn` |
@@ -2025,7 +2020,7 @@ Le lexique est organisé en **familles de racines motivées**. Une racine porte 
 | `nor-` | bas, sommeil, nuit, passé | `noro` (dormir), `nor` (dessous), `noryè` (sombre), `noryel` (lit) |
 | `sil-` | caché, secret | `silèn` (secret), `silo§o` (cacher), `silxo` (chercher), `silè` (invisible) |
 | `sèn-` | loin | `sèn`, `sènè`, `sènor` (étranger) |
-| `cro-` | négatif, mauvais, brisé | `croè` (laid), `croco` (briser), `croxo` (trahir), `crovo` (mentir), `croko` (haïr), `croµo` (maudire) |
+| `cro-` | négatif, mauvais, brisé | `croè` (laid), `croco` (briser), `croxo` (trahir), `crovo` (mentir), `croco` (haïr), `croµo` (maudire) |
 | `lë-` | eau, liquide, froid | `lëme` (eau), `lëmezi` (rivière), `lëvar` (pluie), `lëmeè` (froid), `lëyon` (bleu) |
 | `div-` | mystique, prophétique | `divo` (invoquer), `divè` (mystique), `divexo` (prophétiser) |
 | `zad-` | combat, agitation | `zad` (contre), `zadca` (guerre), `zadco` (attaquer), `zadro` (combattre) |

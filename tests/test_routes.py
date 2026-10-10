@@ -12,6 +12,7 @@ def test_main_pages_and_scenario_are_accessible(client):
         "/commentaires",
         "/historique",
         "/exercice",
+        "/obj_project"
         "/admin",
         "/stats/optimisation",
     ):

@@ -38,7 +38,7 @@ def process_aenor_numbers(text):
 
 # --- Zone de test (s'exécute uniquement si le fichier est lancé directement) ---
 if __name__ == "__main__":
-    texte_test = "Gemini a renvoyé %13% et aussi %15% pour finir avec %144%."
+    texte_test = "%63%"
     texte_converti = process_aenor_numbers(texte_test)
     print("Test de conversion :")
     print(f"Original : {texte_test}")

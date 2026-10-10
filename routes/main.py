@@ -33,27 +33,14 @@ def historique():
 # ROUTES - PAGES PRINCIPALES
 # =============================
 
-@main_bp.route('/', methods=['GET', 'POST'])
+@main_bp.route('/')
 def index():
-    """
-    Page d'accueil utilisant le traducteur local (dictionnaire).
-    Aucun enregistrement dans traductions.json ici : cette route n'utilise
-    pas l'API Gemini, seulement le module modules.traducteur.traduire.
-    """
     return render_template('index.html')
 
 @main_bp.route('/cours')
 def cours():
     cours = load_cours()
     return render_template('cours.html', cours=cours)
-
-@main_bp.route('/grammaire')
-def grammaire():
-    return render_template('grammaire.html')
-
-@main_bp.route('/grammaire_2')
-def grammaire_2():
-    return render_template('grammaire_2.html')
 
 @main_bp.route('/grammaire_3')
 def grammaire_3():
@@ -62,6 +49,10 @@ def grammaire_3():
 @main_bp.route('/ia-trad')
 def ia_trad():
     return render_template('IA-trad.html')
+
+@main_bp.route('/obj_project')
+def obj_project():
+    return render_template('obj_project.html')
 
 @main_bp.route('/commentaires', methods=['GET', 'POST'])
 def commentaires():
@@ -126,7 +117,6 @@ def like_comment(comment_id):
         ).fetchone()[0]
         conn.commit()
     return jsonify({'success': True, 'likes_count': likes_count})
-
 
 @main_bp.route('/api/delete_comment/<int:comment_id>', methods=['POST'])
 def delete_comment(comment_id):

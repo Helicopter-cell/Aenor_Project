@@ -28,5 +28,11 @@
     "traduction": "Est-ce que l'entier réussit ?",
     "commentaire": "La traduction utilise l'adjectif \"valènè\" (entier) en tant que thème, suivi du verbe \"melco§o\" (réussir) avec le suffixe interrogatif \"-ca\". La principale difficulté réside dans l'interprétation nominale d'un adjectif sans nom explicite pour constituer le thème de la phrase, ce qui est toutefois permis par l'ellipse contextuelle de la langue.\nLa construction syntaxique place l'élément central en tête de proposition et reporte la marque interrogative à la fin du verbe, ce qui reflète l'ergonomie thématique de l'Aënor sans artifice surajouté.",
     "date": "2026-10-03T17:35:36"
+  },
+  {
+    "source": "=ö raèran derè sal mèl melyè",
+    "traduction": "raèran mèl melyè sal derè =ö",
+    "commentaire": "La correction de la proposition repose sur le respect de la structure canonique du groupe nominal et sur la pragmatique des particules. L'ordre des modificateurs exige de placer la tête nominale (`raèran`) en premier, immédiatement suivie de l'adjectif et de son mot de degré (`mèl melyè`), puis du quantificateur (`sal`) et enfin du démonstratif (`derè`). Par ailleurs, la particule d'exclamation `=ö` doit obligatoirement figurer en fin de phrase pour exprimer l'admiration ou un affect positif, sa position en tête d'énoncé étant réservée à la colère, la panique ou l'indignation.\n\nL'enchaînement des sons nasaux, liquides et vocaliques au sein de termes comme `raèran` ou `melyè`, combiné à la présence de la fricative dentale consignée par le signe `=`, peut susciter une impression visuelle et auditive orientalisante, évoquant une fluidité poétique ou exotique. Toutefois, cette sonorité ne relève pas d'un simple ornamentalisme linguistique : elle est entièrement intégrée à un système morphologique rigoureux où la hiérarchie du groupe nominal et la portée pragmatique des particules priment sur la recherche d'effet stylistique.",
+    "date": "2026-10-09T10:42:34"
   }
 ]

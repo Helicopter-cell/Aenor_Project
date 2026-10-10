@@ -1,8 +1,4 @@
-# Manuel de Référence & Grammaire Officielle de l'Aënor
-
-> **Partie 1** : Principes fondamentaux, phonologie, orthographe, groupe nominal, pronoms et relateurs.
-
----
+<strong> Manuel de Référence & Grammaire Officielle de l'Aënor </strong>
 
 ## Conventions du manuel
 
@@ -585,7 +581,7 @@ Le nom ne distingue ni singulier ni pluriel : `can` désigne « un chien », « 
 |---|---|---|
 | `yu` | un (singulier précis) | `can yu` : un chien |
 | `jab` | peu, quelques | `can jab` : quelques chiens |
-| `b§ébè` | beaucoup | `can b§ébè` : beaucoup de chiens |
+| `bu§ebè` | beaucoup | `can bu§ebè` : beaucoup de chiens |
 | `sal` | tout, tous | `can sal` : tous les chiens |
 | `oro` | aucun, zéro | `can oro` : aucun chien |
 | numéral | nombre précis | `can vay` : trois chiens |
@@ -1120,9 +1116,6 @@ loy    bro    vèrag    tir    nerac    vey-o
 
 ---
 
-## 2. Morphosyntaxe & grammaire (suite)
-
-> Cette partie poursuit la section 2 à partir du complexe verbal et conduit jusqu'à la fin du manuel.
 
 ### Abréviations complémentaires
 
@@ -1429,7 +1422,7 @@ loy    rin-bal-lon-bodz-en-o-ja§-ten-sbè-ca
 | `jab` | peu | `loy jab µaro` : il mange peu |
 | `dèrn` | assez, plutôt | `dèrn gorè` |
 | `vèlag` | trop | `doy vèlag vèlnèay bal²bèdo` : tu parles trop vite |
-| `b§ébè` | beaucoup | `loy b§ébè µaro` : il mange beaucoup |
+| `bu§ebè` | beaucoup | `loy bu§ebè µaro` : il mange beaucoup |
 
 **Les adverbes de temps** sont des mots lexicaux :
 
@@ -1872,7 +1865,7 @@ loy    tir    roy    tos    vèlnèay    dar-o
 3      ABL    1SG    COMPAR.+ rapidement courir-FIN
 « Il court plus vite que moi. »
 
-roy    na    can    tos    b§ébè    tir    doy    jen-o
+roy    na    can    tos    bu§ebè    tir    doy    jen-o
 1SG    PAT   chien  COMPAR.+ beaucoup ABL  2SG    avoir-FIN
 « J'ai plus de chiens que toi. »
 ```
@@ -2007,6 +2000,7 @@ Une fraction se dit par le numérateur suivi de l'ordinal du dénominateur : `va
 | `-è` | nom → adjectif | `dyad` (magie) → `dyadè` (magique) |
 | `-o` (statif) | adjectif → verbe d'état | `gorè` → `goro` |
 | `-ay` | adjectif → adverbe | `vèlnè` → `vèlnèay` |
+| `-a` | verbe → interjection | cavexo → cavexa |
 | `-èn` | racine → nom abstrait (état, qualité, résultat) | `silèn` (secret), `valèn` (vérité), `dravèn` (destin), `serèn` (promesse) |
 | `-ar` | racine → nom d'agent ou de profession | `limar` (pêcheur) |
 | `-ayn` | cardinal → ordinal | `valayn` |
@@ -2025,7 +2019,7 @@ Le lexique est organisé en **familles de racines motivées**. Une racine porte 
 | `nor-` | bas, sommeil, nuit, passé | `noro` (dormir), `nor` (dessous), `noryè` (sombre), `noryel` (lit) |
 | `sil-` | caché, secret | `silèn` (secret), `silo§o` (cacher), `silxo` (chercher), `silè` (invisible) |
 | `sèn-` | loin | `sèn`, `sènè`, `sènor` (étranger) |
-| `cro-` | négatif, mauvais, brisé | `croè` (laid), `croco` (briser), `croxo` (trahir), `crovo` (mentir), `croko` (haïr), `croµo` (maudire) |
+| `cro-` | négatif, mauvais, brisé | `croè` (laid), `croco` (briser), `croxo` (trahir), `crovo` (mentir), `croco` (haïr), `croµo` (maudire) |
 | `lë-` | eau, liquide, froid | `lëme` (eau), `lëmezi` (rivière), `lëvar` (pluie), `lëmeè` (froid), `lëyon` (bleu) |
 | `div-` | mystique, prophétique | `divo` (invoquer), `divè` (mystique), `divexo` (prophétiser) |
 | `zad-` | combat, agitation | `zad` (contre), `zadca` (guerre), `zadco` (attaquer), `zadro` (combattre) |
@@ -2287,7 +2281,7 @@ Transcription : /ˈdoj no ˈne.rak rin.ˈnɛ.xo ʃa ˈroj na ˈbo.dzo pa ˈvar r
 | `nu` | relateur | instrument, moyen, cause | §2.4.2 |
 | `=em` `=as` `bro` `zad` `tir` | relateurs | compagnie, bénéficiaire, privation, opposition, origine | §2.4.3 |
 | `derè` `falè` `sènè` | déictiques | proche de moi, proche de toi, éloigné | §2.2.6 |
-| `yu` `jab` `b§ébè` `sal` `oro` | quantificateurs | un, peu, beaucoup, tout, aucun | §2.2.3 |
+| `yu` `jab` `bu§ebè` `sal` `oro` | quantificateurs | un, peu, beaucoup, tout, aucun | §2.2.3 |
 | `mèl` `jab` `dèrn` `vèlag` | degrés | très, peu, assez, trop | §2.2.5, §2.5.14 |
 | `rin-` `zo-` | préfixes | irréel, directif | §2.5.6, §2.5.7 |
 | `bal-` `fon-` | préfixes | antérieur, postérieur | §2.5.4 |
