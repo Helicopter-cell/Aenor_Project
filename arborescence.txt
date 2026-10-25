@@ -6,21 +6,21 @@ C:.
 |   .env
 |   app.py
 |   arborescence.txt
-|   conlangV1_critiques
+|   conlangV1_critiques.md
 |   extensions.py
 |   future-edit.md
 |   Future_feature.md
 |   generate_tree.bat
 |   git_update.bat
 |   Global_Manual_V2.md
-|   grammaire_aenor.md
-|   Lexique_ae_V2.json
+|   modification_gestion_prompt.md
 |   Modification_V1_to_V2.md
 |   paths_index.json
 |   print_api_keys.py
 |   pythonanywhere_wsgi.py
 |   requirements-dev.txt
 |   requirements.txt
+|   update_pythonanywhere_commands.txt
 |   
 +---.pytest_cache
 |   |   CACHEDIR.TAG
@@ -34,17 +34,21 @@ C:.
 |       settings.json
 |       
 +---Corbeille
-|       DEPLOYMENT_PYTHONANYWHERE.md
-|       grammaire.html
-|       grammaire_2.html
-|       schem_prompt_upgrade.md
-|       terminal-renderer.py
-|       traducteur.py
-|       traductions.json
-|       
+|   |   DEPLOYMENT_PYTHONANYWHERE.md
+|   |   grammaire.html
+|   |   grammaire_2.html
+|   |   schem_prompt_upgrade.md
+|   |   terminal-renderer.py
+|   |   traducteur.py
+|   |   traductions.json
+|   |   
+|   \---all_ae_V1
+|           aenor_lexique.json
+|           grammaire_aenor.md
+|           
 +---data
-|   |   aenor_lexique.json
 |   |   grammaire_aenor-IA.md
+|   |   Lexique_ae_V2.json
 |   |   non_traduits.json
 |   |   prompt_exercice.txt
 |   |   prompt_revision_traduction.txt
@@ -208,6 +212,7 @@ C:.
 |           IA_trad.js
 |           lexique-search.js
 |           Particles.js
+|           scenario.js
 |           speech.js
 |           
 +---templates
@@ -222,6 +227,7 @@ C:.
 |       historique.html
 |       IA-trad.html
 |       index.html
+|       obj_poject.html
 |       result.html
 |       scenario.html
 |       

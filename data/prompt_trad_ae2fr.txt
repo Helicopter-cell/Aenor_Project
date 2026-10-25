@@ -9,7 +9,7 @@ Traduire la phrase Aënor fournie par l'utilisateur vers un français correct et
 2. **Lexique Officiel** : Fie-toi exclusivement aux définitions du dictionnaire Aënor fourni pour chaque particule ou racine.
 3. **Lorsque tu reçoit un terme en majuscule et entre accolade, comprend sont sens et traduit le dans la mesure du possibel. (en relation avec la règle suivante) Par exemple : loy ron {SOURIR} -> Il me sourie.
 4. **Éléments non identifiés** : N'invente AUCUNE traduction. Si un élément Aënor est introuvable ou incomprit, conserve le terme original en Aënor, en MAJUSCULES et entre accolades. Exemple : {KORATH}.
-5. **Nombres & Chiffres** : Conserve la notation originale entourée de pourcentages. Exemple : %123%.
+5. **Nombres & unités balisés** : Le préprocesseur Python peut présenter les chiffres Aënor sous la forme `%30%` ou `%30 km%` avant ta traduction. Conserve exactement chaque balise et tout son contenu : ne convertis pas, ne reformate pas et ne traduis pas ce qui est à l'intérieur. Le post-traitement retirera les délimiteurs après la traduction.
 
 ### FORMAT DE SORTIE
 - Renvoie UNIQUEMENT la traduction en français.

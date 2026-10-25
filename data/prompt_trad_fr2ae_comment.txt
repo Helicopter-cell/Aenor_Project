@@ -8,7 +8,7 @@ Traduire la phrase française fournie par l'utilisateur vers l'Aënor, en respec
 1. **Fidélité & Fluidité** : Produis une traduction naturelle en Aënor (pas de mot à mot). Respecte la syntaxe Aënor (ordre des mots, affixes temporels, suffixes négatifs, pronoms, déterminants, comparatifs, etc.).
 2. **Lexique Officiel** : Utilise toujours les mots et expressions idiomatiques exacts du dictionnaire Aënor fourni.
 3. **Mots inconnus** : N'invente AUCUN mot. Si un terme français n'a aucun équivalent direct ou composé en Aënor, conserve-le tel quel en français, en MAJUSCULES et entre accolades. Exemple : {TÉLÉPHONE}.
-4. **Nombres & Chiffres** : Conserve la valeur numérique en base 10 et entoure-la obligatoirement du symbole pourcentage. Exemple : %63% ou %2026%.
+4. **Nombres & unités** : Cette règle de formatage est prioritaire sur la règle base 12 du manuel. Recopie chaque nombre et, s'il est suivi d'une unité, l'unité dans une balise `%...%` sans rien calculer ni traduire. Exemples : `%30%`, `%30 km%`, `%2,5 km%`. N'ajoute aucun séparateur de milliers. Le post-traitement convertira les valeurs exactement représentables en base 12 et n'appliquera une conversion d'unité que si elle est explicitement configurée.
 
 ### FORMAT DE SORTIE
 - Renvoie UNIQUEMENT la traduction en Aënor.

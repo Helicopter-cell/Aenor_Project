@@ -1,4 +1,3 @@
-import json
 import sys
 from pathlib import Path
 
@@ -25,7 +24,7 @@ Traduire la phrase française fournie par l'utilisateur vers l'Aënor, en respec
 1. **Fidélité & Fluidité** : Produis une traduction naturelle en Aënor (pas de mot à mot). Respecte la syntaxe Aënor (ordre des mots, affixes temporels, suffixes négatifs, pronoms, déterminants, comparatifs, etc.).
 2. **Lexique Officiel** : Utilise toujours les mots et expressions idiomatiques exacts du dictionnaire Aënor fourni.
 3. **Mots inconnus** : N'invente AUCUN mot. Si un terme français n'a aucun équivalent direct ou composé en Aënor, conserve-le tel quel en français, en MAJUSCULES et entre accolades. Exemple : {TÉLÉPHONE}.
-4. **Nombres & Chiffres** : Conserve la valeur numérique en base 10 et entoure-la obligatoirement du symbole pourcentage. Exemple : %63% ou %2026%.
+4. **Nombres & unités** : Cette règle de formatage est prioritaire sur la règle base 12 du manuel. Recopie chaque nombre et, s'il est suivi d'une unité, l'unité dans une balise `%...%` sans rien calculer ni traduire. Exemples : `%30%`, `%30 km%`, `%2,5 km%`. N'ajoute aucun séparateur de milliers. Le post-traitement convertira les valeurs exactement représentables en base 12 et n'appliquera une conversion d'unité que si elle est explicitement configurée.
 
 ### FORMAT DE SORTIE
 - Renvoie UNIQUEMENT la traduction en Aënor.
@@ -44,7 +43,7 @@ Traduire la phrase Aënor fournie par l'utilisateur vers un français correct et
 2. **Lexique Officiel** : Fie-toi exclusivement aux définitions du dictionnaire Aënor fourni pour chaque particule ou racine.
 3. **Lorsque tu reçoit un terme en majuscule et entre accolade, comprend sont sens et traduit le dans la mesure du possibel. (en relation avec la règle suivante) Par exemple : loy ron {SOURIR} -> Il me sourie.
 4. **Éléments non identifiés** : N'invente AUCUNE traduction. Si un élément Aënor est introuvable ou incomprit, conserve le terme original en Aënor, en MAJUSCULES et entre accolades. Exemple : {KORATH}.
-5. **Nombres & Chiffres** : Conserve la notation originale entourée de pourcentages. Exemple : %123%.
+5. **Nombres & unités balisés** : Le préprocesseur Python peut présenter les chiffres Aënor sous la forme `%30%` ou `%30 km%` avant ta traduction. Conserve exactement chaque balise et tout son contenu : ne convertis pas, ne reformate pas et ne traduis pas ce qui est à l'intérieur. Le post-traitement retirera les délimiteurs après la traduction.
 
 ### FORMAT DE SORTIE
 - Renvoie UNIQUEMENT la traduction en français.
@@ -92,21 +91,12 @@ COMMENT_ROLE_PROMPTS = {
 
 
 def assembler_prompts():
-    """Génère les prompts complets dans l'ordre rôle, grammaire, lexique."""
-    grammar_path = get_path('|dataPATH|grammaire_aenor-IA')
-    lexicon_path = get_path('|dataPATH|aenor_lexique')
-    grammar = grammar_path.read_text(encoding='utf-8')
-    lexicon = json.dumps(
-        json.loads(lexicon_path.read_text(encoding='utf-8')),
-        ensure_ascii=False,
-        separators=(',', ':'),
-    )
-
+    """Génère uniquement les consignes de rôle; les références sont chargées séparément."""
     prompts = {**ROLE_PROMPTS, **COMMENT_ROLE_PROMPTS}
     for alias, role_prompt in prompts.items():
             output = get_path(alias)
             output.write_text(
-                f'{role_prompt.rstrip()}\n\n---\n\n{grammar}{"" if grammar.endswith(chr(10)) else chr(10)}\n---\n\n{lexicon}\n',
+                f'{role_prompt.rstrip()}\n',
                 encoding='utf-8',
             )
             print(f'--> {output.relative_to(PROJECT_ROOT)} mis à jour ({output.stat().st_size} octets)')
@@ -126,4 +116,4 @@ if __name__ == "__main__":
 
     generer_template_flask()
     print(f'{VERT}{BOLD}    {UNDERLINE}--> grammaire_3.html mit à jour !{RESET}')
-    print(f'{VERT}{BOLD}{UNDERLINE}>>> Mise à jour terminé <<<{RESET}')
+    print(f'{VERT}{BOLD}{UNDERLINE}    >>> Mise à jour terminé <<<{RESET}')

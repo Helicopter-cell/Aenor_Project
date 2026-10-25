@@ -34,7 +34,11 @@ except ImportError:
     legacy_genai = None
 
 # --- Modules locaux ---
-from modules.base_converter import process_aenor_numbers
+from modules.base_converter import (
+    prepare_aenor_numbers_for_translation,
+    process_aenor_numbers,
+    strip_number_markers,
+)
 from modules.utils import get_path
 
 
@@ -93,9 +97,9 @@ PROMPT_SIGNATURES: Dict[str, str] = {}
 
 # --- Configuration du modèle Gemini ---
 # Remarque : la sélection du modèle dépend dynamiquement du flag PAIEMENT_ACTIVE.
-# Lorsque PAIEMENT_ACTIVE == True -> modèles payants (2.5)
-# Lorsque PAIEMENT_ACTIVE == False -> modèles recommandés (3.6)
-GEMINI_MODEL = 'gemini-3.6-flash'              # Valeur par défaut (utilisée quand PAIEMENT_ACTIVE=False)
+# Lorsque PAIEMENT_ACTIVE == True -> modèles 2.5 flash
+# Lorsque PAIEMENT_ACTIVE == False -> modèles 3.1 pro
+GEMINI_MODEL = 'gemini-3.1-pro-preview'                # Valeur par défaut (utilisée quand PAIEMENT_ACTIVE=False)
 GEMINI_MODEL_LEGACY = 'gemini-3.5-flash-lite'  # Valeur legacy par défaut
 
 def get_current_models():
@@ -147,10 +151,8 @@ CURRENT_KEY_INDEX = 0
 
 # --- Clients et caches Gemini ---
 CLIENTS_BY_KEY: Dict[str, object] = {}
-# GEMINI_CACHES / CACHE_EXPIRATIONS sont indexés par (api_key, direction) : chaque sens de
-# traduction ('fr2aenor' / 'aenor2fr') dispose ainsi de son propre cache Gemini distinct,
-# au lieu de partager (et donc d'écraser) le même cache pour une clé API donnée.
-CacheKey = Tuple[str, str, str]
+# Les caches sont isolés par clé, sens, modèle et empreinte du manuel/lexique.
+CacheKey = Tuple[str, str, str, str]
 GEMINI_CACHES: Dict[CacheKey, object] = {}
 CACHE_EXPIRATIONS: Dict[CacheKey, float] = {}
 LEGACY_CONFIGURED_KEY: Optional[str] = None  # Dernière clé utilisée pour configurer le SDK legacy
@@ -185,7 +187,7 @@ def prompt_path(role: str) -> str:
 
 
 def load_prompt(role: str) -> str:
-    """Charge un prompt complet et invalide son cache local s'il a changé."""
+    """Charge les seules consignes de rôle depuis un prompt, même anciennement assemblé."""
     path = prompt_path(role)
     try:
         with open(path, 'r', encoding='utf-8') as handle:
@@ -194,6 +196,9 @@ def load_prompt(role: str) -> str:
         logger.error(f'Prompt introuvable ({path}): {exc}')
         return ''
 
+    # Les prompts générés avant la séparation contiennent le rôle, puis la grammaire
+    # et le lexique séparés par cette sentinelle. Seul le rôle appartient à la requête.
+    content = content.partition('\n\n---\n\n')[0].rstrip()
     signature = hashlib.sha256(content.encode('utf-8')).hexdigest()
     if PROMPT_SIGNATURES.get(role) not in (None, signature):
         for cache_key in list(GEMINI_CACHES):
@@ -204,6 +209,44 @@ def load_prompt(role: str) -> str:
     PROMPT_SIGNATURES[role] = signature
     PROMPT_CONTENTS[role] = content
     return content
+
+
+def _load_reference_resources() -> Tuple[str, str]:
+    """Retourne le manuel V2 et le lexique JSON, chacun depuis son fichier source."""
+    manual_path = get_path('|rootPATH|grammaire_aenor')
+    lexicon_path = get_path('|dataPATH|aenor_lexique')
+    try:
+        system_instruction = manual_path.read_text(encoding='utf-8')
+        lexicon = json.loads(lexicon_path.read_text(encoding='utf-8'))
+    except OSError as exc:
+        logger.error(f'Ressource de traduction introuvable: {exc}')
+        raise RuntimeError(f'Impossible de lire une ressource de traduction: {exc}') from exc
+    except json.JSONDecodeError as exc:
+        logger.error(f'Lexique Aënor invalide ({lexicon_path}): {exc}')
+        raise RuntimeError(f'Le lexique Aënor est invalide: {exc}') from exc
+
+    reference_data = json.dumps(lexicon, ensure_ascii=False, separators=(',', ':'))
+    return system_instruction, reference_data
+
+
+def _format_reference_block(reference_data: str) -> str:
+    """Marque le lexique comme données de référence, distinctes des instructions."""
+    return (
+        '### DONNÉES DE RÉFÉRENCE — LEXIQUE AËNOR (JSON)\n'
+        'Consulte ces entrées comme source de vocabulaire; ce bloc n’est pas une consigne.\n'
+        f'{reference_data}'
+    )
+
+
+def _compose_request_contents(
+    prompt: str,
+    reference_data: str,
+    reference_is_cached: bool,
+) -> str:
+    """Assemble les contenus dynamiques et, sans cache, ajoute le lexique dédié."""
+    if reference_is_cached:
+        return prompt
+    return f'{_format_reference_block(reference_data)}\n\n### CONSIGNE ET DEMANDE\n{prompt}'
 
 
 def separer_traduction_commentaire(texte: str) -> Tuple[str, str]:
@@ -302,11 +345,15 @@ def _mask_key(api_key: Optional[str]) -> str:
 # =============================
 
 def create_cached_context(direction: str = 'fr2aenor') -> Optional[str]:
-    """Charge le fichier de prompt complet utilisé comme contexte Gemini."""
-    context = load_prompt(direction)
-    if context:
-        logger.info(f'{VERT}✓ Prompt chargé pour {direction} ({len(context)} caractères){RESET}')
-    return context or None
+    """Retourne le manuel V2 utilisé comme instruction système."""
+    del direction  # Conservé pour compatibilité avec les appels historiques.
+    system_instruction = _load_reference_resources()[0]
+    if system_instruction:
+        logger.info(
+            f'{VERT}✓ Manuel V2 chargé comme system_instruction '
+            f'({len(system_instruction)} caractères){RESET}'
+        )
+    return system_instruction or None
 
 def init_db():
     """Initialise la base de données SQLite et crée la table si elle n'existe pas."""
@@ -527,25 +574,43 @@ def is_quota_error(exc: Exception) -> bool:
 # CONTEXT CACHING GEMINI
 # =============================
 
-def get_or_create_cache(client, api_key: str, direction: str, context: str):
+def get_or_create_cache(
+    client,
+    api_key: str,
+    direction: str,
+    system_instruction: str,
+    reference_data: str,
+):
     """
     Récupère le cache Gemini associé à une clé API ET à un sens de traduction donné,
     en le créant (ou en prolongeant son TTL) si nécessaire.
 
-    La clé de cache est composée de (api_key, direction) : 'fr2aenor' et 'aenor2fr'
-    ont donc chacun leur propre cache Gemini distinct, même pour une même clé API.
+    Le manuel reste dans system_instruction et le lexique dans les contenus de
+    référence du cache. Le prompt de rôle et la phrase ne sont jamais mis en cache.
 
     Si CACHED_CONTEXTS_ACTIVATION est False, retourne toujours None sans effectuer
-    aucun appel réseau : le contexte complet sera alors envoyé directement dans
-    chaque requête (voir prompt_fallback dans traduire_avec_gemini()).
+    aucun appel réseau : le lexique sera alors envoyé comme bloc de référence à
+    chaque requête, avec le manuel en system_instruction.
     """
     if not CACHED_CONTEXTS_ACTIVATION:
         return None
 
-    if not context or client is None:
+    if not system_instruction or not reference_data or client is None:
         return None
 
-    cache_key: CacheKey = (api_key, direction, get_current_models()[0])
+    context_signature = hashlib.sha256(
+        f'{system_instruction}\0{reference_data}'.encode('utf-8')
+    ).hexdigest()
+    cache_key: CacheKey = (
+        api_key,
+        direction,
+        get_current_models()[0],
+        context_signature,
+    )
+    for old_key in list(GEMINI_CACHES):
+        if old_key[:3] == cache_key[:3] and old_key != cache_key:
+            GEMINI_CACHES.pop(old_key, None)
+            CACHE_EXPIRATIONS.pop(old_key, None)
     now = time.time()
     cached = GEMINI_CACHES.get(cache_key)
     expiration = CACHE_EXPIRATIONS.get(cache_key)
@@ -585,7 +650,8 @@ def get_or_create_cache(client, api_key: str, direction: str, context: str):
         cache_config = types.CreateCachedContentConfig(
             display_name=f'aenor-context-cache-{direction}',
             ttl=f'{CACHE_TTL_SECONDS}s',
-            system_instruction=context,
+            system_instruction=system_instruction,
+            contents=_format_reference_block(reference_data),
         )
         cache = client.caches.create(model=get_current_models()[0], config=cache_config)
 
@@ -634,10 +700,16 @@ def warmup_gemini() -> None:
     api_key = get_current_api_key()
     client = get_gemini_client(api_key)
     if client is not None:
+        system_instruction, reference_data = _load_reference_resources()
         for direction in PROMPT_FILES:
-            context = load_prompt(direction)
-            if context:
-                get_or_create_cache(client, api_key, direction, context)
+            if load_prompt(direction):
+                get_or_create_cache(
+                    client,
+                    api_key,
+                    direction,
+                    system_instruction,
+                    reference_data,
+                )
 
 def _get_token_count(response) -> Optional[int]:
     """Calcule le nombre de tokens facturables d'une réponse Gemini."""
@@ -728,11 +800,28 @@ def _call_gemini_with_latency(generate_content, provenance: str, traduction_fiab
         )
 
 
-def _print_global_prompt(role: str, prompt: str) -> None:
-    """Affiche le fichier source et le prompt logique complet si demandé par l'admin."""
+def _print_global_prompt(
+    role: str,
+    reference_is_cached: bool,
+    model_name: str,
+    additional_prompt_roles: Tuple[str, ...] = (),
+) -> None:
+    """Affiche uniquement les fichiers, leurs destinations et le modèle choisi."""
     if not PRINT_GLOBAL_PROMPT:
         return
-    print(f'\n===== PROMPT GEMINI: {role} =====')
+    manual_path = get_path('|rootPATH|grammaire_aenor')
+    lexicon_path = get_path('|dataPATH|aenor_lexique')
+    reference_destination = (
+        'cached_content.contents (déjà associé à cette requête)'
+        if reference_is_cached
+        else 'contents (bloc de données de référence)'
+    )
+    print(f'\n===== REQUÊTE GEMINI: {role} =====')
+    print(f'Modèle LLM utilisé : {model_name}')
+    print(f'{manual_path.name} -> Gemini system_instruction')
+    print(f'{lexicon_path.name} -> Gemini {reference_destination}')
+    for prompt_role in (role, *additional_prompt_roles):
+        print(f'{Path(prompt_path(prompt_role)).name} -> Gemini contents')
 
 
 # =============================
@@ -754,15 +843,14 @@ def reviser_traduction_avec_gemini(
     if not contexte_traduction or not prompt_revision:
         raise RuntimeError('Contexte de revision introuvable')
 
+    system_instruction, reference_data = _load_reference_resources()
     demande = (
-        f'{prompt_revision.rstrip()}\n\n'
+        f'{contexte_traduction.rstrip()}\n\n{prompt_revision.rstrip()}\n\n'
         f'Phrase source :\n{texte_source}\n\n'
         f'Traduction proposee :\n{traduction_proposee}\n\n'
         f'Sens de traduction : {direction}\n'
         f'Mode apprentissage : {"oui" if autoriser_apprentissage else "non"}'
     )
-    prompt_complet = f'{contexte_traduction.rstrip()}\n\n{demande}'
-    _print_global_prompt('revision', prompt_complet)
 
     erreurs: List[str] = []
     nb_tentatives = len(API_KEYS_POOL) if POOL_API_KEYS_ACTIVATION else 1
@@ -772,10 +860,37 @@ def reviser_traduction_avec_gemini(
         if client is None or not hasattr(client, 'models') or not hasattr(client.models, 'generate_content'):
             break
         try:
+            cache = get_or_create_cache(
+                client,
+                api_key,
+                'revision',
+                system_instruction,
+                reference_data,
+            )
+            reference_is_cached = cache is not None and getattr(cache, 'name', None)
+            request_contents = _compose_request_contents(
+                demande,
+                reference_data,
+                reference_is_cached,
+            )
+            config = (
+                types.GenerateContentConfig(cached_content=cache.name)
+                if reference_is_cached
+                else types.GenerateContentConfig(system_instruction=system_instruction)
+            )
+            _print_global_prompt(
+                'revision',
+                bool(reference_is_cached),
+                get_current_models()[0],
+                additional_prompt_roles=(
+                    COMMENT_PROMPT_FILES[direction] if autoriser_apprentissage else direction,
+                ),
+            )
             response = _call_gemini_with_latency(
                 lambda: client.models.generate_content(
                     model=get_current_models()[0],
-                    contents=prompt_complet,
+                    contents=request_contents,
+                    config=config,
                 ),
                 f'{provenance}_revision',
                 True,
@@ -791,9 +906,25 @@ def reviser_traduction_avec_gemini(
     legacy_client = get_legacy_client(get_current_api_key())
     if legacy_client is not None and hasattr(legacy_client, 'GenerativeModel'):
         try:
-            model = legacy_client.GenerativeModel(GEMINI_MODEL_LEGACY)
+            model = legacy_client.GenerativeModel(
+                GEMINI_MODEL_LEGACY,
+                system_instruction=system_instruction,
+            )
+            request_contents = _compose_request_contents(
+                demande,
+                reference_data,
+                reference_is_cached=False,
+            )
+            _print_global_prompt(
+                'revision',
+                False,
+                GEMINI_MODEL_LEGACY,
+                additional_prompt_roles=(
+                    COMMENT_PROMPT_FILES[direction] if autoriser_apprentissage else direction,
+                ),
+            )
             response = _call_gemini_with_latency(
-                lambda: model.generate_content(prompt_complet),
+                lambda: model.generate_content(request_contents),
                 f'{provenance}_revision',
                 True,
             )
@@ -815,12 +946,12 @@ def traduire_avec_gemini(
     Traduit un texte via l'API Gemini.
 
     Stratégie :
-        1. Réutilise (ou crée) un cache de contexte Gemini pour la clé API active,
-           afin de ne pas renvoyer le prompt système, la grammaire et le lexique
-           à chaque requête (Context Caching).
-        2. En cas de dépassement de quota sur une clé, effectue une rotation
+        1. Envoie le manuel V2 dans system_instruction et le lexique comme données
+           de référence, mises en cache lorsque Context Caching est activé.
+        2. Envoie les consignes ciblées et la phrase dans contents.
+        3. En cas de dépassement de quota sur une clé, effectue une rotation
            automatique vers la clé suivante du pool et retente l'appel.
-        3. Si le SDK officiel échoue pour toute autre raison, ou si aucune clé
+        4. Si le SDK officiel échoue pour toute autre raison, ou si aucune clé
            n'est fonctionnelle, retombe sur le SDK legacy `google.generativeai`.
 
     L'enregistrement de la traduction (sauvegarder_traduction) n'est déclenché
@@ -832,14 +963,25 @@ def traduire_avec_gemini(
     if not context:
         return "Erreur : le contexte de traduction n'a pas pu être construit.", ''
 
+    try:
+        system_instruction, reference_data = _load_reference_resources()
+    except RuntimeError as exc:
+        return f"Erreur : les ressources de traduction sont indisponibles ({exc}).", ''
+
     if not API_KEYS_POOL:
         return (
             "Erreur : aucune clé API Gemini n'a été configurée. "
             "Définissez GEMINI_API_KEY_1/2/3, GEMINI_API_KEY ou GOOGLE_API_KEY."
         ), ''
 
-    prompt_fallback = f'{context.rstrip()}\n\n{texte_utilisateur}'
-    _print_global_prompt(direction, prompt_fallback)
+    texte_source_modele = (
+        prepare_aenor_numbers_for_translation(texte_utilisateur)
+        if direction == 'aenor2fr'
+        else texte_utilisateur
+    )
+    request_prompt = (
+        f'{context.rstrip()}\n\nPhrase à traduire :\n{texte_source_modele}'
+    )
 
     erreurs_rencontrees: List[str] = []
 
@@ -856,25 +998,37 @@ def traduire_avec_gemini(
             break  # Client officiel indisponible : on passe directement au fallback legacy
 
         try:
-            cache = get_or_create_cache(client, api_key, prompt_role, context)
-
-            if cache is not None and getattr(cache, 'name', None):
-                response = _call_gemini_with_latency(
-                    lambda: client.models.generate_content(
-                        model=get_current_models()[0],
-                        contents=texte_utilisateur,
-                        config=types.GenerateContentConfig(cached_content=cache.name),
-                    ),
-                    provenance,
-                )
-            else:
-                response = _call_gemini_with_latency(
-                    lambda: client.models.generate_content(
-                        model=get_current_models()[0],
-                        contents=prompt_fallback,
-                    ),
-                    provenance,
-                )
+            cache = get_or_create_cache(
+                client,
+                api_key,
+                prompt_role,
+                system_instruction,
+                reference_data,
+            )
+            reference_is_cached = cache is not None and getattr(cache, 'name', None)
+            request_contents = _compose_request_contents(
+                request_prompt,
+                reference_data,
+                reference_is_cached,
+            )
+            config = (
+                types.GenerateContentConfig(cached_content=cache.name)
+                if reference_is_cached
+                else types.GenerateContentConfig(system_instruction=system_instruction)
+            )
+            _print_global_prompt(
+                prompt_role,
+                bool(reference_is_cached),
+                get_current_models()[0],
+            )
+            response = _call_gemini_with_latency(
+                lambda: client.models.generate_content(
+                    model=get_current_models()[0],
+                    contents=request_contents,
+                    config=config,
+                ),
+                provenance,
+            )
 
 
             # On récupère le texte brut de Gemini
@@ -882,17 +1036,18 @@ def traduire_avec_gemini(
 
             if traduction_fiable:
                 traduction_brute = reviser_traduction_avec_gemini(
-                    texte_utilisateur,
+                    texte_source_modele,
                     traduction_brute,
                     direction,
                     autoriser_apprentissage,
                     provenance,
                 )
             
-            # --- APPLICATION DU FILTRE BASE 12 ICI ---
             traduction, commentaire = separer_traduction_commentaire(traduction_brute) if autoriser_apprentissage else (traduction_brute.strip(), '')
-            traduction = process_aenor_numbers(traduction)
-            # -----------------------------------------
+            if direction == 'fr2aenor':
+                traduction = process_aenor_numbers(traduction)
+            elif direction == 'aenor2fr':
+                traduction = strip_number_markers(traduction)
             
             enregistrer_mots_non_traduits(traduction)
             # Sauvegarde en fonction du sens : sauvegarder_traduction(francais, aenor)
@@ -921,9 +1076,22 @@ def traduire_avec_gemini(
 
     if legacy_client is not None and hasattr(legacy_client, 'GenerativeModel'):
         try:
-            model = legacy_client.GenerativeModel(GEMINI_MODEL_LEGACY)
+            model = legacy_client.GenerativeModel(
+                GEMINI_MODEL_LEGACY,
+                system_instruction=system_instruction,
+            )
+            request_contents = _compose_request_contents(
+                request_prompt,
+                reference_data,
+                reference_is_cached=False,
+            )
+            _print_global_prompt(
+                prompt_role,
+                False,
+                GEMINI_MODEL_LEGACY,
+            )
             response = _call_gemini_with_latency(
-                lambda: model.generate_content(prompt_fallback),
+                lambda: model.generate_content(request_contents),
                 provenance,
             )
             
@@ -932,17 +1100,18 @@ def traduire_avec_gemini(
 
             if traduction_fiable:
                 traduction_brute = reviser_traduction_avec_gemini(
-                    texte_utilisateur,
+                    texte_source_modele,
                     traduction_brute,
                     direction,
                     autoriser_apprentissage,
                     provenance,
                 )
             
-            # --- APPLICATION DU FILTRE BASE 12 ICI ---
             traduction, commentaire = separer_traduction_commentaire(traduction_brute) if autoriser_apprentissage else (traduction_brute.strip(), '')
-            traduction = process_aenor_numbers(traduction)
-            # -----------------------------------------
+            if direction == 'fr2aenor':
+                traduction = process_aenor_numbers(traduction)
+            elif direction == 'aenor2fr':
+                traduction = strip_number_markers(traduction)
             
             # Le fallback legacy n'utilise pas de cache (aucun cached_content transmis),
             # mais on journalise quand même prompt/réponse pour garder une visibilité complète.
@@ -1049,13 +1218,20 @@ def evaluer_avec_gemini(phrase_fr: str, reponse_user: str) -> Dict:
     if not context:
         return {'note': 0, 'commentaire': 'Erreur : contexte d\'évaluation manquant.'}
 
+    try:
+        system_instruction, reference_data = _load_reference_resources()
+    except RuntimeError as exc:
+        return {
+            'note': 0,
+            'commentaire': f'Erreur : les ressources de traduction sont indisponibles ({exc}).',
+        }
+
     if not API_KEYS_POOL:
         return {'note': 0, 'commentaire': 'Erreur : aucune clé API Gemini configurée.'}
 
     prompt_evaluation = f'''Phrase originale en français : "{phrase_fr}"
 Traduction proposée par l'élève : "{reponse_user}"'''
-    prompt_full = f'{context.rstrip()}\n\n{prompt_evaluation}'
-    _print_global_prompt(direction, prompt_full)
+    request_prompt = f'{context.rstrip()}\n\n{prompt_evaluation}'
 
     nb_tentatives = len(API_KEYS_POOL) if POOL_API_KEYS_ACTIVATION else 1
     erreurs = []
@@ -1065,24 +1241,37 @@ Traduction proposée par l'élève : "{reponse_user}"'''
         if client is None or not hasattr(client, 'models') or not hasattr(client.models, 'generate_content'):
             break
         try:
-            cache = get_or_create_cache(client, api_key, direction, context)
-            if cache is not None and getattr(cache, 'name', None):
-                response = _call_gemini_with_latency(
-                    lambda: client.models.generate_content(
-                        model=get_current_models()[0],
-                        contents=prompt_evaluation,
-                        config=types.GenerateContentConfig(cached_content=cache.name),
-                    ),
-                    'exercice',
-                )
-            else:
-                response = _call_gemini_with_latency(
-                    lambda: client.models.generate_content(
-                        model=get_current_models()[0],
-                        contents=prompt_full,
-                    ),
-                    'exercice',
-                )
+            cache = get_or_create_cache(
+                client,
+                api_key,
+                direction,
+                system_instruction,
+                reference_data,
+            )
+            reference_is_cached = cache is not None and getattr(cache, 'name', None)
+            request_contents = _compose_request_contents(
+                request_prompt,
+                reference_data,
+                reference_is_cached,
+            )
+            config = (
+                types.GenerateContentConfig(cached_content=cache.name)
+                if reference_is_cached
+                else types.GenerateContentConfig(system_instruction=system_instruction)
+            )
+            _print_global_prompt(
+                direction,
+                bool(reference_is_cached),
+                get_current_models()[0],
+            )
+            response = _call_gemini_with_latency(
+                lambda: client.models.generate_content(
+                    model=get_current_models()[0],
+                    contents=request_contents,
+                    config=config,
+                ),
+                'exercice',
+            )
 
             reponse_brute = getattr(response, 'text', str(response))
             # tenter d'extraire JSON
@@ -1113,9 +1302,22 @@ Traduction proposée par l'élève : "{reponse_user}"'''
     legacy_client = get_legacy_client(legacy_key)
     if legacy_client is not None and hasattr(legacy_client, 'GenerativeModel'):
         try:
-            model = legacy_client.GenerativeModel(GEMINI_MODEL_LEGACY)
+            model = legacy_client.GenerativeModel(
+                GEMINI_MODEL_LEGACY,
+                system_instruction=system_instruction,
+            )
+            request_contents = _compose_request_contents(
+                request_prompt,
+                reference_data,
+                reference_is_cached=False,
+            )
+            _print_global_prompt(
+                direction,
+                False,
+                GEMINI_MODEL_LEGACY,
+            )
             response = _call_gemini_with_latency(
-                lambda: model.generate_content(prompt_full),
+                lambda: model.generate_content(request_contents),
                 'exercice',
             )
             reponse_brute = getattr(response, 'text', str(response))
@@ -1258,7 +1460,6 @@ def internal_error(error):
         'success': False,
         'erreur': 'Erreur interne du serveur',
     }), 500
-
 
 
 # =============================
