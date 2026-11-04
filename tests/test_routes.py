@@ -12,12 +12,19 @@ def test_main_pages_and_scenario_are_accessible(client):
         "/commentaires",
         "/historique",
         "/exercice",
-        "/obj_project"
+        "/obj_project",
         "/admin",
         "/stats/optimisation",
     ):
         response = client.get(path)
         assert response.status_code == 200, path
+
+
+def test_obj_project_page_renders(client):
+    response = client.get("/obj_project")
+
+    assert response.status_code == 200
+    assert b"Mais en fait, pourquoi faire tout \xc3\xa7a ?" in response.data
 
 
 def test_comment_form_validates_and_persists_submission(client):

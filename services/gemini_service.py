@@ -22,6 +22,11 @@ import sys
 from threading import Timer
 from pathlib import Path
 
+# Keep sibling project packages importable when this file is executed directly.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 # --- Bibliothèques tierces ---
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 from flask import jsonify, redirect, request, session, url_for
@@ -49,7 +54,6 @@ from modules.utils import get_path
 RESET = '\033[0m'
 BOLD = '\033[1m'
 UNDERLINE = '\033[4m'
-
 
 INVERTION = '\033[7m'
 
@@ -99,8 +103,8 @@ PROMPT_SIGNATURES: Dict[str, str] = {}
 # Remarque : la sélection du modèle dépend dynamiquement du flag PAIEMENT_ACTIVE.
 # Lorsque PAIEMENT_ACTIVE == True -> modèles 2.5 flash
 # Lorsque PAIEMENT_ACTIVE == False -> modèles 3.1 pro
-GEMINI_MODEL = 'gemini-3.1-pro-preview'                # Valeur par défaut (utilisée quand PAIEMENT_ACTIVE=False)
-GEMINI_MODEL_LEGACY = 'gemini-3.5-flash-lite'  # Valeur legacy par défaut
+GEMINI_MODEL = 'gemini-3.1-pro-preview  '                      # Valeur par défaut (utilisée quand PAIEMENT_ACTIVE=False)
+GEMINI_MODEL_LEGACY = 'gemini-3.6-flash'                     # Valeur legacy par défaut
 
 def get_current_models():
     """Retourne un tuple (model_principal, model_fallback) selon l'état de PAIEMENT_ACTIVE."""
@@ -816,13 +820,13 @@ def _print_global_prompt(
         if reference_is_cached
         else 'contents (bloc de données de référence)'
     )
-    print(f'\n===== REQUÊTE GEMINI: {role} =====')
+    print(f'\n===== {CYAN}REQUÊTE GEMINI: {UNDERLINE}{role}{RESET} ====={CYAN}')
     print(f'Modèle LLM utilisé : {model_name}')
     print(f'{manual_path.name} -> Gemini system_instruction')
     print(f'{lexicon_path.name} -> Gemini {reference_destination}')
     for prompt_role in (role, *additional_prompt_roles):
-        print(f'{Path(prompt_path(prompt_role)).name} -> Gemini contents')
-
+        print(f'{Path(prompt_path(prompt_role)).name} -> Gemini contents{RESET}')
+    print(f'=========================')
 
 # =============================
 # FONCTION DE TRADUCTION AVEC GEMINI

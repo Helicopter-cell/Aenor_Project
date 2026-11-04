@@ -2,18 +2,24 @@
 
 import hashlib
 import json
+import logging
 import os
 import re
+import socket
 import tempfile
 import threading
 from pathlib import Path
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 from xml.sax.saxutils import escape, quoteattr
 
 
+logger = logging.getLogger(__name__)
+
 AZURE_SPEECH_KEY = os.environ.get("AZURE_SPEECH_KEY", "").strip()
 AZURE_SPEECH_REGION = os.environ.get("AZURE_SPEECH_REGION", "").strip()
+AZURE_SPEECH_ENDPOINT = os.environ.get("AZURE_SPEECH_ENDPOINT", "").strip()
 AZURE_SPEECH_LANGUAGE = os.environ.get("AZURE_SPEECH_LANGUAGE", "fr-FR").strip()
 AZURE_SPEECH_VOICE = os.environ.get("AZURE_SPEECH_VOICE", "fr-FR-DeniseNeural").strip()
 AZURE_SPEECH_RATE = float(os.environ.get("AZURE_SPEECH_RATE", "0.85"))
@@ -38,6 +44,47 @@ class AudioConfigurationError(RuntimeError):
 
 class AudioSynthesisError(RuntimeError):
     """Raised when Azure Speech cannot synthesize the requested audio."""
+
+
+def build_speech_endpoint() -> str:
+    """Build the regional endpoint or a resource-specific Azure TTS endpoint."""
+    if AZURE_SPEECH_ENDPOINT:
+        parsed_endpoint = urlsplit(AZURE_SPEECH_ENDPOINT)
+        if (
+            parsed_endpoint.scheme.lower() != "https"
+            or not parsed_endpoint.hostname
+            or parsed_endpoint.username
+            or parsed_endpoint.password
+            or parsed_endpoint.query
+            or parsed_endpoint.fragment
+        ):
+            raise AudioConfigurationError(
+                "AZURE_SPEECH_ENDPOINT doit être une URL HTTPS valide sans identifiants, "
+                "paramètres ni fragment."
+            )
+
+        endpoint_path = parsed_endpoint.path.rstrip("/")
+        if endpoint_path and endpoint_path != "/cognitiveservices/v1":
+            raise AudioConfigurationError(
+                "AZURE_SPEECH_ENDPOINT doit être l'endpoint de ressource Azure "
+                "ou se terminer par /cognitiveservices/v1."
+            )
+        return urlunsplit((
+            "https",
+            parsed_endpoint.netloc,
+            endpoint_path or "/cognitiveservices/v1",
+            "",
+            "",
+        ))
+
+    if not re.fullmatch(r"[a-z0-9-]+", AZURE_SPEECH_REGION):
+        raise AudioConfigurationError(
+            "AZURE_SPEECH_REGION doit être le nom de région Azure, par exemple francecentral."
+        )
+    return (
+        f"https://{AZURE_SPEECH_REGION}.tts.speech.microsoft.com/"
+        "cognitiveservices/v1"
+    )
 
 
 def normalize_speech_input(text: str, ipa: str) -> tuple[str, str]:
@@ -75,15 +122,14 @@ def build_ssml(text: str, ipa: str) -> str:
 
 
 def _synthesize_audio(ssml: str) -> bytes:
-    if not AZURE_SPEECH_KEY or not AZURE_SPEECH_REGION:
+    if not AZURE_SPEECH_KEY or (not AZURE_SPEECH_REGION and not AZURE_SPEECH_ENDPOINT):
         raise AudioConfigurationError(
-            "Configurez AZURE_SPEECH_KEY et AZURE_SPEECH_REGION pour activer la synthèse vocale."
+            "Configurez AZURE_SPEECH_KEY et soit AZURE_SPEECH_REGION, soit "
+            "AZURE_SPEECH_ENDPOINT pour activer la synthèse vocale."
         )
 
-    endpoint = (
-        f"https://{AZURE_SPEECH_REGION}.tts.speech.microsoft.com/"
-        "cognitiveservices/v1"
-    )
+    endpoint = build_speech_endpoint()
+    endpoint_host = urlsplit(endpoint).hostname
     request = Request(
         endpoint,
         data=ssml.encode("utf-8"),
@@ -98,6 +144,8 @@ def _synthesize_audio(ssml: str) -> bytes:
 
     try:
         with urlopen(request, timeout=SYNTHESIS_TIMEOUT_SECONDS) as response:
+            status = response.status
+            content_type = response.headers.get("Content-Type", "")
             audio = response.read()
     except HTTPError as error:
         detail = error.read(1024).decode("utf-8", errors="replace").strip()
@@ -105,12 +153,36 @@ def _synthesize_audio(ssml: str) -> bytes:
             f"Azure Speech a refusé la synthèse (HTTP {error.code}): {detail}"
         ) from error
     except URLError as error:
+        if isinstance(error.reason, socket.gaierror):
+            raise AudioSynthesisError(
+                f"Échec DNS pour l'hôte Azure Speech « {endpoint_host} ». "
+                "Vérifiez la résolution DNS et l'accès réseau, ou définissez "
+                "AZURE_SPEECH_ENDPOINT avec l'endpoint HTTPS de la ressource "
+                "indiqué dans Azure (Keys and Endpoint)."
+            ) from error
         raise AudioSynthesisError(
-            f"Azure Speech est injoignable: {error.reason}"
+            f"Azure Speech est injoignable à l'hôte « {endpoint_host} »: {error.reason}"
         ) from error
 
     if not audio:
         raise AudioSynthesisError("Azure Speech a renvoyé un fichier audio vide.")
+    if not content_type.lower().startswith("audio/"):
+        logger.error(
+            "Azure Speech a renvoyé une réponse non audio: status=%s content_type=%s bytes=%s",
+            status,
+            content_type or "<absent>",
+            len(audio),
+        )
+        raise AudioSynthesisError(
+            f"Azure Speech a renvoyé un type de contenu inattendu: {content_type or 'absent'}."
+        )
+
+    logger.info(
+        "Synthèse Azure réussie: status=%s content_type=%s bytes=%s",
+        status,
+        content_type,
+        len(audio),
+    )
     return audio
 
 

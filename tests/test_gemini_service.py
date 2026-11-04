@@ -1,6 +1,24 @@
+import subprocess
+import sys
+from pathlib import Path
 from types import SimpleNamespace
 
 from services import gemini_service
+
+
+def test_gemini_service_script_imports_project_packages_from_services_dir():
+    service_path = Path(__file__).resolve().parents[1] / "services" / "gemini_service.py"
+
+    result = subprocess.run(
+        [sys.executable, str(service_path)],
+        cwd=service_path.parent,
+        capture_output=True,
+        text=True,
+        timeout=30,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stderr
 
 
 def test_load_prompt_strips_previously_assembled_references(monkeypatch, tmp_path):

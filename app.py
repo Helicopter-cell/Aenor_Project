@@ -7,6 +7,9 @@ from flask import Flask
 from dotenv import load_dotenv
 from werkzeug.middleware.proxy_fix import ProxyFix
 
+
+load_dotenv(Path(__file__).resolve().parent / ".env")
+
 from extensions import csrf, limiter
 from modules.utils import clean_text, load_cours, render_cours_value, static_path
 from routes.admin import admin_bp
@@ -15,9 +18,6 @@ from routes.main import main_bp
 from routes.scenario import scenario_bp
 from routes.translation import translation_bp
 from services import gemini_service
-
-
-load_dotenv(Path(__file__).resolve().parent / ".env")
 
 
 def create_app(config=None):

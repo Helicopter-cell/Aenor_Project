@@ -64,14 +64,44 @@ def test_audio_route_returns_cached_file_as_mpeg(client, tmp_path, monkeypatch):
 def test_synthesis_requires_azure_credentials(monkeypatch):
     monkeypatch.setattr(audio_service, "AZURE_SPEECH_KEY", "")
     monkeypatch.setattr(audio_service, "AZURE_SPEECH_REGION", "")
+    monkeypatch.setattr(audio_service, "AZURE_SPEECH_ENDPOINT", "")
 
     with pytest.raises(audio_service.AudioConfigurationError):
         audio_service._synthesize_audio("<speak />")
 
 
+def test_build_speech_endpoint_uses_azure_region(monkeypatch):
+    monkeypatch.setattr(audio_service, "AZURE_SPEECH_REGION", "francecentral")
+    monkeypatch.setattr(audio_service, "AZURE_SPEECH_ENDPOINT", "")
+
+    assert audio_service.build_speech_endpoint() == (
+        "https://francecentral.tts.speech.microsoft.com/cognitiveservices/v1"
+    )
+
+
+def test_build_speech_endpoint_supports_resource_endpoint(monkeypatch):
+    monkeypatch.setattr(audio_service, "AZURE_SPEECH_ENDPOINT", "https://aenor.cognitiveservices.azure.com/")
+
+    assert audio_service.build_speech_endpoint() == (
+        "https://aenor.cognitiveservices.azure.com/cognitiveservices/v1"
+    )
+
+
+def test_build_speech_endpoint_rejects_non_https_endpoint(monkeypatch):
+    monkeypatch.setattr(audio_service, "AZURE_SPEECH_ENDPOINT", "http://localhost:5000")
+
+    with pytest.raises(audio_service.AudioConfigurationError, match="HTTPS"):
+        audio_service.build_speech_endpoint()
+
+
 def test_synthesis_posts_ssml_to_azure_endpoint(monkeypatch):
     monkeypatch.setattr(audio_service, "AZURE_SPEECH_KEY", "test-key")
     monkeypatch.setattr(audio_service, "AZURE_SPEECH_REGION", "westeurope")
+    monkeypatch.setattr(audio_service, "AZURE_SPEECH_ENDPOINT", "")
+
+    class FakeResponse(io.BytesIO):
+        status = 200
+        headers = {"Content-Type": "audio/mpeg"}
 
     def fake_urlopen(request, timeout):
         assert request.full_url == (
@@ -80,11 +110,52 @@ def test_synthesis_posts_ssml_to_azure_endpoint(monkeypatch):
         assert request.get_header("Ocp-apim-subscription-key") == "test-key"
         assert request.get_header("Content-type") == "application/ssml+xml"
         assert timeout == audio_service.SYNTHESIS_TIMEOUT_SECONDS
-        return io.BytesIO(b"azure-mp3")
+        return FakeResponse(b"azure-mp3")
 
     monkeypatch.setattr(audio_service, "urlopen", fake_urlopen)
 
     assert audio_service._synthesize_audio("<speak />") == b"azure-mp3"
+
+
+def test_synthesis_reports_dns_failure_with_endpoint_guidance(monkeypatch):
+    monkeypatch.setattr(audio_service, "AZURE_SPEECH_KEY", "test-key")
+    monkeypatch.setattr(audio_service, "AZURE_SPEECH_REGION", "francecentral")
+    monkeypatch.setattr(audio_service, "AZURE_SPEECH_ENDPOINT", "")
+
+    def fake_urlopen(request, timeout):
+        assert request is not None
+        assert timeout > 0
+        raise audio_service.URLError(
+            audio_service.socket.gaierror(11001, "getaddrinfo failed")
+        )
+
+    monkeypatch.setattr(audio_service, "urlopen", fake_urlopen)
+
+    with pytest.raises(audio_service.AudioSynthesisError, match="Échec DNS.*francecentral"):
+        audio_service._synthesize_audio("<speak />")
+
+
+def test_synthesis_rejects_non_audio_azure_response(monkeypatch):
+    monkeypatch.setattr(audio_service, "AZURE_SPEECH_KEY", "test-key")
+    monkeypatch.setattr(audio_service, "AZURE_SPEECH_REGION", "westeurope")
+
+    class FakeResponse(io.BytesIO):
+        status = 200
+        headers = {"Content-Type": "application/json"}
+
+    def fake_urlopen(request, timeout):
+        assert request is not None
+        assert timeout > 0
+        return FakeResponse(b'{"error":"invalid SSML"}')
+
+    monkeypatch.setattr(
+        audio_service,
+        "urlopen",
+        fake_urlopen,
+    )
+
+    with pytest.raises(audio_service.AudioSynthesisError, match="type de contenu inattendu"):
+        audio_service._synthesize_audio("<speak />")
 
 
 def test_audio_route_reports_missing_service_configuration(client, monkeypatch):

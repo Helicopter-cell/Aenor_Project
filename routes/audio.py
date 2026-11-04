@@ -28,17 +28,25 @@ def synthesize_aenor_audio():
         return jsonify({"success": False, "error": str(error)}), 400
     except AudioConfigurationError as error:
         return jsonify({"success": False, "error": str(error)}), 503
-    except AudioSynthesisError:
-        logger.exception("Échec de synthèse vocale Azure pour une requête Aënor")
+    except AudioSynthesisError as error:
+        logger.error("Échec de synthèse vocale Azure: %s", error)
         return jsonify({
             "success": False,
-            "error": "La synthèse vocale est momentanément indisponible.",
+            "error": str(error),
         }), 502
 
-    return send_file(
+    response = send_file(
         audio_path,
         mimetype="audio/mpeg",
         conditional=True,
         etag=True,
         max_age=31536000,
     )
+    logger.info(
+        "Réponse TTS servie: status=%s content_type=%s bytes=%s",
+        response.status_code,
+        response.mimetype,
+        response.content_length,
+    )
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
