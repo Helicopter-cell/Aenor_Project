@@ -4,23 +4,6 @@
 ## Style page d'acceuil: 
 J'adore les SVG dans les cartes, mais c'est dommage qu'il ne soit visible que au `:hover`. je propose donc de faire en sorte qu'ils soit visible tout le temps, mais que le :hover lance l'animation du SVG.
 
-## `grammaire_3.html` :
-Faire en sorte de "supprimer" de la template la "carte d'accordéon" qui contient toutes les autres : Il y a actuellement "Manuel de Référence & Grammaire Officielle de l'Aënor" qui est affiché au milieux, tout seule.
-
-##  `obj_project` :
-La page ne s'affiche tout simplement pas, liéé à un problème Flask.
-Hypothèses de localisation du problème :
-
-- Routes flask
-- Test des modules et des routes
-- Syntaxes du liens
-
-
-## Modifier print global prompt :
-Je veux que la fonction log le `nom` de tout les fichiers et leur destination, mais pas leur contenu.
-Je veux aussi que print global prompt log le nom du model utilisé (gemini 3.5 pro, 3.6 flash ou jsp quoi)
-
-
 # Logique de traduction des nombres et unités :
 À ce stade, la traduction d'entrée en français : 30 km donne une ouput Aënor : 26 km.
 Je veux donc franchir une étape supplémentaire, pour que cette traduction s'occupe également des unité. Génère moi un prompt complet à envoyer pour faire cette modification. Tu trouvera ci-dessou un descriptif du fonctionnement des nombres en aenor (extrait du manuel)

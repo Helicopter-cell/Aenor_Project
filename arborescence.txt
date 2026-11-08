@@ -13,7 +13,6 @@ C:.
 |   generate_tree.bat
 |   git_update.bat
 |   Global_Manual_V2.md
-|   modification_gestion_prompt.md
 |   Modification_V1_to_V2.md
 |   paths_index.json
 |   print_api_keys.py
@@ -37,6 +36,7 @@ C:.
 |   |   DEPLOYMENT_PYTHONANYWHERE.md
 |   |   grammaire.html
 |   |   grammaire_2.html
+|   |   modification_gestion_prompt.md
 |   |   schem_prompt_upgrade.md
 |   |   terminal-renderer.py
 |   |   traducteur.py
@@ -159,6 +159,37 @@ C:.
 |           
 +---static
 |   +---cache_audio
+|   |       009be8f47b40a2c6fd64530ea6eadb3d539af28d00228f328466f5cd6e7a4ec1.mp3
+|   |       017bb3fdfc79e80b12b3516809d8c833c92b06116619e7beef0de653e3aac0d5.mp3
+|   |       0cff6a3afdbf1e77a679ce41a9d349cf8d75e2e0a60b884f54b1cda36064b6dc.mp3
+|   |       11545661f20ff7c8d9bce65a37523d5a21231476957d07518c61f427fa0ab8b6.mp3
+|   |       203c0abcde186fcf06cf2bdae742bc7eeae8a851715f7470c0fe174d2895a8b1.mp3
+|   |       346a57efd3b4d18a491eb7626390d3ab403dde0354af85059e8ecf0b02034202.mp3
+|   |       374ab3aacf8a78bab40df460c51c9ffa542043b351431bf698f2535ffbb69e57.mp3
+|   |       39279df65ff2b8f7799296be8a8ee27b9e441f0ce4d49504fb594739a1dd3bcf.mp3
+|   |       3b20627ec7209ed49f073d8719c4a80f45ef869e2e10f34fdee96a562f782a4a.mp3
+|   |       3bd78b2b46a7dd0e18d155d807f8e49b11366b7a05f94d2b4f42f098c0bafaf1.mp3
+|   |       449f1039d530c62330693764517eb4556376d814acabba10492100fead8f0d54.mp3
+|   |       46acb3cf21a8d8d635d8fff2bd3e1c17a6edd97d8cc1999a4c5a3f46ce1429f8.mp3
+|   |       515816ace09df86d1a886e3e6c3a2d45e7f1a16177e5d159b0b72b30136ddd3c.mp3
+|   |       574e0cc305bc5a900db4399e0055eff34ef1544605412509e40bc372359e405c.mp3
+|   |       575b80bd8165f66a1194a694a23edddeb331ad3ebf47d1b1e64f9cf6a1cecee6.mp3
+|   |       585a2e842d512c5bd04683a04768be1a714ea4c1812ffe03d35a27050bd78954.mp3
+|   |       6673a331bc9e4ec78d3b868206b4698eff32ba401c4f68ad84d50334fbf6a1a3.mp3
+|   |       6a3b42f26f6b23b1e30f92d9383967c8f0dc04c57106191d2937c47198c8d8c4.mp3
+|   |       9e8368338e48b62e14ddb336e6678dcbfaf9341c12335123877596679d5be3b7.mp3
+|   |       a14fa7009d5f769704f2f9418c57a295a39694c1a0bed4935ed2af59aff924df.mp3
+|   |       a17b79a597b12eaa79a35028bc481014c6bbb1933097cc671b243cdfe1d8b682.mp3
+|   |       a853b2602541e0f8124f84a2e23a8d35423f1e9ff2cd1095206ebce3f5ed9d73.mp3
+|   |       b80adfeed6a41f9fd84fbc1458781a4f502c00ae7e71387991b6cf85fe5bf821.mp3
+|   |       ba362fe68d0c06de867b758a9d097f78f0a328c0d79ee745c50459feec8ec22b.mp3
+|   |       d3f4b4f5a9e9036a02f0dd92f103a020044c27c7e825362a10704204b314af89.mp3
+|   |       d89b942054b0cdac2f586286510d6a9e821633149e8f11f58b1cbf962ef2e0d7.mp3
+|   |       d9574dacf559fb0487f6acb56d15e0470752463d0c61e2a511fe00cb01b28140.mp3
+|   |       e5bd848edd2261d9da92bc6f5221c6b3cc1d94f48e00795a7bd28e3916591b51.mp3
+|   |       e607daa69dfafeb583f3bd18cb36c0de8b2958a6cb9949efcf054f241a28b930.mp3
+|   |       e805fff3d47aa6158150b436c8ba3e42c9a7cee54888a9476ba9587fe548f181.mp3
+|   |       
 |   +---CSS
 |   |   |   main.css
 |   |   |   responsive.css
@@ -227,7 +258,7 @@ C:.
 |       historique.html
 |       IA-trad.html
 |       index.html
-|       obj_poject.html
+|       obj_project.html
 |       result.html
 |       scenario.html
 |       
