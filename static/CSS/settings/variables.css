@@ -1,0 +1,73 @@
+:root {
+    /* Palette Aënor */
+    --color-midnight: #07100D;
+    --color-snow: #FCFCFC;
+    --color-forest: #123524;
+    --color-leaf: #2E5A44;
+    --color-earth: #4A3319;
+    --color-copper: #B3894E;
+
+    /* Textes, surfaces et contours */
+    --color-text: var(--color-snow);
+    --color-text-muted: #C4D0C8;
+    --color-focus: #D8B477;
+    --color-transparent: transparent;
+    --color-current: currentColor;
+    --color-surface: rgb(var(--rgb-forest) / 0.78);
+    --color-surface-raised: rgb(var(--rgb-leaf-deep) / 0.92);
+    --color-border: rgb(var(--rgb-copper) / 0.32);
+
+    /* Tons dérivés employés par les composants */
+    --color-background-raised: #0B1711;
+    --color-background-deep: #0A1510;
+    --color-background-panel: #10251A;
+    --color-ink: #17130D;
+    --color-leaf-hover: #376B50;
+    --color-neutral: #64746A;
+    --color-danger: #873E37;
+    --color-danger-hover: #A64B40;
+    --color-muted-green: #8FA394;
+    --color-placeholder: #A9B9AE;
+    --color-success-light: #B6D6C1;
+    --color-copper-deep: #BD9254;
+    --color-copper-rich: #C49A5A;
+    --color-copper-bright: #D2AD71;
+    --color-copper-soft: #D7B779;
+    --color-copper-focus: #D8B477;
+    --color-copper-pale: #E5C58B;
+    --color-copper-highlight: #E7C98E;
+    --color-success: #DCF4DF;
+    --color-danger-soft: #E18577;
+    --color-danger-pale: #FFE4DF;
+    --color-copper-cream: #FFE8BF;
+    --color-coral-soft: #F0C4AE;
+    --color-warm-panel: rgb(var(--rgb-earth) / 0.3);
+    --color-warm-border: rgb(var(--rgb-copper) / 0.48);
+
+    /* Canaux RGB pour les variantes translucides */
+    --rgb-ink: 0 0 0;
+    --rgb-danger: 117 51 43;
+    --rgb-danger-deep: 74 30 25;
+    --rgb-forest-deep: 13 35 25;
+    --rgb-success-light: 140 208 153;
+    --rgb-copper: 179 137 78;
+    --rgb-forest: 18 53 36;
+    --rgb-parchment: 207 195 152;
+    --rgb-coral: 214 113 96;
+    --rgb-copper-light: 216 180 119;
+    --rgb-copper-gold: 224 201 133;
+    --rgb-danger-light: 225 133 119;
+    --rgb-leaf-deep: 24 65 45;
+    --rgb-snow: 252 252 252;
+    --rgb-midnight-shadow: 3 9 6;
+    --rgb-leaf: 46 90 68;
+    --rgb-midnight: 7 16 13;
+    --rgb-earth: 74 51 25;
+
+    /* Ombres */
+    --shadow-card: 0 18px 45px rgb(var(--rgb-ink) / 0.24);
+    --shadow-elevated: 0 24px 60px rgb(var(--rgb-ink) / 0.34);
+    --shadow-glow-copper: 0 0 0 1px rgb(var(--rgb-copper) / 0.18), 0 10px 28px rgb(var(--rgb-copper) / 0.22);
+    --shadow-glow-copper-strong: 0 0 0 1px rgb(var(--rgb-copper) / 0.3), 0 12px 32px rgb(var(--rgb-copper) / 0.32);
+    --shadow-glow-snow: inset 0 1px 0 rgb(var(--rgb-snow) / 0.14);
+}

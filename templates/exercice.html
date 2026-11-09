@@ -5,14 +5,11 @@
 <div class="exercise-header-row">
 
     <h1 class="section-heading">Traduisez :</h1>
-    
+
     {% if phrase %}
         <p class="phrase">{{ phrase }}</p>
-        <br>
     {% endif %}
 </div>
-
-<br>
 
 <div class="center-column">
     {% if phrase %}
@@ -20,7 +17,7 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <input
             id="prompt-ae"
-            placeholder="Ecrivez votre réponse ici :"
+            placeholder="Écrivez votre réponse ici :"
 
             type="text"
             name="answer"
@@ -31,7 +28,7 @@
             autocapitalize="off">
 
             <input type="hidden" name="phrase" value="{{ phrase }}">
-            <button type="submit" class="btn-IA-trad" style="margin-top: 15px;">Valider</button>
+            <button type="submit" class="btn-IA-trad">Valider</button>
         </form>
 
     {% else %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<main class="feedback-page" aria-labelledby="feedback-title">
+<section class="feedback-page" aria-labelledby="feedback-title">
     <header class="feedback-heading">
         <p class="feedback-eyebrow">Le carnet d'Aënor</p>
         <h1 id="feedback-title">Vos retours font évoluer l'application</h1>
@@ -67,7 +67,7 @@
             <div class="feedback-empty" id="feedback-empty" {% if comments %}hidden{% endif %}><span aria-hidden="true">✦</span><p>Aucun retour ne correspond à ce filtre.</p></div>
         </section>
     </section>
-</main>
+</section>
 
 <dialog class="feedback-modal" id="feedback-modal" aria-labelledby="feedback-modal-title">
     <button type="button" class="feedback-modal-close" aria-label="Fermer">×</button>

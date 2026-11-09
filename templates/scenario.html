@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/components/scenario-graph.css') }}">
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
-<main class="scenario-page" aria-label="Carte du coffre Obsidian">
+<div class="scenario-page">
     <section class="scenario-outline-panel" aria-label="Carte mentale hiérarchique">
         <header class="scenario-toolbar">
             <div>
@@ -59,7 +59,7 @@
             <div id="preview-content" class="preview-content"></div>
         </article>
     </aside>
-</main>
+</div>
 
 <script src="{{ url_for('static', filename=static_path('|jsPATH|scenario')) }}"></script>
 

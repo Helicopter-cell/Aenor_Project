@@ -9,18 +9,12 @@
 </head>
 <body>
 
-<img src="{{ url_for('static', filename=static_path('|imagePATH|Wood-IA')) }}" class="background-image">
-
-<img src="{{ url_for('static', filename=static_path('|imagePATH|Corner')) }}" class="corner-right">
-<img src="{{ url_for('static', filename=static_path('|imagePATH|Corner-Copie')) }}" class="corner-left">
-
-
 <!-- 🌿 CONTENU -->
-<div class="container">
+<main class="container">
     {% block content %}{% endblock %}
-</div>
+</main>
 
 
+<footer>Robin LALUNG-BONNAIRE</footer>
 </body>
-<footer>Robin   LALUNG-BONNAIRE</footer>
 </html>

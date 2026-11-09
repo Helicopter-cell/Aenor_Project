@@ -1,54 +1,135 @@
+.btn,
 .toggle-btn,
-.btn {
-    border: 0;
-    border-radius: 999px;
-    padding: 10px 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.toggle-btn {
-    min-width: 78px;
-    background: rgba(82, 107, 86, 0.75);
-    color: #f4fbf4;
-}
-
-.toggle-btn-paid {
-    background: rgba(93, 126, 83, 0.9);
-}
-
-.btn {
+.btn-logout,
+.btn-IA-trad,
+#energy-btn {
     display: inline-flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.7rem 1.15rem;
+    border: 1px solid var(--color-transparent);
+    border-radius: var(--radius-pill);
+    font: 650 0.95rem/1.2 var(--font-body);
+    text-align: center;
     text-decoration: none;
-    min-height: 46px;
+    cursor: pointer;
+    transition: transform var(--transition-ui), background-color var(--transition-ui), border-color var(--transition-ui), box-shadow var(--transition-ui), color var(--transition-ui);
 }
 
 .btn:hover,
 .toggle-btn:hover,
-.btn-danger:hover {
-    transform: translateY(-1px);
+.btn-logout:hover,
+.btn-IA-trad:hover,
+#energy-btn:hover {
+    transform: translateY(-2px);
 }
 
-.btn-primary {
-    background: linear-gradient(135deg, #90c48d, #6daa74);
-    color: #0f170f;
+.btn:active,
+.toggle-btn:active,
+.btn-logout:active,
+.btn-IA-trad:active,
+#energy-btn:active {
+    transform: translateY(0);
 }
 
-.btn-logout {
-    background: rgba(97, 121, 100, 0.35);
-    color: #edf5ee;
-    border: 1px solid rgba(178, 225, 186, 0.18);
-    border-radius: 999px;
-    padding: 10px 16px;
-    text-decoration: none;
-    font-weight: 700;
+.btn-primary,
+.btn-IA-trad {
+    border-color: rgb(var(--rgb-snow) / 0.24);
+    background: linear-gradient(135deg, var(--color-copper-rich), var(--color-copper));
+    color: var(--color-ink);
+    box-shadow: var(--shadow-glow-copper), var(--shadow-glow-snow);
+}
+
+.btn-primary:hover,
+.btn-IA-trad:hover {
+    background: linear-gradient(135deg, var(--color-copper-bright), var(--color-copper-deep));
+    box-shadow: var(--shadow-glow-copper-strong), var(--shadow-glow-snow);
+}
+
+.btn {
+    border-color: rgb(var(--rgb-copper) / 0.42);
+    background: linear-gradient(135deg, var(--color-leaf), var(--color-earth));
+    color: var(--color-snow);
+}
+
+.btn:hover {
+    border-color: var(--color-copper);
+    background: linear-gradient(135deg, var(--color-leaf-hover), var(--color-earth));
+    box-shadow: var(--shadow-glow-copper);
+}
+
+.btn-primary.btn:hover {
+    border-color: var(--color-copper-pale);
+    background: linear-gradient(135deg, var(--color-copper-bright), var(--color-copper-deep));
+    box-shadow: var(--shadow-glow-copper-strong), var(--shadow-glow-snow);
+}
+
+.btn-logout,
+.toggle-btn {
+    border-color: rgb(var(--rgb-copper) / 0.36);
+    background: linear-gradient(135deg, rgb(var(--rgb-leaf) / 0.78), rgb(var(--rgb-earth) / 0.5));
+    color: var(--color-text);
+}
+
+.toggle-btn {
+    min-width: 76px;
+    min-height: 38px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.82rem;
+}
+
+.toggle-btn-paid {
+    border-color: rgb(var(--rgb-copper) / 0.58);
+    background: linear-gradient(135deg, var(--color-earth), var(--color-copper-deep));
+}
+
+.btn-logout:hover,
+.toggle-btn:hover {
+    border-color: var(--color-copper);
+    box-shadow: var(--shadow-glow-copper);
 }
 
 .btn-danger {
-    background: linear-gradient(135deg, #ff5a5a, #d32626);
-    color: white;
     width: 100%;
+    background: var(--color-danger);
+    color: var(--color-snow);
+}
+
+.btn-danger:hover {
+    background: var(--color-danger-hover);
+}
+
+.btn-IA-trad {
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+    letter-spacing: 0.02em;
+}
+
+#energy-btn {
+    position: relative;
+    z-index: 5;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--color-copper-bright), var(--color-copper));
+    color: var(--color-ink);
+    box-shadow: var(--shadow-glow-copper);
+}
+
+.energy-container {
+    position: relative;
+    display: inline-block;
+}
+
+#energy-canvas {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    z-index: 1;
+    width: min(635px, 95vw);
+    height: 285px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
 }

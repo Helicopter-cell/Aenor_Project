@@ -11,11 +11,6 @@
 </head>
 <body>
 
-<img src="{{ url_for('static', filename=static_path('|imagePATH|Wood-IA')) }}" class="background-image">
-
-<img src="{{ url_for('static', filename=static_path('|imagePATH|Corner')) }}" class="corner-right">
-<img src="{{ url_for('static', filename=static_path('|imagePATH|Corner-Copie')) }}" class="corner-left">
-
 <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/hatch.js"></script> <!-- Je sais même pas si on en a encore besoin en fait -->
 
 <!-- NAVBAR -->
@@ -38,9 +33,9 @@
 </nav>
 
 <!-- CONTENU -->
-<div class="container">
+<main class="container">
     {% block content %}{% endblock %}
-</div>
+</main>
 
 <script>
     document.querySelector('.mobile-menu-toggle')?.addEventListener('click', function () {
@@ -51,8 +46,8 @@
     });
 </script>
 
-</body>
+<footer>Robin LALUNG-BONNAIRE</footer>
 
-<footer>Robin   LALUNG-BONNAIRE</footer>
+</body>
 
 </html>

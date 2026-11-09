@@ -2,23 +2,24 @@
 
 {% block content %}
 
-<h1 class="result">{{ note }} / 10</h1>
+<section class="result-page" aria-labelledby="result-score">
+    <h1 class="result" id="result-score">{{ note }} / 10</h1>
 
-<p class="phrase">{{ phrase }}</p>
+    <p class="phrase">{{ phrase }}</p>
 
-<p style="margin-top: 25px;">Ta réponse :</p>
+    <p>Ta réponse :</p>
+    {% if note >= 8 %}
+        <p class="bonne-réponse">{{ user }}</p>
+    {% elif note >= 5 %}
+        <p class="moyenne-réponse">{{ user }}</p>
+    {% else %}
+        <p class="mauvaise-réponse">{{ user }}</p>
+    {% endif %}
 
-{% if note >= 8 %}
-    <p class="bonne-réponse">{{ user }}</p>
-{% elif note >= 5 %}
-    <p class="moyenne-réponse">{{ user }}</p>
-{% else %}
-    <p class="mauvaise-réponse">{{ user }}</p>
-{% endif %}
+    <p>Commentaire du professeur :</p>
+    <div class="commentaire">{{ commentaire }}</div>
 
-<p style="margin-top: 25px;">Commentaire du professeur :</p>
-<div class="commentaire">{{ commentaire }}</div>
-
-<a href="/exercice">Recommencer</a>
+    <a class="btn btn-primary" href="/exercice">Recommencer</a>
+</section>
 
 {% endblock %}
