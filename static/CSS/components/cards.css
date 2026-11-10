@@ -96,6 +96,7 @@
 #svg-exe svg path,
 #svg-his svg path,
 #svg-com svg path { animation-duration: 1s; }
+#svg-sce svg path { animation-duration: 1s ;}
 
 .card-link:hover .card-icon svg path,
 .card-link:focus-visible .card-icon svg path {

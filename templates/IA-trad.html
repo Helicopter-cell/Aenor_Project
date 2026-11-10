@@ -1,55 +1,82 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<section class="translator-page" aria-labelledby="translator-title">
+    <header class="page-intro translator-intro">
+        <p class="page-eyebrow">L'atelier des phrases</p>
+        <h1 class="section-heading" id="translator-title">Traducteur Aënor</h1>
+        <p>Choisissez un sens, posez votre phrase, puis laissez les deux langues se répondre.</p>
+    </header>
 
-<h1 class="section-heading">Traducteur Aënor</h1>
-
-<div class="center-column">
-    <div class="direction-toggle">
+    <fieldset class="direction-toggle">
+        <legend class="sr-only">Sens de traduction</legend>
         <span class="direction-glider" aria-hidden="true"></span>
 
         <label class="direction-option">
             <input type="radio" name="direction" value="fr2aenor" checked>
             <span class="direction-label">Français → Aënor</span>
         </label>
-        
+
         <label class="direction-option">
             <input type="radio" name="direction" value="aenor2fr">
             <span class="direction-label">Aënor → Français</span>
         </label>
+    </fieldset>
+
+    <div class="translator-workspace">
+        <section class="translator-panel translator-source" aria-labelledby="translator-source-title">
+            <header class="translator-panel-heading">
+                <p class="page-eyebrow">01 · La source</p>
+                <h2 id="translator-source-title">Votre phrase</h2>
+                <p>Écrivez dans l'une ou l'autre langue.</p>
+            </header>
+
+            <div class="form-wrapper translator-form">
+                <label class="learning-toggle">
+                    <input id="autoriser-apprentissage" name="autoriser_apprentissage" type="checkbox">
+                    <span class="learning-toggle-control" aria-hidden="true"></span>
+                    <span>Autoriser l'analyse pédagogique</span>
+                </label>
+
+                <label class="learning-toggle">
+                    <input id="traduction-fiable" name="traduction_fiable" type="checkbox">
+                    <span class="learning-toggle-control" aria-hidden="true"></span>
+                    <span>Traduction fiable</span>
+                </label>
+
+                <label class="sr-only" for="prompt-fr">Phrase à traduire</label>
+                <input
+                    id="prompt-fr"
+                    type="text"
+                    name="answer"
+                    required
+                    spellcheck="false"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    placeholder="Écrivez votre phrase à traduire ici...">
+
+                <div class="button-row">
+                    <button type="button" onclick="sendPrompt()" class="btn-IA-trad">Traduire <span aria-hidden="true">→</span></button>
+                </div>
+            </div>
+        </section>
+
+        <section class="translator-panel translator-destination" aria-labelledby="translator-result-title">
+            <header class="translator-panel-heading">
+                <p class="page-eyebrow">02 · La réponse</p>
+                <h2 id="translator-result-title">La voix traduite</h2>
+                <p>Votre traduction apparaîtra ici.</p>
+            </header>
+            <div id="response" aria-live="polite">
+                <div class="translator-empty" aria-hidden="true">
+                    <span class="translator-empty-mark">✦</span>
+                    <span>En attente de votre phrase</span>
+                </div>
+            </div>
+        </section>
     </div>
-
-    <div class="form-wrapper">
-        <label class="learning-toggle">
-            <input id="autoriser-apprentissage" name="autoriser_apprentissage" type="checkbox">
-            <span class="learning-toggle-control" aria-hidden="true"></span>
-            <span>Autoriser l'analyse pédagogique</span>
-        </label>
-
-        <label class="learning-toggle">
-            <input id="traduction-fiable" name="traduction_fiable" type="checkbox">
-            <span class="learning-toggle-control" aria-hidden="true"></span>
-            <span>Traduction fiable</span>
-        </label>
-
-        <input
-            id="prompt-fr"
-            type="text"
-            name="answer"
-            required
-            spellcheck="false"
-            autocomplete="off"
-            autocorrect="off"
-            autocapitalize="off"
-            placeholder="Écrivez votre phrase à traduire ici...">
-
-        <div class="button-row">
-            <button onclick="sendPrompt()" class="btn-IA-trad">Envoyer</button>
-        </div>
-    </div>
-</div>
-
-<div id="response"></div>
+</section>
 
 <template id="tts-button-template">
     <button class="btn-tts" type="button" aria-label="Écouter la prononciation" aria-pressed="false" title="Écouter la prononciation">
@@ -62,5 +89,4 @@
 </template>
 
 <script src="{{ url_for('static', filename=static_path('|jsPATH|IA_trad')) }}"></script>
-
 {% endblock %}

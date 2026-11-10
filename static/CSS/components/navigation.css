@@ -1,3 +1,47 @@
+.site-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: min(1440px, calc(100% - 40px));
+    margin: 1rem auto 0;
+}
+
+.site-brand {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--color-snow);
+    text-decoration: none;
+}
+
+.site-brand:hover {
+    color: var(--color-snow);
+    text-decoration: none;
+}
+
+.site-brand-mark {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border: 1px solid rgb(var(--rgb-copper) / 0.52);
+    border-radius: 50%;
+    background: linear-gradient(145deg, rgb(var(--rgb-copper) / 0.24), rgb(var(--rgb-earth) / 0.62));
+    box-shadow: inset 0 1px 0 rgb(var(--rgb-snow) / 0.1);
+    color: var(--color-copper-pale);
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-style: italic;
+}
+
+.site-brand-name {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+}
+
 .navbar {
     position: relative;
     z-index: 5;
@@ -6,8 +50,9 @@
     align-items: center;
     justify-content: center;
     gap: 0.4rem;
-    width: min(1200px, calc(100% - 40px));
-    margin: 1.25rem auto 0;
+    width: auto;
+    flex: 1;
+    margin: 0;
     padding: 0.65rem;
     border: 1px solid rgb(var(--rgb-copper) / 0.34);
     border-radius: var(--radius-pill);
@@ -22,8 +67,8 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 40px;
-    padding: 0.55rem 0.95rem;
+    min-height: 38px;
+    padding: 0.5rem 0.72rem;
     border: 1px solid var(--color-transparent);
     border-radius: var(--radius-pill);
     color: var(--color-text-muted);
@@ -34,6 +79,13 @@
     transition: color var(--transition-ui), background-color var(--transition-ui), border-color var(--transition-ui), transform var(--transition-ui);
 }
 
+.nav-element[aria-current="page"] {
+    border-color: rgb(var(--rgb-copper) / 0.4);
+    background: rgb(var(--rgb-earth) / 0.42);
+    color: var(--color-snow);
+    box-shadow: inset 0 -2px 0 var(--color-copper);
+}
+
 .nav-element:hover,
 .nav-element:focus-visible {
     transform: translateY(-1px);
@@ -42,6 +94,12 @@
     color: var(--color-snow);
     box-shadow: var(--shadow-glow-copper), var(--shadow-glow-snow);
     text-decoration: none;
+}
+
+.nav-element[aria-current="page"]:hover,
+.nav-element[aria-current="page"]:focus-visible {
+    border-color: var(--color-copper-pale);
+    background: linear-gradient(135deg, rgb(var(--rgb-leaf) / 0.84), rgb(var(--rgb-earth) / 0.68));
 }
 
 .nav-element:active {
@@ -56,6 +114,10 @@
     color: var(--color-snow);
     cursor: pointer;
     transition: background-color var(--transition-ui), border-color var(--transition-ui);
+}
+
+.mobile-menu-toggle .sr-only {
+    clip-path: inset(50%);
 }
 
 .mobile-menu-toggle:hover,

@@ -1,40 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div class="exercise-header-row">
-
-    <h1 class="section-heading">Traduisez :</h1>
+<section class="exercise-page" aria-labelledby="exercise-title">
+    <header class="page-intro exercise-intro">
+        <p class="page-eyebrow">La salle d'entraînement</p>
+        <h1 class="section-heading" id="exercise-title">À vous de traduire</h1>
+        <p>Un instant pour retrouver les mots justes.</p>
+    </header>
 
     {% if phrase %}
-        <p class="phrase">{{ phrase }}</p>
-    {% endif %}
-</div>
+        <section class="exercise-prompt" aria-labelledby="exercise-prompt-title">
+            <p class="page-eyebrow" id="exercise-prompt-title">Votre phrase</p>
+            <p class="exercise-phrase">{{ phrase }}</p>
+        </section>
 
-<div class="center-column">
-    {% if phrase %}
-        <form method="POST" class="form-wrapper">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <input
-            id="prompt-ae"
-            placeholder="Écrivez votre réponse ici :"
-
-            type="text"
-            name="answer"
-            required
-            spellcheck="false"
-            autocomplete="off"
-            autocorrect="off"
-            autocapitalize="off">
-
+        <form method="POST" class="form-wrapper exercise-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <label class="sr-only" for="prompt-ae">Votre traduction en Aënor</label>
+            <input
+                id="prompt-ae"
+                placeholder="Écrivez votre réponse en Aënor..."
+                type="text"
+                name="answer"
+                required
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off">
             <input type="hidden" name="phrase" value="{{ phrase }}">
-            <button type="submit" class="btn-IA-trad">Valider</button>
+            <button type="submit" class="btn-IA-trad">Valider ma réponse <span aria-hidden="true">→</span></button>
         </form>
-
     {% else %}
-        <p>❌ Aucune phrase disponible</p>
+        <p class="exercise-unavailable" role="status">Aucune phrase n'est disponible pour le moment.</p>
     {% endif %}
-
-</div>
-
-{% endblock %} 
+</section>
+{% endblock %}

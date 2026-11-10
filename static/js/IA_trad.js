@@ -74,6 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // 2. Récupérer le champ de saisie (on utilise une requête qui ne dépend pas de l'ID puisqu'il va changer)
     const textInput = document.querySelector('.form-wrapper input[type="text"]');
+    const textInputLabel = document.querySelector('.translator-form label[for="prompt-fr"]');
 
     // 3. Ajouter un écouteur d'événement sur chaque bouton radio
     directionRadios.forEach(radio => {
@@ -81,12 +82,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (event.target.value === 'fr2aenor') {
                 // Si Français → Aënor
                 textInput.id = 'prompt-fr';
+                textInputLabel.htmlFor = 'prompt-fr';
                 textInput.placeholder = "Écrivez votre phrase à traduire ici...";
                 // Optionnel : tu peux même changer la classe si besoin
                 textInput.classList.replace('result-aenor', 'result-fr'); 
             } else if (event.target.value === 'aenor2fr') {
                 // Si Aënor → Français
                 textInput.id = 'prompt-ae';
+                textInputLabel.htmlFor = 'prompt-ae';
                 textInput.placeholder = "Écrivez votre phrase à traduire ici...";
                 // Optionnel : adapter la police/classe pour l'Aënor
                 textInput.classList.replace('result-fr', 'result-aenor'); 

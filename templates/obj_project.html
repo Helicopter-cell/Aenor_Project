@@ -1,41 +1,58 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<article class="project-page" aria-labelledby="project-title">
+    <header class="project-hero">
+        <span class="project-seal" aria-hidden="true"></span>
+        <h1 id="project-title">Mais en fait, pourquoi faire tout ça ?</h1>
+        <p class="project-hero-thought">Bah pour pas grand chose…</p>
+    </header>
 
-<h1>Mais en fait, pourquoi faire tout ça ?</h1>
+    <section class="project-story" aria-labelledby="project-story-title">
+        <header class="project-story-heading">
+            <span class="project-story-rule" aria-hidden="true"></span>
+            <h2 id="project-story-title">Histoire du projet : </h2>
+            <h3>Donc, pourquoi ?</h3>
+        </header>
 
-<h2>Bah pour pas grand chose…</h2>
+        <div class="project-chapters">
+            <p class="project-chapter">
+                En effet, je ne fais pas principalement ça pour le résultat. Je le fais tout d'abord par exercice.
+                ce projet, qui dure maintenant depuis longtemps, m'a aidé dans beaucoup de domaine. Au début,
+                c'était un simple entraînement au code et à l'informatique, mais finalement bien d'autres diciplines
+                ont été impliquée.
+            </p>
 
-<h3>Histoire du projet : </h3>
+            <p class="project-chapter">
+                Les Maths, très logiquement relié au code, qui s'approfondissait au fur et a msure que ce site se
+                complexifiait, ont été très présent dans l'envers du décors. Je ne parle pas spécialement du
+                changement de base ou autres dans mon univers, mais d'éléments tels que la gestions des statistique
+                d'erreur, organiser au mieux un tableau pour le tordre dans tout les sens en en extrayant le plus
+                d'info, créer des logique d'algorithme etc…
+            </p>
 
-<h3>Donc, pourquoi ?</h3>
-    <div>
-        En effet, je ne fais pas principalement ça pour le résultat. Je le fais tout d'abord par exercice.
-        ce projet, qui dure maintenant depuis longtemps, m'a aidé dans beaucoup de domaine. Au début, 
-        c'était un simple entraînement au code et à l'informatique, mais finalement bien d'autres diciplines 
-        ont été impliquée. 
-        <br><br>
-        Les Maths, très logiquement relié au code, qui s'approfondissait au fur et a msure que ce site se
-        complexifiait, ont été très présent dans l'envers du décors. Je ne parle pas spécialement du 
-        changement de base ou autres dans mon univers, mais d'éléments tels que la gestions des statistique 
-        d'erreur, organiser au mieux un tableau pour le tordre dans tout les sens en en extrayant le plus 
-        d'info, créer des logique d'algorithme etc…
-        <br><br>
-        Les langues s'y sont mélé, bien logiquement, car pour inventer une langue un minimum serieuse, on 
-        se doit déjà de comprendre un minimum la notre. Et même ne serait-ce que pour la retranscrire en 
-        Français, cela représente finalement un important travail de rédaction. Je reste néamoins assez 
-        déçu de contater mon niveau pltôt mauvais en Français, d'autant plus en Grammaire, même après ce 
-        travail.
-        <br><br>
-        L'histoire s'y est impliqué aussi, plus tardivement. Par souhaits de créer un univers, j'ai donc 
-        développé mon scénario, qui joue beaucoup sur les axes géopolitiques. En faisant cela, j'ai du 
-        m'interesser aux réalisme. J'ai du aporter un jugement critique à mon scénario, en faisant appelle à 
-        mes connaissances en histoire, puis j'ai du paufiner mes dates, pour voir quelles durées sont 
-        "réalisme" pour tel révolution, tel guerre, tel propagandes etc…
-        <br><br>        
-        La géographie et la SVT on était impliquée aussi, lors de la conception de la carte. Je cherchais 
-        quelque-chose de réaliste en therme de continent, géologie, climat etc… et surtout, je cherchais à 
-        rendre cette carte intéressante.
-    </div>
+            <p class="project-chapter">
+                Les langues s'y sont mélé, bien logiquement, car pour inventer une langue un minimum serieuse, on
+                se doit déjà de comprendre un minimum la notre. Et même ne serait-ce que pour la retranscrire en
+                Français, cela représente finalement un important travail de rédaction. Je reste néamoins assez
+                déçu de contater mon niveau pltôt mauvais en Français, d'autant plus en Grammaire, même après ce
+                travail.
+            </p>
 
+            <p class="project-chapter">
+                L'histoire s'y est impliqué aussi, plus tardivement. Par souhaits de créer un univers, j'ai donc
+                développé mon scénario, qui joue beaucoup sur les axes géopolitiques. En faisant cela, j'ai du
+                m'interesser aux réalisme. J'ai du aporter un jugement critique à mon scénario, en faisant appelle à
+                mes connaissances en histoire, puis j'ai du paufiner mes dates, pour voir quelles durées sont
+                "réalisme" pour tel révolution, tel guerre, tel propagandes etc…
+            </p>
+
+            <p class="project-chapter">
+                La géographie et la SVT on était impliquée aussi, lors de la conception de la carte. Je cherchais
+                quelque-chose de réaliste en therme de continent, géologie, climat etc… et surtout, je cherchais à
+                rendre cette carte intéressante.
+            </p>
+        </div>
+    </section>
+</article>
 {% endblock %}

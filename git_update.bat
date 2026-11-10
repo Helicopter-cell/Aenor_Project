@@ -5,7 +5,7 @@ powershell -Command "git add ."
 echo git add. effectué !
 pause
 
-powershell -Command "git commit -m 'ae_2.4 | Sauvegarde avant un changement CSS majeur.'"
+powershell -Command "git commit -m 'ae_2.4 | Sauvegarde avant un changement CSS majeur ; intégration d`outils et d`effet tiers qualitatif.'"
 echo git commit effectué !
 pause
 

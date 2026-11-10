@@ -11,7 +11,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 load_dotenv(Path(__file__).resolve().parent / ".env")
 
 from extensions import csrf, limiter
-from modules.utils import clean_text, load_cours, render_cours_value, static_path
+from modules.utils import clean_text, load_cours, render_cours_value, static_path, static_version
 from routes.admin import admin_bp
 from routes.audio import audio_bp
 from routes.main import main_bp
@@ -35,6 +35,7 @@ def create_app(config=None):
     app.config.update(
         SECRET_KEY=secret_key,
         DEBUG=False,
+        TEMPLATES_AUTO_RELOAD=True,
         PREFERRED_URL_SCHEME="https",
         SESSION_COOKIE_SECURE=True,
         SESSION_COOKIE_HTTPONLY=True,
@@ -50,6 +51,7 @@ def create_app(config=None):
     app.jinja_env.filters["render_cours_value"] = render_cours_value
     app.jinja_env.filters["clean_text"] = clean_text
     app.jinja_env.globals["static_path"] = static_path
+    app.jinja_env.globals["static_version"] = static_version
 
     csrf.init_app(app)
     limiter.init_app(app)

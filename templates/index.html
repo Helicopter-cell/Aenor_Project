@@ -1,87 +1,123 @@
 {% extends 'base_without_navbar.html' %}
 
 {% block content %}
+<div class="home-page">
+    <header class="home-intro">
+        <span class="home-seal" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none">
+                <circle cx="32" cy="32" r="25" />
+                <circle cx="32" cy="32" r="19" />
+                <path d="M32 15v34M22 39l10-20 10 20M25.5 32h13" />
+            </svg>
+        </span>
+        <p class="home-eyebrow">Carnet d'une langue vivante</p>
+        <h1 class="Index-title">Le cabinet des voix</h1>
+        <p class="home-lede">Entrez dans l'Aënor : explorez ses mots, écoutez ses formes et découvrez la langue à votre rythme.</p>
+    </header>
 
-<h1 class="Index-title">Où souhaitez-vous aller ?</h1>
+    <section class="home-paths" aria-labelledby="home-paths-title">
+        <h2 class="sr-only" id="home-paths-title">Explorer l'Aënor</h2>
+        <a href="/cours" class="card-link card-link--featured">
+            <article class="card">
+                <span class="card-icon" id="svg-lex" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path pathLength="100" d="M12 6c-2-1.5-5-2-8-1v13c3-1 6-0.5 8 1 2-1.5 5-2 8-1V5c-3-1-6-0.5-8 1z"/><path pathLength="100" d="M12 6v13"/></svg>
+                </span>
+                <div class="card-content">
+                    <p class="card-kicker">La première porte</p>
+                    <h2>Parcourir le lexique</h2>
+                    <p>Rencontrez les mots, leur écriture, leur son et leur sens.</p>
+                </div>
+                <span class="card-arrow" aria-hidden="true">↗</span>
+            </article>
+        </a>
 
-<div class="grid">
-    <a href="/grammaire_3" class="card-link">
-        <div class="card">
-            <span class="card-icon" id="svg-grm" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path pathLength="100" d="M12 3l-5 6h3l-5 6h4l-4 6h14l-4-6h4l-5-6h3z"/></svg>
-            </span>
-            <div class="card-content">
-                <h2>Grammaire</h2>
-                <p>Fonctionnement de ma langue, de A à Z</p>
-            </div>
+        <a href="/ia-trad" class="card-link card-link--featured">
+            <article class="card">
+                <span class="card-icon" id="svg-tra" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path pathLength="100" d="M4 8h13 M13 4l4 4-4 4 M20 16H7 M11 20l-4-4 4-4"/></svg>
+                </span>
+                <div class="card-content">
+                    <p class="card-kicker">L'atelier des phrases</p>
+                    <h2>Ouvrir le traducteur</h2>
+                    <p>Faites dialoguer le français et l'Aënor, dans les deux sens.</p>
+                </div>
+                <span class="card-arrow" aria-hidden="true">↗</span>
+            </article>
+        </a>
+    </section>
+
+    <section class="home-collection" aria-labelledby="home-collection-title">
+        <div class="home-section-heading">
+            <p class="home-eyebrow">Pour aller plus loin</p>
+            <h2 id="home-collection-title">Les autres salles du cabinet</h2>
         </div>
-    </a>
+        <div class="grid home-grid">
+            <a href="/grammaire_3" class="card-link card-link--secondary">
+                <article class="card">
+                    <span class="card-icon" id="svg-grm" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path pathLength="100" d="M12 3l-5 6h3l-5 6h4l-4 6h14l-4-6h4l-5-6h3z"/></svg>
+                    </span>
+                    <div class="card-content">
+                        <h3>Grammaire</h3>
+                        <p>Comprendre la structure de la langue.</p>
+                    </div>
+                </article>
+            </a>
 
-    <a href="/ia-trad" class="card-link">
-        <div class="card">
-            <span class="card-icon" id="svg-tra" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path pathLength="100" d="M4 8h13 M13 4l4 4-4 4 M20 16H7 M11 20l-4-4 4-4"/></svg>
-            </span>
-            <div class="card-content">
-                <h2>Traducteur</h2>
-                <p>Traducteur intelligent entre le Français et Aënor</p>
-            </div>
-        </div>
-    </a>
+            <a href="/exercice" class="card-link card-link--secondary">
+                <article class="card">
+                    <span class="card-icon" id="svg-exe" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path pathLength="100" d="M 12 3 a 9 9 0 1 0 0 18 a 9 9 0 1 0 0 -18 M8 12l3 3 5-6"/></svg>
+                    </span>
+                    <div class="card-content">
+                        <h3>Exercices</h3>
+                        <p>Mettre vos connaissances à l'épreuve.</p>
+                    </div>
+                </article>
+            </a>
 
-    <a href="/exercice" class="card-link">
-        <div class="card">
-            <span class="card-icon" id="svg-exe" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path pathLength="100" d="M 12 3 a 9 9 0 1 0 0 18 a 9 9 0 1 0 0 -18 M8 12l3 3 5-6"/></svg>
-            </span>
-            <div class="card-content">
-                <h2>Exercices</h2>
-                <p>Pour tester vos connaissances</p>
-            </div>
-        </div>
-    </a>
+            <a href="/scenario" class="card-link card-link--secondary">
+                <article class="card">
+                    <span class="card-icon" id="svg-sce"aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M6 5a2 2 0 1 1 0 4a2 2 0 1 1 0-4M18 4a2 2 0 1 1 0 4a2 2 0 1 1 0-4M13 16a2 2 0 1 1 0 4a2 2 0 1 1 0-4m8 7 8-1M7 9l5 7m5-8-3 8" /></svg>
+                    </span>
+                    <div class="card-content">
+                        <h3>Scénario</h3>
+                        <p>Explorer les notes et les liens de l'univers.</p>
+                    </div>
+                </article>
+            </a>
 
-    <a href="/cours" class="card-link">
-        <div class="card">
-            <span class="card-icon" id="svg-lex" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path pathLength="100" d="M12 6c-2-1.5-5-2-8-1v13c3-1 6-0.5 8 1 2-1.5 5-2 8-1V5c-3-1-6-0.5-8 1z"/><path pathLength="100" d="M12 6v13"/></svg>
-            </span>
-            <div class="card-content">
-                <h2>Lexique</h2>
-                <p>Pour apprendre le vocabulaire</p>
-            </div>
-        </div>
-    </a>
+            <a href="/commentaires" class="card-link card-link--secondary">
+                <article class="card">
+                    <span class="card-icon" id="svg-com" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path pathLength="100" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            <path pathLength="100" d="M8 8h8M8 12h5"/>
+                        </svg>
+                    </span>
+                    <div class="card-content">
+                        <h3>Vos retours</h3>
+                        <p>Partager une idée ou une remarque.</p>
+                    </div>
+                </article>
+            </a>
 
-    <a href="/commentaires" class="card-link">
-        <div class="card">
-            <span class="card-icon" id="svg-com" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                    <path pathLength="100" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                    <path pathLength="100" d="M8 8h8M8 12h5"/>
-                </svg>
-            </span>
-            <div class="card-content">
-                <h2>Commentaires</h2>
-                <p>Pour publier des commentaires ou des critiques</p>
-            </div>
+            <a href="/historique" class="card-link card-link--secondary">
+                <article class="card">
+                    <span class="card-icon" id="svg-his" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path pathLength="100" d="M12 8v4l3 3"/>
+                            <path pathLength="100" d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5"/>
+                        </svg>
+                    </span>
+                    <div class="card-content">
+                        <h3>Historique</h3>
+                        <p>Retrouver vos traductions et exercices.</p>
+                    </div>
+                </article>
+            </a>
         </div>
-    </a>
-
-    <a href="/historique" class="card-link">
-        <div class="card">
-            <span class="card-icon" id="svg-his" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                    <path pathLength="100" d="M12 8v4l3 3"/>
-                    <path pathLength="100" d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5"/>
-                </svg>
-            </span>
-            <div class="card-content">
-                <h2>Historique</h2>
-                <p>Pour consulter les précedents exercices et traductions.</p>
-            </div>
-        </div>
-    </a>
+    </section>
 </div>
-
 {% endblock %}

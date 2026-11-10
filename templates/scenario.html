@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='CSS/components/scenario-graph.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='CSS/components/scenario-graph.css', v=static_version('|staticPATH|main')) }}">
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
 <div class="scenario-page">

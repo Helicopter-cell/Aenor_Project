@@ -1,54 +1,66 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1 class="section-heading">Mon historique</h1>
+<section class="history-page" aria-labelledby="history-title">
+    <header class="page-intro history-intro">
+        <p class="page-eyebrow">Les traces du parcours</p>
+        <h1 class="section-heading" id="history-title">Votre historique</h1>
+        <p>Traductions et exercices déjà parcourus, réunis dans votre carnet.</p>
+    </header>
 
-<section class="card">
-    <h2>Historique des traductions</h2>
-    <div class="table-wrap">
-        <table class="admin-table">
-            <thead>
-                <tr><th>Source</th><th>Traduction</th><th>Sens</th><th>Mode fiable</th><th>Date</th></tr>
-            </thead>
-            <tbody>
-                {% for traduction in traductions %}
-                    <tr>
-                        <td>{{ traduction['source_text'] }}</td>
-                        <td>{{ traduction['target_text'] }}</td>
-                        <td>{{ traduction['direction'] }}</td>
-                        <td>{{ 'Oui' if traduction['traduction_fiable'] else 'Non' }}</td>
-                        <td>{{ traduction['timestamp'] }}</td>
-                    </tr>
-                {% else %}
-                    <tr><td colspan="5">Aucune traduction enregistrée.</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</section>
-<br>
-<br>
-<br>
-<section class="card">
-    <h2>Historique des exercices</h2>
-    <div class="table-wrap">
-        <table class="admin-table">
-            <thead>
-                <tr><th>Consigne</th><th>Réponse</th><th>Correction / Feedback</th><th>Date</th></tr>
-            </thead>
-            <tbody>
-                {% for exercice in exercices %}
-                    <tr>
-                        <td>{{ exercice['intitule_exercice'] }}</td>
-                        <td>{{ exercice['reponse_utilisateur'] }}</td>
-                        <td><strong>{{ exercice['correction'] }}</strong>{% if exercice['feedback'] %}<br>{{ exercice['feedback'] }}{% endif %}</td>
-                        <td>{{ exercice['timestamp'] }}</td>
-                    </tr>
-                {% else %}
-                    <tr><td colspan="4">Aucun exercice corrigé.</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="history-sections">
+        <section class="card history-section" aria-labelledby="translation-history-title">
+            <header class="history-section-heading">
+                <p class="page-eyebrow">01 · Le dialogue</p>
+                <h2 id="translation-history-title">Historique des traductions</h2>
+            </header>
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>Source</th><th>Traduction</th><th>Sens</th><th>Mode fiable</th><th>Date</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for traduction in traductions %}
+                            <tr>
+                                <td>{{ traduction['source_text'] }}</td>
+                                <td>{{ traduction['target_text'] }}</td>
+                                <td>{{ traduction['direction'] }}</td>
+                                <td>{{ 'Oui' if traduction['traduction_fiable'] else 'Non' }}</td>
+                                <td>{{ traduction['timestamp'] }}</td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="5">Aucune traduction enregistrée.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card history-section" aria-labelledby="exercise-history-title">
+            <header class="history-section-heading">
+                <p class="page-eyebrow">02 · La pratique</p>
+                <h2 id="exercise-history-title">Historique des exercices</h2>
+            </header>
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>Consigne</th><th>Réponse</th><th>Correction / Feedback</th><th>Date</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for exercice in exercices %}
+                            <tr>
+                                <td>{{ exercice['intitule_exercice'] }}</td>
+                                <td>{{ exercice['reponse_utilisateur'] }}</td>
+                                <td><strong>{{ exercice['correction'] }}</strong>{% if exercice['feedback'] %}<br>{{ exercice['feedback'] }}{% endif %}</td>
+                                <td>{{ exercice['timestamp'] }}</td>
+                            </tr>
+                        {% else %}
+                            <tr><td colspan="4">Aucun exercice corrigé.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
 </section>
 {% endblock %}

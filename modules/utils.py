@@ -3,6 +3,7 @@
 # =============================
 
 # Importation du module natif pour manipuler les fichiers et données au format JSON
+import hashlib
 import json
 from functools import lru_cache
 from pathlib import Path
@@ -39,6 +40,22 @@ def static_path(alias):
     """Retourne le chemin relatif attendu par l'endpoint Flask static."""
     relative_path = get_path(alias).relative_to(PROJECT_ROOT / 'static')
     return relative_path.as_posix()
+
+
+def static_version(alias):
+    """Retourne une empreinte des styles CSS pour invalider leur cache après modification."""
+    target_path = get_path(alias)
+    if target_path.suffix.lower() == '.css':
+        css_root = PROJECT_ROOT / 'static' / 'CSS'
+        files = sorted(css_root.rglob('*.css'))
+    else:
+        files = [target_path]
+
+    digest = hashlib.sha256()
+    for file_path in files:
+        digest.update(file_path.relative_to(PROJECT_ROOT / 'static').as_posix().encode('utf-8'))
+        digest.update(file_path.read_bytes())
+    return digest.hexdigest()[:12]
 
 
 # Constantes d'espacement pour le rendu HTML

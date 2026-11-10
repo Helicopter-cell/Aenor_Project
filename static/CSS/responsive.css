@@ -7,6 +7,15 @@
         border-radius: var(--radius-lg);
     }
 
+    .site-header {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .site-brand {
+        padding: 0.45rem 0;
+    }
+
     .feedback-workspace {
         grid-template-columns: minmax(240px, 300px) minmax(0, 1fr);
         gap: 1.25rem;
@@ -38,11 +47,26 @@
         padding: 2rem 0 3rem;
     }
 
+    .site-header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 0.5rem 0.75rem;
+        width: calc(100% - 32px);
+        margin-top: 0.75rem;
+    }
+
+    .site-brand {
+        min-height: 44px;
+    }
+
     .mobile-menu-toggle {
         display: block;
-        width: calc(100% - 32px);
+        grid-column: 2;
+        grid-row: 1;
+        min-width: 48px;
         min-height: 46px;
-        margin: 0.75rem auto 0;
+        margin: 0;
         padding: 0.55rem 0.9rem;
         font-size: 1.25rem;
         line-height: 1;
@@ -50,8 +74,10 @@
 
     .navbar {
         display: none;
-        width: calc(100% - 32px);
-        margin: 0.5rem auto;
+        grid-column: 1 / -1;
+        grid-row: 2;
+        width: 100%;
+        margin: 0;
         padding: 0.6rem;
         border-radius: var(--radius-md);
     }
@@ -159,7 +185,7 @@
         width: calc(100% - 28px);
     }
 
-    .navbar {
+    .site-header {
         width: calc(100% - 28px);
     }
 

@@ -1,5 +1,6 @@
 from routes import admin as admin_routes
 from routes import translation as translation_routes
+from modules import utils
 
 
 def test_main_pages_and_scenario_are_accessible(client):
@@ -25,6 +26,30 @@ def test_obj_project_page_renders(client):
 
     assert response.status_code == 200
     assert b"Mais en fait, pourquoi faire tout \xc3\xa7a ?" in response.data
+    assert b"/static/CSS/main.css?v=" in response.data
+
+
+def test_template_auto_reload_is_enabled(app):
+    assert app.config["TEMPLATES_AUTO_RELOAD"] is True
+    assert app.jinja_env.auto_reload is True
+
+
+def test_css_fingerprint_changes_when_imported_styles_change(tmp_path, monkeypatch):
+    static_root = tmp_path / "static"
+    css_root = static_root / "CSS"
+    css_root.mkdir(parents=True)
+    main_css = css_root / "main.css"
+    imported_css = css_root / "components" / "pages.css"
+    imported_css.parent.mkdir()
+    main_css.write_text('@import url("components/pages.css");', encoding="utf-8")
+    imported_css.write_text(".project-page { display: block; }", encoding="utf-8")
+    monkeypatch.setattr(utils, "PROJECT_ROOT", tmp_path)
+    monkeypatch.setattr(utils, "get_path", lambda _alias: main_css)
+
+    original_version = utils.static_version("|staticPATH|main")
+    imported_css.write_text(".project-page { display: grid; }", encoding="utf-8")
+
+    assert utils.static_version("|staticPATH|main") != original_version
 
 
 def test_comment_form_validates_and_persists_submission(client):
