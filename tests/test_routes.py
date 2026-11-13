@@ -29,6 +29,16 @@ def test_obj_project_page_renders(client):
     assert b"/static/CSS/main.css?v=" in response.data
 
 
+def test_home_page_loads_animation_and_3d_enhancements(client):
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert b"gsap.min.js" in response.data
+    assert b"js/aenor-motion.js" in response.data
+    assert b'id="home-voice-orb"' in response.data
+    assert b"js/home-orb.js" in response.data
+
+
 def test_template_auto_reload_is_enabled(app):
     assert app.config["TEMPLATES_AUTO_RELOAD"] is True
     assert app.jinja_env.auto_reload is True

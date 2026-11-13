@@ -45,6 +45,8 @@
 }
 
 .home-seal {
+    position: relative;
+    isolation: isolate;
     display: grid;
     width: clamp(60px, 8vw, 78px);
     aspect-ratio: 1;
@@ -59,7 +61,26 @@
     color: var(--color-copper-pale);
 }
 
+.home-orb-canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 0;
+    width: clamp(150px, 18vw, 200px);
+    height: clamp(150px, 18vw, 200px);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: opacity 500ms ease;
+}
+
+.home-orb-canvas.is-ready {
+    opacity: 0.88;
+}
+
 .home-seal svg {
+    position: relative;
+    z-index: 1;
     width: 70%;
     height: 70%;
     stroke: var(--color-current);
@@ -683,6 +704,10 @@
         grid-template-columns: 1fr;
         margin-top: 1.75rem;
         margin-bottom: 2.5rem;
+    }
+
+    .home-orb-canvas {
+        display: none;
     }
 
     .card-link--featured .card {

@@ -4,6 +4,7 @@
 <div class="home-page">
     <header class="home-intro">
         <span class="home-seal" aria-hidden="true">
+            <canvas class="home-orb-canvas" id="home-voice-orb" hidden></canvas>
             <svg viewBox="0 0 64 64" fill="none">
                 <circle cx="32" cy="32" r="25" />
                 <circle cx="32" cy="32" r="19" />
@@ -120,4 +121,5 @@
         </div>
     </section>
 </div>
+<script src="{{ url_for('static', filename='js/home-orb.js') }}" defer></script>
 {% endblock %}
