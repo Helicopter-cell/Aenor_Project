@@ -1,6 +1,62 @@
 (() => {
+    window.AenorScenario?.destroy();
+
+    const networks = [];
+    const pendingFrames = new Set();
+    let generation = 0;
+    let dependencyScript;
+    window.AenorScenario = {
+        destroy() {
+            generation += 1;
+            pendingFrames.forEach(frame => window.cancelAnimationFrame(frame));
+            pendingFrames.clear();
+            networks.splice(0).forEach(network => network.destroy());
+            if (dependencyScript) {
+                dependencyScript.onload = null;
+                dependencyScript.onerror = null;
+                dependencyScript.remove();
+                dependencyScript = undefined;
+            }
+        },
+    };
+
+    const initializationGeneration = generation;
+    const showDependencyError = error => {
+        console.error('La bibliothèque du graphe Aënor n’a pas pu être chargée.', error);
+        const status = document.createElement('p');
+        status.className = 'scenario-empty';
+        status.setAttribute('role', 'alert');
+        status.textContent = 'Le graphe interactif est temporairement indisponible.';
+        document.querySelector('.scenario-page')?.prepend(status);
+    };
+
+    if (!window.vis) {
+        const sourceScript = document.currentScript;
+        dependencyScript = document.createElement('script');
+        dependencyScript.src = 'https://unpkg.com/vis-network/standalone/umd/vis-network.min.js';
+        dependencyScript.async = true;
+        dependencyScript.onload = () => {
+            dependencyScript = undefined;
+            if (initializationGeneration !== generation || !sourceScript?.isConnected) return;
+            const replay = document.createElement('script');
+            replay.src = sourceScript.src;
+            sourceScript.after(replay);
+        };
+        dependencyScript.onerror = error => {
+            dependencyScript = undefined;
+            if (initializationGeneration === generation) showDependencyError(error);
+        };
+        document.head.appendChild(dependencyScript);
+        return;
+    }
+
     const EXPAND_BY_DEFAULT = false;
-    const outlineMarkdown = {{ outline_markdown|tojson }};
+    const graphDataElement = document.getElementById('scenario-graph-data');
+    const outlineDataElement = document.getElementById('scenario-outline-data');
+    if (!graphDataElement || !outlineDataElement) return;
+
+    const graphData = JSON.parse(graphDataElement.textContent);
+    const outlineMarkdown = JSON.parse(outlineDataElement.textContent);
     const mindmapElement = document.getElementById('obsidian-mindmap');
 
     if (mindmapElement) {
@@ -173,8 +229,16 @@
             interaction: { hover: true, zoomView: true, dragView: true, dragNodes: false },
             physics: { enabled: false },
         });
+        networks.push(mindmapNetwork);
 
-        requestAnimationFrame(() => mindmapNetwork.fit({ animation: false }));
+        let fitFrame;
+        fitFrame = window.requestAnimationFrame(() => {
+            pendingFrames.delete(fitFrame);
+            if (initializationGeneration === generation && mindmapElement.isConnected) {
+                mindmapNetwork.fit({ animation: false });
+            }
+        });
+        pendingFrames.add(fitFrame);
 
         function updateVisibleTree(changedNodeId) {
             const positions = positionTree();
@@ -260,7 +324,6 @@
         });
     }
 
-    const graphData = {{ graph_data|tojson }};
     const graphElement = document.getElementById('scenario-network');
     const previewPlaceholder = document.getElementById('preview-placeholder');
     const notePreview = document.getElementById('note-preview');
@@ -320,6 +383,7 @@
             barnesHut: { gravitationalConstant: -3800, springLength: 125, springConstant: 0.035 },
         },
     });
+    networks.push(network);
 
     network.on('zoom', ({ scale }) => {
         const boundedScale = Math.min(maxZoom, Math.max(minZoom, scale));

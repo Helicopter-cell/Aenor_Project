@@ -1,7 +1,37 @@
 (() => {
+    window.AenorSpeech?.destroy();
+
     const players = new Set();
     const playerByButton = new WeakMap();
     let activePlayer = null;
+    let initialized = false;
+
+    function loadWaveSurfer() {
+        if (window.WaveSurfer && typeof window.WaveSurfer.create === 'function') {
+            return Promise.resolve(window.WaveSurfer);
+        }
+        if (window.AenorWaveSurferLoading) return window.AenorWaveSurferLoading;
+
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/wavesurfer.js@7.8.6/dist/wavesurfer.min.js';
+        script.async = true;
+        window.AenorWaveSurferLoading = new Promise((resolve, reject) => {
+            script.onload = () => {
+                if (window.WaveSurfer && typeof window.WaveSurfer.create === 'function') {
+                    resolve(window.WaveSurfer);
+                } else {
+                    reject(new Error('WaveSurfer loaded without exposing its constructor.'));
+                }
+            };
+            script.onerror = () => reject(new Error('WaveSurfer could not load from its CDN.'));
+            document.head.appendChild(script);
+        });
+        window.AenorWaveSurferLoading.catch(() => {
+            window.AenorWaveSurferLoading = undefined;
+            script.remove();
+        });
+        return window.AenorWaveSurferLoading;
+    }
 
     function setButtonState(button, state, message = '') {
         button.classList.remove('is-loading', 'is-playing', 'is-paused', 'is-error');
@@ -132,6 +162,16 @@
         void handleAudioError(player, error);
     }
 
+    function showInitializationError(player, error) {
+        if (player.destroyed) return;
+        const { button, wrapper } = player;
+        const message = error instanceof Error ? error.message : String(error);
+        destroyPlayer(player);
+        wrapper.classList.add('is-error');
+        setButtonState(button, 'error', message);
+        console.error('Le lecteur audio Aënor n’a pas pu être initialisé :', error);
+    }
+
     function pauseOtherPlayers(currentPlayer) {
         players.forEach(player => {
             if (player === currentPlayer) return;
@@ -158,13 +198,6 @@
     }
 
     function createPlayer(button) {
-        if (!window.WaveSurfer || typeof window.WaveSurfer.create !== 'function') {
-            const message = 'Le lecteur audio WaveSurfer n’a pas pu être chargé.';
-            setButtonState(button, 'error', message);
-            console.error(message);
-            return null;
-        }
-
         const wrapper = button.closest('.tts-player');
         const waveform = wrapper && wrapper.querySelector('.tts-waveform');
         if (!wrapper || !waveform) {
@@ -206,7 +239,8 @@
 
         requestAnimationFrame(() => {
             if (player.destroyed) return;
-            try {
+            loadWaveSurfer().then(() => {
+                if (player.destroyed) return;
                 const instance = window.WaveSurfer.create({
                     container: waveform,
                     waveColor: '#2E5A44',
@@ -257,9 +291,7 @@
                 if (loadPromise && typeof loadPromise.catch === 'function') {
                     loadPromise.catch(error => void handleAudioError(player, error));
                 }
-            } catch (error) {
-                void handleAudioError(player, error);
-            }
+            }).catch(error => showInitializationError(player, error));
         });
 
         return player;
@@ -289,16 +321,42 @@
         Array.from(players).forEach(destroyPlayer);
     }
 
-    window.destroyAenorAudioPlayers = destroyAllPlayers;
-    document.addEventListener('click', event => {
+    const onDocumentClick = event => {
         if (!(event.target instanceof Element)) return;
         const button = event.target.closest('.btn-tts');
         if (button && !button.disabled) togglePlayback(button);
-    });
-    document.addEventListener('visibilitychange', () => {
+    };
+    const onVisibilityChange = () => {
         if (document.hidden && activePlayer && activePlayer.instance) {
             activePlayer.instance.pause();
         }
-    });
-    window.addEventListener('pagehide', destroyAllPlayers);
+    };
+    const onPageShow = event => {
+        if (event.persisted) initialize();
+    };
+    const onPageHide = destroyAllPlayers;
+
+    function initialize() {
+        if (initialized) return;
+        initialized = true;
+        document.addEventListener('click', onDocumentClick);
+        document.addEventListener('visibilitychange', onVisibilityChange);
+        window.addEventListener('pagehide', onPageHide);
+        window.addEventListener('pageshow', onPageShow);
+    }
+
+    function destroy() {
+        destroyAllPlayers();
+        if (!initialized) return;
+        initialized = false;
+        document.removeEventListener('click', onDocumentClick);
+        document.removeEventListener('visibilitychange', onVisibilityChange);
+        window.removeEventListener('pagehide', onPageHide);
+        window.removeEventListener('pageshow', onPageShow);
+    }
+
+    const controller = { init: initialize, destroy, destroyAll: destroyAllPlayers };
+    window.AenorSpeech = controller;
+    window.destroyAenorAudioPlayers = destroyAllPlayers;
+    initialize();
 })();

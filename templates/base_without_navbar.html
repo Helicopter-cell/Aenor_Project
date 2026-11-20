@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Aënor</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/atropos@2.0.2/atropos.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename=static_path('|staticPATH|main'), v=static_version('|staticPATH|main')) }}">
@@ -11,15 +12,19 @@
     <script src="https://cdn.jsdelivr.net/npm/atropos@2.0.2/atropos.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js" defer></script>
     <script src="{{ url_for('static', filename='js/aenor-motion.js') }}" defer></script>
+    <script src="https://unpkg.com/swup@4.10.0" defer></script>
+    <script src="https://unpkg.com/@swup/scripts-plugin@2.1.0" defer></script>
+    <script src="{{ url_for('static', filename='js/swup-navigation.js') }}" defer data-swup-ignore-script></script>
 </head>
 <body>
 
-<!-- 🌿 CONTENU -->
-<main class="container">
+<div id="swup" class="transition-room" data-csrf-token="{{ csrf_token() }}">
+<main id="main-content" class="container transition-content" tabindex="-1">
     {% block content %}{% endblock %}
 </main>
 
 
 <footer>Robin LALUNG-BONNAIRE</footer>
+</div>
 </body>
 </html>

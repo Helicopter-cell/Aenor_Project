@@ -5,7 +5,7 @@ powershell -Command "git add ."
 echo git add. effectué !
 pause
 
-powershell -Command "git commit -m 'ae_2.4 | intégration de wavesurfer.js'"
+powershell -Command "git commit -m 'ae_2.4 | intégration de Swup'"
 echo git commit effectué !
 pause
 

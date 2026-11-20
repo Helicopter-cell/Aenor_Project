@@ -7,6 +7,25 @@ html {
     scroll-behavior: smooth;
 }
 
+.transition-room {
+    transform-origin: center top;
+}
+
+html.is-changing .transition-room {
+    transition: opacity 280ms ease, transform 360ms cubic-bezier(0.22, 0.7, 0.25, 1);
+    will-change: opacity, transform;
+}
+
+html.is-animating.is-leaving .transition-room {
+    opacity: 0;
+    transform: translateY(-0.55rem) scale(0.994);
+}
+
+html.is-rendering .transition-room {
+    opacity: 0;
+    transform: translateY(0.7rem) scale(0.994);
+}
+
 html.lenis,
 html.lenis body {
     height: auto;
@@ -85,6 +104,10 @@ body.admin-body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    html.is-changing .transition-room {
+        transition-duration: 0.01ms;
+    }
+
     *,
     *::before,
     *::after {

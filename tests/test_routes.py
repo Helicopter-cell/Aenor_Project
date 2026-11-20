@@ -70,14 +70,34 @@ def test_lenis_is_loaded_only_on_lexique_and_grammar_pages(client):
         assert b"js/lenis-scroll.js" not in response.data
 
 
-def test_wavesurfer_is_loaded_only_on_pages_with_audio_players(client):
+def test_swup_shell_is_shared_by_public_pages_and_admin_uses_native_navigation(client):
+    for path in ("/", "/cours", "/ia-trad", "/grammaire_3"):
+        response = client.get(path)
+
+        assert response.status_code == 200
+        assert b'id="swup" class="transition-room"' in response.data
+        assert b'data-csrf-token="' in response.data
+        assert b"swup@4.10.0" in response.data
+        assert b"scripts-plugin@2.1.0" in response.data
+        assert b"js/swup-navigation.js" in response.data
+
+    translator = client.get("/ia-trad")
+    assert b'href="/admin" class="nav-element" data-no-swup' in translator.data
+
+    admin = client.get("/admin")
+    assert admin.status_code == 200
+    assert b"swup@4.10.0" not in admin.data
+    assert b'id="swup"' not in admin.data
+
+
+def test_audio_controller_is_loaded_only_on_pages_with_audio_players(client):
     for path in ("/cours", "/ia-trad"):
         response = client.get(path)
 
         assert response.status_code == 200
-        assert b"wavesurfer.js@7.8.6" in response.data
         assert b"js/speech.js" in response.data
         assert b'class="tts-waveform"' in response.data
+        assert b"wavesurfer.js" not in response.data
 
     for path in ("/", "/grammaire_3", "/exercice"):
         response = client.get(path)

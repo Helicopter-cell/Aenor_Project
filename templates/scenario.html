@@ -2,8 +2,6 @@
 
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='CSS/components/scenario-graph.css', v=static_version('|staticPATH|main')) }}">
-<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-
 <div class="scenario-page">
     <section class="scenario-outline-panel" aria-label="Carte mentale hiérarchique">
         <header class="scenario-toolbar">
@@ -61,6 +59,8 @@
     </aside>
 </div>
 
+<script id="scenario-graph-data" type="application/json">{{ graph_data|tojson }}</script>
+<script id="scenario-outline-data" type="application/json">{{ outline_markdown|tojson }}</script>
 <script src="{{ url_for('static', filename=static_path('|jsPATH|scenario')) }}"></script>
 
 {% endblock %}

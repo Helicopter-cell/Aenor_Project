@@ -1,5 +1,6 @@
 (() => {
-  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+  const getCsrfToken = () => document.querySelector('#swup')?.dataset.csrfToken
+    || document.querySelector('meta[name="csrf-token"]')?.content;
   const cardsContainer = document.getElementById('feedback-cards');
   const emptyState = document.getElementById('feedback-empty');
   const filter = document.getElementById('feedback-filter');
@@ -60,7 +61,7 @@
       try {
         const response = await fetch(`/api/like_comment/${button.dataset.likeId}`, {
           method: 'POST',
-          headers: { 'X-CSRFToken': csrfToken },
+          headers: { 'X-CSRFToken': getCsrfToken() },
         });
         const result = await response.json();
         if (!response.ok || !result.success) throw new Error('Like impossible');
@@ -99,7 +100,7 @@
     try {
       const response = await fetch(`/api/delete_comment/${cardToDelete.dataset.commentId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken },
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
         body: JSON.stringify({ password: new FormData(deleteForm).get('password') }),
       });
       const result = await response.json();

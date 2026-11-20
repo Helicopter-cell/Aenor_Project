@@ -1,3 +1,14 @@
+(() => {
+window.AenorTranslator?.destroy();
+
+let activeTranslationRequest;
+window.AenorTranslator = {
+    destroy() {
+        activeTranslationRequest?.abort();
+        activeTranslationRequest = undefined;
+    },
+};
+
 async function sendPrompt() {
     const prompt = (document.getElementById("prompt-fr") || document.getElementById("prompt-ae"))?.value || "";
     const responseDiv = document.getElementById("response");
@@ -8,18 +19,23 @@ async function sendPrompt() {
     }
 
     responseDiv.innerHTML = '<span class="loading">Traduction en cours :</span>';
+    activeTranslationRequest?.abort();
+    const requestController = new AbortController();
+    activeTranslationRequest = requestController;
 
     try {
         const direction = document.querySelector('input[name="direction"]:checked')?.value || 'fr2aenor';
         const autoriserApprentissage = document.getElementById('autoriser-apprentissage')?.checked || false;
         const traductionFiable = document.getElementById('traduction-fiable')?.checked || false;
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+        const csrfToken = document.querySelector('#swup')?.dataset.csrfToken
+            || document.querySelector('meta[name="csrf-token"]')?.content;
         const response = await fetch('/traduire', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken
             },
+            signal: requestController.signal,
             body: JSON.stringify({
                 texte: prompt,
                 direction: direction,
@@ -63,38 +79,38 @@ async function sendPrompt() {
             responseDiv.classList.add('result-aenor');
         }
     } catch (error) {
+        if (error.name === 'AbortError') return;
         console.error(error);
         responseDiv.textContent = 'Erreur lors de la traduction : ' + error.message;
         responseDiv.classList.remove('result-aenor', 'result-fr');
+    } finally {
+        if (activeTranslationRequest === requestController) {
+            activeTranslationRequest = undefined;
+        }
     }
 }
+window.sendPrompt = sendPrompt;
 
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. Récupérer tous les boutons radio de direction
+(() => {
     const directionRadios = document.querySelectorAll('input[name="direction"]');
-    
-    // 2. Récupérer le champ de saisie (on utilise une requête qui ne dépend pas de l'ID puisqu'il va changer)
     const textInput = document.querySelector('.form-wrapper input[type="text"]');
     const textInputLabel = document.querySelector('.translator-form label[for="prompt-fr"]');
+    if (!textInput || !textInputLabel) return;
 
-    // 3. Ajouter un écouteur d'événement sur chaque bouton radio
     directionRadios.forEach(radio => {
         radio.addEventListener('change', (event) => {
             if (event.target.value === 'fr2aenor') {
-                // Si Français → Aënor
                 textInput.id = 'prompt-fr';
                 textInputLabel.htmlFor = 'prompt-fr';
                 textInput.placeholder = "Écrivez votre phrase à traduire ici...";
-                // Optionnel : tu peux même changer la classe si besoin
-                textInput.classList.replace('result-aenor', 'result-fr'); 
+                textInput.classList.replace('result-aenor', 'result-fr');
             } else if (event.target.value === 'aenor2fr') {
-                // Si Aënor → Français
                 textInput.id = 'prompt-ae';
                 textInputLabel.htmlFor = 'prompt-ae';
                 textInput.placeholder = "Écrivez votre phrase à traduire ici...";
-                // Optionnel : adapter la police/classe pour l'Aënor
-                textInput.classList.replace('result-fr', 'result-aenor'); 
+                textInput.classList.replace('result-fr', 'result-aenor');
             }
         });
     });
-});
+})();
+})();

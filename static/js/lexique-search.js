@@ -19,32 +19,8 @@
         }
 
         const noResults = document.querySelector('#lexique-no-results');
-        const defaultAccordionState = new Map();
-
         accordions.forEach(function (details) {
             details.open = false;
-            defaultAccordionState.set(details, false);
-
-            const summary = details.querySelector(':scope > .cours-summary');
-            const chevron = details.querySelector(':scope > .cours-summary .cours-chevron');
-
-            if (summary) {
-                summary.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    details.open = !details.open;
-                });
-            } 
-
-            const syncState = function () {
-                const isOpen = details.open;
-                details.setAttribute('aria-expanded', String(isOpen));
-                if (chevron) {
-                    chevron.textContent = isOpen ? '▼' : '▶';
-                }
-            };
-
-            details.addEventListener('toggle', syncState);
-            syncState();
         });
 
         const entryRecords = Array.from(entries).map(function (entry) {
@@ -61,7 +37,7 @@
 
             accordions.forEach(function (details) {
                 details.hidden = false;
-                details.open = defaultAccordionState.get(details);
+                details.open = false;
             });
 
             if (noResults) {

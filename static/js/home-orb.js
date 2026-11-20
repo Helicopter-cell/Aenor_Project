@@ -1,4 +1,10 @@
 (() => {
+    window.AenorHomeOrb?.destroy();
+
+    let destroyed = false;
+    let destroyCurrent = () => { destroyed = true; };
+    window.AenorHomeOrb = { destroy: () => destroyCurrent() };
+
     const canvas = document.getElementById("home-voice-orb");
     const intro = canvas?.closest(".home-intro");
     if (!canvas || !intro) return;
@@ -22,7 +28,6 @@
     let animationFrame = 0;
     let observer;
     let lastFrameTime = 0;
-    let destroyed = false;
     const pointer = { x: 0, y: 0 };
     const targetPointer = { x: 0, y: 0 };
 
@@ -135,6 +140,7 @@
             animationFrame = 0;
         };
         const destroy = () => {
+            if (destroyed) return;
             destroyed = true;
             pause();
             window.removeEventListener("resize", resize);
@@ -156,6 +162,7 @@
             canvas.hidden = true;
             canvas.classList.remove("is-ready");
         };
+        destroyCurrent = destroy;
         const onVisibilityChange = () => (document.hidden ? pause() : start());
         const onMotionPreferenceChange = (event) => {
             if (event.matches) destroy();
