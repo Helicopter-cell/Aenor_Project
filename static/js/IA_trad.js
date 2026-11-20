@@ -43,10 +43,11 @@ async function sendPrompt() {
         resultContent.appendChild(translatedText);
 
         if (direction === 'fr2aenor' && data.traduction) {
-            const speakButton = document.getElementById('tts-button-template').content.firstElementChild.cloneNode(true);
+            const speakPlayer = document.getElementById('tts-button-template').content.firstElementChild.cloneNode(true);
+            const speakButton = speakPlayer.querySelector('.btn-tts');
             speakButton.dataset.ipa = data.phonetic || '';
             speakButton.dataset.text = data.traduction;
-            resultContent.appendChild(speakButton);
+            resultContent.appendChild(speakPlayer);
         }
         responseDiv.replaceChildren(resultContent);
         if (autoriserApprentissage && data.commentaire) {

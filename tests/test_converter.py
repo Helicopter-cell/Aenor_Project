@@ -73,6 +73,8 @@ def test_rendered_lexicon_entries_include_safe_speech_data_attributes():
     }))
 
     assert 'class="btn-tts"' in html
+    assert 'class="tts-player"' in html
+    assert 'class="tts-waveform" aria-hidden="true"' in html
     assert 'data-text="&lt;mot&gt;"' in html
     assert 'data-ipa="[mɔt]"' in html
 

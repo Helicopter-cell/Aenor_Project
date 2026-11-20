@@ -70,6 +70,23 @@ def test_lenis_is_loaded_only_on_lexique_and_grammar_pages(client):
         assert b"js/lenis-scroll.js" not in response.data
 
 
+def test_wavesurfer_is_loaded_only_on_pages_with_audio_players(client):
+    for path in ("/cours", "/ia-trad"):
+        response = client.get(path)
+
+        assert response.status_code == 200
+        assert b"wavesurfer.js@7.8.6" in response.data
+        assert b"js/speech.js" in response.data
+        assert b'class="tts-waveform"' in response.data
+
+    for path in ("/", "/grammaire_3", "/exercice"):
+        response = client.get(path)
+
+        assert response.status_code == 200
+        assert b"wavesurfer.js" not in response.data
+        assert b"js/speech.js" not in response.data
+
+
 def test_template_auto_reload_is_enabled(app):
     assert app.config["TEMPLATES_AUTO_RELOAD"] is True
     assert app.jinja_env.auto_reload is True
