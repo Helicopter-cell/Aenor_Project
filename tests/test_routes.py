@@ -39,6 +39,20 @@ def test_home_page_loads_animation_and_3d_enhancements(client):
     assert b"js/home-orb.js" in response.data
 
 
+def test_lenis_is_loaded_only_on_lexique_and_grammar_pages(client):
+    for path in ("/cours", "/grammaire_3"):
+        response = client.get(path)
+
+        assert response.status_code == 200
+        assert b"js/lenis-scroll.js" in response.data
+
+    for path in ("/", "/ia-trad", "/exercice"):
+        response = client.get(path)
+
+        assert response.status_code == 200
+        assert b"js/lenis-scroll.js" not in response.data
+
+
 def test_template_auto_reload_is_enabled(app):
     assert app.config["TEMPLATES_AUTO_RELOAD"] is True
     assert app.jinja_env.auto_reload is True

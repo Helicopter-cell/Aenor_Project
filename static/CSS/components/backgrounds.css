@@ -22,6 +22,11 @@ body::before {
     animation: aenor-aurora-drift 34s ease-in-out infinite alternate;
 }
 
+html.aenor-reading-atmosphere body::before {
+    opacity: var(--reading-leaf-opacity, 0.62);
+    translate: 0 var(--reading-leaf-shift, 0px);
+}
+
 body::after {
     right: -20vw;
     bottom: -38vh;
@@ -33,6 +38,11 @@ body::after {
         var(--color-transparent) 72%
     );
     animation: aenor-aurora-drift 42s ease-in-out -12s infinite alternate-reverse;
+}
+
+html.aenor-reading-atmosphere body::after {
+    opacity: var(--reading-copper-opacity, 1);
+    translate: 0 var(--reading-copper-shift, 0px);
 }
 
 @keyframes aenor-aurora-drift {

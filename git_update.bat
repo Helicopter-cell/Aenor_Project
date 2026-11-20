@@ -5,7 +5,7 @@ powershell -Command "git add ."
 echo git add. effectué !
 pause
 
-powershell -Command "git commit -m 'ae_2.4 | intégration d`outils et d`effet tiers qualitatif'"
+powershell -Command "git commit -m 'ae_2.4 | intégration de Lenis'"
 echo git commit effectué !
 pause
 
