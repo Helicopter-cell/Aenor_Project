@@ -34,9 +34,26 @@ def test_home_page_loads_animation_and_3d_enhancements(client):
 
     assert response.status_code == 200
     assert b"gsap.min.js" in response.data
+    assert b"atropos@2.0.2" in response.data
+    assert b"split-type@0.3.4" in response.data
     assert b"js/aenor-motion.js" in response.data
     assert b'id="home-voice-orb"' in response.data
     assert b"js/home-orb.js" in response.data
+    assert b'data-split="words"' in response.data
+    assert b'data-atropos' in response.data
+
+
+def test_artistic_libraries_have_marked_content_on_target_pages(client):
+    for path in ("/cours", "/grammaire_3", "/ia-trad", "/exercice", "/obj_project"):
+        response = client.get(path)
+
+        assert response.status_code == 200
+        assert b'data-split="words"' in response.data, path
+
+    for path in ("/ia-trad", "/exercice", "/obj_project"):
+        response = client.get(path)
+
+        assert b'data-atropos' in response.data, path
 
 
 def test_lenis_is_loaded_only_on_lexique_and_grammar_pages(client):

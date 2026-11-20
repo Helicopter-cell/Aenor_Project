@@ -129,6 +129,11 @@ a:hover {
     font-size: 1.45em;
 }
 
+.split-reveal .word,
+.split-reveal .char {
+    display: inline-block;
+}
+
 .lexique-latin {
     color: var(--color-success-light);
     font-weight: 650;

@@ -9,6 +9,26 @@
     outline-offset: 5px;
 }
 
+html.atropos-enabled .card-link[data-atropos]:hover .card,
+html.atropos-enabled .card-link[data-atropos]:focus-visible .card,
+html.atropos-enabled .card-link[data-atropos] .card:active {
+    transform: none;
+}
+
+html.atropos-enabled .card-link[data-atropos].atropos-active .card {
+    border-color: var(--color-copper-pale);
+    box-shadow: var(--shadow-card), 0 0 24px rgb(var(--rgb-copper) / 0.16);
+}
+
+.atropos-highlight {
+    background-image: radial-gradient(circle at 50%, rgb(var(--rgb-copper) / 0.2), var(--color-transparent) 52%);
+}
+
+.atropos-shadow {
+    background: rgb(var(--rgb-copper) / 0.12);
+    filter: blur(28px);
+}
+
 .card-link:hover .card-icon,
 .card-link:focus-visible .card-icon {
     border-color: var(--color-copper-pale);

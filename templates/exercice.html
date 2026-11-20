@@ -4,12 +4,12 @@
 <section class="exercise-page" aria-labelledby="exercise-title">
     <header class="page-intro exercise-intro">
         <p class="page-eyebrow">La salle d'entraînement</p>
-        <h1 class="section-heading" id="exercise-title">À vous de traduire</h1>
+        <h1 class="section-heading" id="exercise-title" data-split="words">À vous de traduire</h1>
         <p>Un instant pour retrouver les mots justes.</p>
     </header>
 
     {% if phrase %}
-        <section class="exercise-prompt" aria-labelledby="exercise-prompt-title">
+        <section class="exercise-prompt" aria-labelledby="exercise-prompt-title" data-atropos>
             <p class="page-eyebrow" id="exercise-prompt-title">Votre phrase</p>
             <p class="exercise-phrase">{{ phrase }}</p>
         </section>

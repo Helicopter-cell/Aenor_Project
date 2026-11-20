@@ -506,6 +506,13 @@
     text-align: center;
 }
 
+html.atropos-enabled .project-hero.atropos-active,
+html.atropos-enabled .translator-panel.atropos-active,
+html.atropos-enabled .exercise-prompt.atropos-active {
+    border-color: var(--color-copper-pale);
+    box-shadow: var(--shadow-card), 0 0 28px rgb(var(--rgb-copper) / 0.14);
+}
+
 .project-hero::before,
 .project-hero::after {
     position: absolute;
