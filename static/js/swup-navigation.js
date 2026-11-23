@@ -44,6 +44,7 @@
         window.AenorLexiqueControls?.init();
         window.AenorMotion?.init();
         document.querySelector('#main-content')?.focus({ preventScroll: true });
+        window.AenorAmbientCurves?.refresh();
     }
 
     updateActiveNavigation();

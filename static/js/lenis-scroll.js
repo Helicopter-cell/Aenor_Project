@@ -11,13 +11,14 @@
     let generation = 0;
     let listenersAttached = false;
 
-    const updateAtmosphere = ({ scroll, limit }) => {
+    const updateAtmosphere = ({ scroll, limit, velocity = 0 }) => {
         const progress = limit > 0 ? Math.min(1, Math.max(0, scroll / limit)) : 0;
         const root = document.documentElement;
         root.style.setProperty('--reading-leaf-opacity', (0.62 + progress * 0.33).toFixed(3));
         root.style.setProperty('--reading-leaf-shift', `${-progress * 8}vh`);
         root.style.setProperty('--reading-copper-opacity', (1 - progress * 0.78).toFixed(3));
         root.style.setProperty('--reading-copper-shift', `${-progress * 12}vh`);
+        window.AenorAmbientCurves?.onLenisScroll({ scroll, limit, progress, velocity });
     };
 
     const clearAtmosphere = () => {

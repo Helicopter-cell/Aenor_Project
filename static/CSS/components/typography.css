@@ -36,6 +36,8 @@ a:hover {
 }
 
 .cours-accordion {
+    position: relative;
+    isolation: isolate;
     overflow: hidden;
     margin: 0.8rem 0;
     border: 1px solid rgb(var(--rgb-copper) / 0.34);
@@ -48,32 +50,69 @@ a:hover {
 }
 
 .cours-accordion[open] {
-    border-color: rgb(var(--rgb-copper-gold) / 0.72);
+    border-color: rgb(var(--rgb-copper-gold) / 0.82);
     background:
-        linear-gradient(110deg, rgb(var(--rgb-earth) / 0.3), var(--color-transparent) 48%),
-        rgb(var(--rgb-forest) / 0.78);
-    box-shadow: 0 12px 30px rgb(var(--rgb-ink) / 0.2), var(--shadow-glow-copper);
+        linear-gradient(110deg, rgb(var(--rgb-earth) / 0.26), var(--color-transparent) 48%),
+        rgb(var(--rgb-forest) / 0.68);
+    box-shadow:
+        0 12px 30px rgb(var(--rgb-ink) / 0.2),
+        inset 0 1px 1px rgb(var(--rgb-snow) / 0.18),
+        inset 0 0 0 1px rgb(var(--rgb-copper) / 0.08),
+        var(--shadow-glow-copper);
 }
 
 .cours-summary {
+    position: relative;
+    z-index: 0;
+    isolation: isolate;
     display: flex;
     align-items: center;
     gap: 0.75rem;
     padding: 1rem 1.2rem;
+    border-radius: inherit;
     color: var(--color-snow);
     font-weight: 650;
     list-style: none;
     cursor: pointer;
-    transition: background-color var(--transition-ui), color var(--transition-ui);
+    transition: color var(--transition-ui);
+}
+
+.cours-summary::before {
+    position: absolute;
+    z-index: -1;
+    border-radius: inherit;
+    background:
+        linear-gradient(115deg, rgb(var(--rgb-copper) / 0.2), rgb(var(--rgb-snow) / 0.045) 42%, transparent 76%);
+    box-shadow:
+        inset 0 1px 1px rgb(var(--rgb-snow) / 0.25),
+        inset 0 -1px 0 rgb(var(--rgb-earth) / 0.24);
+    content: "";
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease;
 }
 
 .cours-summary::-webkit-details-marker {
     display: none;
 }
 
-.cours-summary:hover {
-    background: rgb(var(--rgb-copper) / 0.16);
+.cours-summary:hover,
+.cours-accordion[open] > .cours-summary {
     color: var(--color-copper-cream);
+}
+
+.cours-summary:hover::before,
+.cours-summary:focus-visible::before,
+.cours-accordion[open] > .cours-summary::before {
+    opacity: 1;
+}
+
+.cours-summary:hover::before,
+.cours-summary:focus-visible::before {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    filter: url("#glass-distortion");
 }
 
 .cours-summary:focus-visible {
@@ -103,6 +142,32 @@ a:hover {
 .cours-content {
     padding: 0.25rem 1.2rem 1.2rem;
     color: var(--color-text-muted);
+}
+
+@supports selector(details::details-content) {
+    .cours-accordion::details-content {
+        block-size: 0;
+        overflow: clip;
+        opacity: 0;
+        transition:
+            block-size 280ms ease,
+            opacity 220ms ease,
+            content-visibility 280ms allow-discrete;
+        interpolate-size: allow-keywords;
+    }
+
+    .cours-accordion[open]::details-content {
+        block-size: auto;
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cours-summary::before,
+    .cours-accordion,
+    .cours-accordion::details-content {
+        transition-duration: 0.01ms;
+    }
 }
 
 .cours-content h2,

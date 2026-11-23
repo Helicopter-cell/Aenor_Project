@@ -12,11 +12,36 @@
     <script src="https://cdn.jsdelivr.net/npm/atropos@2.0.2/atropos.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js" defer></script>
     <script src="{{ url_for('static', filename='js/aenor-motion.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/ambient-curves.js') }}" defer data-swup-ignore-script></script>
     <script src="https://unpkg.com/swup@4.10.0" defer></script>
     <script src="https://unpkg.com/@swup/scripts-plugin@2.1.0" defer></script>
     <script src="{{ url_for('static', filename='js/swup-navigation.js') }}" defer data-swup-ignore-script></script>
 </head>
 <body>
+
+<svg aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute;overflow:hidden">
+    <filter id="glass-distortion" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="1" seed="7" result="glassNoise"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="glassNoise" scale="4" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+    </filter>
+</svg>
+
+<svg class="ambient-curves" aria-hidden="true" focusable="false">
+    <path class="ambient-curve ambient-curve--copper"></path>
+    <path class="ambient-curve ambient-curve--leaf"></path>
+    <path class="ambient-curve ambient-curve--copper"></path>
+    <path class="ambient-curve ambient-curve--snow"></path>
+    <path class="ambient-curve ambient-curve--leaf"></path>
+    <g class="ambient-glyph ambient-glyph--copper"><path d="M3 25 14 4l11 21M8 18h12"></path><circle cx="14" cy="4" r="2"></circle></g>
+    <g class="ambient-glyph ambient-glyph--leaf"><path d="M5 6h18M14 6v22M7 22c4-5 10-5 14 0"></path><circle cx="14" cy="14" r="2"></circle></g>
+    <g class="ambient-glyph ambient-glyph--copper"><path d="M5 16c5-13 15-13 20 0-5 13-15 13-20 0ZM14 10v12"></path></g>
+    <g class="ambient-glyph ambient-glyph--leaf"><path d="M6 5v22M22 5v22M6 13h16M10 5c0 6 2 9 4 9s4 3 4 8"></path></g>
+    <g class="ambient-glyph ambient-glyph--copper"><path d="M4 8h20M14 8c0 4-4 5-4 9s4 4 4 9M6 26h16"></path><circle cx="14" cy="17" r="2"></circle></g>
+    <g class="ambient-glyph ambient-glyph--leaf"><path d="M7 5c10 2 12 6 12 12 0 4 2 7 6 8M6 25h12M12 9v16"></path></g>
+    <g class="ambient-glyph ambient-glyph--copper"><path d="M5 14h18M14 4v20M8 8l12 12M20 8 8 20"></path><circle cx="14" cy="14" r="3"></circle></g>
+    <g class="ambient-glyph ambient-glyph--leaf"><path d="M5 7c6 0 9 3 9 7s3 7 9 7M5 25h18M14 4v24"></path></g>
+</svg>
+<div class="ambient-ink-dust" aria-hidden="true"></div>
 
 <div id="swup" class="transition-room" data-csrf-token="{{ csrf_token() }}">
 <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/hatch.js" data-swup-ignore-script></script>

@@ -1,3 +1,92 @@
+/* Keep the persistent ornament behind the Swup content but above the aurora. */
+#swup {
+    position: relative;
+    z-index: 1;
+}
+
+.ambient-curves {
+    position: fixed;
+    z-index: 0;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.ambient-curve {
+    fill: none;
+    stroke-width: 1.1px;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.ambient-curve--copper {
+    stroke: var(--color-copper);
+    opacity: 0.2;
+}
+
+.ambient-curve--leaf {
+    stroke: var(--color-leaf);
+    opacity: 0.3;
+}
+
+.ambient-curve--snow {
+    stroke: var(--color-snow);
+    opacity: 0.075;
+}
+
+.ambient-glyph {
+    color: var(--color-copper);
+    transform-box: fill-box;
+    transform-origin: center;
+    will-change: transform;
+}
+
+.ambient-glyph path,
+.ambient-glyph circle {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.15px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.ambient-glyph--copper {
+    color: var(--color-copper);
+    opacity: 0.12;
+}
+
+.ambient-glyph--leaf {
+    color: var(--color-leaf);
+    opacity: 0.16;
+}
+
+.ambient-ink-dust {
+    position: fixed;
+    z-index: 0;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.ambient-dust-particle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--particle-size);
+    height: var(--particle-size);
+    border-radius: 50%;
+    background: var(--color-copper);
+    opacity: var(--particle-opacity);
+    transform-origin: center;
+    will-change: transform, opacity;
+}
+
+.ambient-dust-particle--leaf {
+    background: var(--color-leaf);
+}
+
 body::before,
 body::after {
     position: fixed;
@@ -88,6 +177,14 @@ html.aenor-reading-atmosphere body::after {
 }
 
 @media (max-width: 767px) {
+    .ambient-curves {
+        opacity: 0.72;
+    }
+
+    .ambient-ink-dust {
+        opacity: 0.75;
+    }
+
     body::before {
         top: -12vh;
         left: -45vw;
@@ -104,6 +201,19 @@ html.aenor-reading-atmosphere body::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .ambient-dust-particle {
+        transform: none !important;
+    }
+
+    .ambient-glyph {
+        will-change: auto;
+    }
+
+    .ambient-dust-particle {
+        opacity: var(--particle-opacity) !important;
+        will-change: auto;
+    }
+
     body::before,
     body::after {
         animation: none;

@@ -195,31 +195,6 @@
 
             aenorGlyphs.forEach(glyph => glyphObserver.observe(glyph));
         }
-
-        document.querySelectorAll('.btn-primary, .btn-IA-trad, .btn').forEach(cta => {
-            const brighten = () => trackAnimation(gsap.to(cta, {
-                filter: 'brightness(1.07) drop-shadow(0 0 7px rgb(179 137 78 / 0.26))',
-                duration: 0.2,
-                overwrite: true,
-            }));
-            const reset = () => trackAnimation(gsap.to(cta, {
-                filter: 'none',
-                duration: 0.22,
-                overwrite: true,
-            }));
-
-            cta.addEventListener('pointerenter', brighten);
-            cta.addEventListener('pointerleave', reset);
-            cta.addEventListener('focus', brighten);
-            cta.addEventListener('blur', reset);
-            cleanups.push(() => {
-                cta.removeEventListener('pointerenter', brighten);
-                cta.removeEventListener('pointerleave', reset);
-                cta.removeEventListener('focus', brighten);
-                cta.removeEventListener('blur', reset);
-                gsap.killTweensOf(cta);
-            });
-        });
     }
 
     function destroy() {

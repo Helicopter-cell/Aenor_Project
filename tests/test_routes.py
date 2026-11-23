@@ -104,6 +104,28 @@ def test_swup_shell_is_shared_by_public_pages_and_admin_uses_native_navigation(c
     assert b'id="swup"' not in admin.data
 
 
+def test_liquid_glass_filter_is_global_and_included_once(client):
+    for path in ("/cours", "/grammaire_3"):
+        response = client.get(path)
+
+        assert response.status_code == 200
+        assert response.data.count(b'id="glass-distortion"') == 1
+        assert b'<body>\n\n<svg aria-hidden="true" focusable="false"' in response.data
+
+
+def test_ambient_curves_are_persistent_on_public_pages(client):
+    for path in ("/", "/cours", "/ia-trad"):
+        response = client.get(path)
+
+        assert response.status_code == 200
+        assert response.data.count(b'class="ambient-curves"') == 1
+        assert response.data.count(b'class="ambient-curve ') == 5
+        assert response.data.count(b'class="ambient-glyph ') == 8
+        assert response.data.count(b'class="ambient-ink-dust"') == 1
+        assert b"js/ambient-curves.js" in response.data
+        assert response.data.index(b'class="ambient-curves"') < response.data.index(b'id="swup"')
+
+
 def test_audio_controller_is_loaded_only_on_pages_with_audio_players(client):
     for path in ("/cours", "/ia-trad"):
         response = client.get(path)
