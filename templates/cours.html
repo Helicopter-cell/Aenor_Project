@@ -14,10 +14,30 @@
 
     <p id="lexique-no-results" class="lexique-no-results" role="status" hidden>Aucun mot trouvé dans le lexique pour cette recherche.</p>
 
-    {{ cours | render_cours_value }}
+    <section class="lexique-toolbar" data-lexique-toolbar aria-label="Outils du lexique">
+        <button class="lexique-toggle-all" type="button" data-lexique-toggle-all aria-controls="lexique-categories" aria-expanded="false">
+            <span class="lexique-toggle-icon" data-lexique-toggle-icon aria-hidden="true">＋</span>
+            <span data-lexique-toggle-label>Tout ouvrir</span>
+        </button>
+
+        <fieldset class="lexique-columns">
+            <legend>Informations visibles</legend>
+            <label><input type="checkbox" data-lexique-column="aenor" checked><span>Aënor / glyphes</span></label>
+            <label><input type="checkbox" data-lexique-column="audio" checked><span>Audio</span></label>
+            <label><input type="checkbox" data-lexique-column="latin" checked><span>Translittération</span></label>
+            <label><input type="checkbox" data-lexique-column="phonetic" checked><span>Phonétique</span></label>
+            <label><input type="checkbox" data-lexique-column="french" checked><span>Français</span></label>
+        </fieldset>
+        <p class="lexique-toolbar-status" data-lexique-toolbar-status role="status" aria-live="polite"></p>
+    </section>
+
+    <div id="lexique-categories" class="lexique-categories">
+        {{ cours | render_cours_value }}
+    </div>
 </div>
 
 <script src="{{ url_for('static', filename='js/lexique-search.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lexique-controls.js') }}"></script>
 <script src="{{ url_for('static', filename='js/lenis-scroll.js') }}" defer></script>
 <script src="{{ url_for('static', filename='js/speech.js') }}" defer></script>
 {% endblock %}

@@ -30,6 +30,7 @@
     });
 
     function disposePage() {
+        window.AenorLexiqueControls?.destroy();
         window.AenorMotion?.destroy();
         window.AenorLenis?.destroy();
         window.AenorSpeech?.destroy();
@@ -40,6 +41,7 @@
 
     function initializePage() {
         updateActiveNavigation();
+        window.AenorLexiqueControls?.init();
         window.AenorMotion?.init();
         document.querySelector('#main-content')?.focus({ preventScroll: true });
     }

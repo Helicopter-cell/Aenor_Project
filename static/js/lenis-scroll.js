@@ -141,7 +141,11 @@
         window.removeEventListener('pageshow', onPageShow);
     };
 
-    const controller = { init: initialize, destroy };
+    const controller = {
+        init: initialize,
+        resize: () => lenis?.resize(),
+        destroy,
+    };
     window.AenorLenis = controller;
     attachListeners();
     initialize();

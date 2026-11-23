@@ -70,6 +70,20 @@ def test_lenis_is_loaded_only_on_lexique_and_grammar_pages(client):
         assert b"js/lenis-scroll.js" not in response.data
 
 
+def test_lexique_controls_render_for_real_lexicon_columns(client):
+    response = client.get("/cours")
+
+    assert response.status_code == 200
+    assert b'data-lexique-toggle-all' in response.data
+    assert b'id="lexique-categories"' in response.data
+    assert b'data-lexique-column="aenor"' in response.data
+    assert b'data-lexique-column="audio"' in response.data
+    assert b'data-lexique-column="latin"' in response.data
+    assert b'data-lexique-column="phonetic"' in response.data
+    assert b'data-lexique-column="french"' in response.data
+    assert b"js/lexique-controls.js" in response.data
+
+
 def test_swup_shell_is_shared_by_public_pages_and_admin_uses_native_navigation(client):
     for path in ("/", "/cours", "/ia-trad", "/grammaire_3"):
         response = client.get(path)
