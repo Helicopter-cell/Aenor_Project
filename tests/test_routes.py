@@ -110,7 +110,18 @@ def test_liquid_glass_filter_is_global_and_included_once(client):
 
         assert response.status_code == 200
         assert response.data.count(b'id="glass-distortion"') == 1
-        assert b'<body>\n\n<svg aria-hidden="true" focusable="false"' in response.data
+        assert response.data.count(b'id="ambient-grain-filter"') == 1
+        assert response.data.count(b'class="ambient-grain"') == 1
+        assert response.data.index(b"<body>") < response.data.index(b'id="ambient-grain-filter"')
+
+
+def test_ambient_grain_is_rendered_once_on_public_home_and_admin(client):
+    for path in ("/", "/ia-trad", "/admin"):
+        response = client.get(path)
+
+        assert response.status_code == 200
+        assert response.data.count(b'id="ambient-grain-filter"') == 1
+        assert response.data.count(b'class="ambient-grain"') == 1
 
 
 def test_ambient_curves_are_persistent_on_public_pages(client):
