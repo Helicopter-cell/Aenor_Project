@@ -56,7 +56,7 @@
     };
 
     const initialize = () => {
-        const page = document.querySelector('.lexique-page, .conlang-documentation');
+        const page = document.querySelector('.lexique-page, .conlang-documentation, [data-lexicographer-game]');
         if (lenis || loadingScript || reducedMotion.matches || !page) return;
         if (typeof window.Lenis === 'function') {
             startLenis();

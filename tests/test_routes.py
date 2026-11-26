@@ -7,6 +7,7 @@ def test_main_pages_and_scenario_are_accessible(client):
     for path in (
         "/",
         "/cours",
+        "/minijeu",
         "/grammaire_3",
         "/ia-trad",
         "/scenario",
@@ -56,8 +57,8 @@ def test_artistic_libraries_have_marked_content_on_target_pages(client):
         assert b'data-atropos' in response.data, path
 
 
-def test_lenis_is_loaded_only_on_lexique_and_grammar_pages(client):
-    for path in ("/cours", "/grammaire_3"):
+def test_lenis_is_loaded_only_on_long_form_pages_and_the_lexicographer_game(client):
+    for path in ("/cours", "/grammaire_3", "/minijeu"):
         response = client.get(path)
 
         assert response.status_code == 200
@@ -82,6 +83,42 @@ def test_lexique_controls_render_for_real_lexicon_columns(client):
     assert b'data-lexique-column="phonetic"' in response.data
     assert b'data-lexique-column="french"' in response.data
     assert b"js/lexique-controls.js" in response.data
+
+
+def test_lexicographer_game_uses_live_lexicon_entries(client):
+    response = client.get("/minijeu")
+
+    assert response.status_code == 200
+    assert b"Divination du Lexicographe" in response.data
+    assert b'id="lexicographer-entries"' in response.data
+    assert b'"french"' in response.data
+    assert b'"aenor"' in response.data
+    assert b'"category"' in response.data
+    assert b"js/lexicographer-game.js" in response.data
+    assert b'href="/minijeu" class="nav-element" aria-current="page"' in response.data
+
+
+def test_lexicographer_game_lexicon_flattener_preserves_categories():
+    entries = utils.flatten_lexicon_entries({
+        "NOMS": {
+            "vie quotidienne": {
+                "mur": {
+                    "french": "mur",
+                    "aenor": "calun",
+                    "latin": "calun",
+                    "phonetic": "[kalun]",
+                },
+                "invalid": {"french": "", "aenor": "", "latin": "", "phonetic": ""},
+            },
+        },
+    })
+
+    assert entries == [{
+        "french": "mur",
+        "aenor": "calun",
+        "phonetic": "[kalun]",
+        "category": "vie quotidienne",
+    }]
 
 
 def test_swup_shell_is_shared_by_public_pages_and_admin_uses_native_navigation(client):

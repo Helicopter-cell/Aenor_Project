@@ -61,6 +61,7 @@
     <nav class="navbar" id="main-navigation" aria-label="Navigation principale">
         <a href="/" class="nav-element" {% if request.path == '/' %}aria-current="page"{% endif %}>Accueil</a>
         <a href="/cours" class="nav-element" {% if request.path == '/cours' %}aria-current="page"{% endif %}>Lexique</a>
+        <a href="/minijeu" class="nav-element" {% if request.path == '/minijeu' %}aria-current="page"{% endif %}>Divination</a>
         <a href="/exercice" class="nav-element" {% if request.path == '/exercice' %}aria-current="page"{% endif %}>Exercices</a>
         <a href="{{ url_for('main.historique') }}" class="nav-element" {% if request.path == url_for('main.historique') %}aria-current="page"{% endif %}>Historique</a>
         <a href="/grammaire_3" class="nav-element" {% if request.path == '/grammaire_3' %}aria-current="page"{% endif %}>Grammaire</a>

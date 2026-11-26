@@ -1,0 +1,319 @@
+.lexicographer-page {
+    width: min(820px, 100%);
+    margin: 0 auto;
+    padding: 0.5rem 0 3rem;
+}
+
+.lexicographer-intro {
+    max-width: 720px;
+    margin: 0 auto 2rem;
+    text-align: center;
+}
+
+.lexicographer-intro .section-heading {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    text-wrap: balance;
+}
+
+.lexicographer-intro > p:last-child {
+    max-width: 600px;
+    margin: 0.85rem auto 0;
+    color: var(--color-text-muted);
+}
+
+.lexicographer-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(1.1rem, 4vw, 2.2rem);
+    border: 1px solid rgb(var(--rgb-copper) / 0.36);
+    border-radius: var(--radius-lg);
+    background:
+        radial-gradient(ellipse at 50% 0, rgb(var(--rgb-copper) / 0.14), var(--color-transparent) 48%),
+        linear-gradient(140deg, rgb(var(--rgb-earth) / 0.3), var(--color-transparent) 58%),
+        rgb(var(--rgb-forest-deep) / 0.86);
+    box-shadow: var(--shadow-elevated), inset 0 1px 0 rgb(var(--rgb-snow) / 0.08);
+}
+
+.lexicographer-scorebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgb(var(--rgb-earth) / 0.9);
+    box-shadow: 0 1px 0 rgb(var(--rgb-copper) / 0.1);
+}
+
+.lexicographer-score,
+.lexicographer-round {
+    display: grid;
+    gap: 0.2rem;
+}
+
+.lexicographer-score .page-eyebrow {
+    margin: 0;
+}
+
+.lexicographer-score strong {
+    color: var(--color-copper-pale);
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.lexicographer-score-divider {
+    color: var(--color-text-muted);
+    font-size: 0.85em;
+}
+
+.lexicographer-round {
+    min-width: min(45%, 220px);
+    color: var(--color-text-muted);
+    font-size: 0.86rem;
+    text-align: right;
+}
+
+.lexicographer-round progress {
+    width: 100%;
+    height: 5px;
+    overflow: hidden;
+    border: 0;
+    border-radius: 999px;
+    appearance: none;
+    background: rgb(var(--rgb-midnight) / 0.82);
+}
+
+.lexicographer-round progress::-webkit-progress-bar {
+    border-radius: inherit;
+    background: rgb(var(--rgb-midnight) / 0.82);
+}
+
+.lexicographer-round progress::-webkit-progress-value {
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--color-leaf), var(--color-copper));
+    transition: width 240ms ease;
+}
+
+.lexicographer-round progress::-moz-progress-bar {
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--color-leaf), var(--color-copper));
+}
+
+.lexicographer-question {
+    display: grid;
+    justify-items: center;
+    padding-top: clamp(1.5rem, 4vw, 2.5rem);
+    text-align: center;
+}
+
+.lexicographer-seal {
+    display: grid;
+    width: 56px;
+    aspect-ratio: 1;
+    margin-bottom: 0.8rem;
+    place-items: center;
+    border: 1px solid rgb(var(--rgb-copper) / 0.52);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgb(var(--rgb-copper) / 0.18), var(--color-transparent) 72%);
+    box-shadow: 0 0 24px rgb(var(--rgb-copper) / 0.1), inset 0 1px 0 rgb(var(--rgb-snow) / 0.12);
+    color: var(--color-copper-pale);
+}
+
+.lexicographer-seal svg {
+    width: 38px;
+    height: 38px;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.lexicographer-prompt {
+    margin: 0;
+    color: var(--color-text-muted);
+}
+
+.lexicographer-glyph {
+    margin: 0.5rem 0 0;
+    color: var(--color-snow);
+    font-family: var(--font-aenor);
+    font-size: clamp(3rem, 9vw, 5.2rem);
+    line-height: 1.2;
+    text-shadow: 0 0 28px rgb(var(--rgb-copper) / 0.14);
+}
+
+.lexicographer-phonetic {
+    margin: 0.3rem 0 0;
+    color: var(--color-copper-pale);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-style: italic;
+}
+
+.lexicographer-hints {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.65rem;
+    margin: 1.2rem 0 0.4rem;
+}
+
+.lexicographer-hint-button {
+    padding: 0.48rem 0.8rem;
+    border: 1px solid rgb(var(--rgb-copper) / 0.32);
+    border-radius: var(--radius-sm);
+    background: rgb(var(--rgb-midnight) / 0.36);
+    color: var(--color-copper-pale);
+    font: inherit;
+    font-size: 0.86rem;
+    cursor: pointer;
+    transition: border-color var(--transition-ui), background-color var(--transition-ui), color var(--transition-ui);
+}
+
+.lexicographer-hint-button:hover,
+.lexicographer-hint-button[aria-expanded="true"] {
+    border-color: var(--color-copper);
+    background: rgb(var(--rgb-copper) / 0.12);
+    color: var(--color-snow);
+}
+
+.lexicographer-hint {
+    margin: 0.3rem 0 0.6rem;
+    color: var(--color-copper-pale);
+    font-size: 0.95rem;
+}
+
+.lexicographer-choices {
+    display: grid;
+    width: min(560px, 100%);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.4rem;
+}
+
+.lexicographer-choice {
+    position: relative;
+    min-height: 58px;
+    padding: 0.8rem;
+    border: 1px solid rgb(var(--rgb-copper) / 0.3);
+    border-radius: var(--radius-md);
+    background:
+        linear-gradient(130deg, rgb(var(--rgb-earth) / 0.25), var(--color-transparent) 68%),
+        rgb(var(--rgb-forest) / 0.58);
+    box-shadow: inset 0 1px 0 rgb(var(--rgb-snow) / 0.05);
+    color: var(--color-snow);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color var(--transition-ui), background-color var(--transition-ui), box-shadow var(--transition-ui), transform var(--transition-ui);
+}
+
+.lexicographer-choice:not(:disabled):hover {
+    transform: translateY(-2px);
+    border-color: var(--color-copper);
+    box-shadow: var(--shadow-glow-copper);
+}
+
+.lexicographer-choice:disabled {
+    cursor: default;
+}
+
+.lexicographer-choice.is-correct {
+    border-color: var(--color-success-light);
+    background: rgb(var(--rgb-leaf) / 0.74);
+    color: var(--color-snow);
+}
+
+.lexicographer-choice.is-incorrect {
+    border-color: var(--color-danger-soft);
+    background: rgb(var(--rgb-danger) / 0.64);
+}
+
+.lexicographer-feedback {
+    min-height: 1.7em;
+    margin: 0.85rem 0 0;
+    color: var(--color-text-muted);
+}
+
+.lexicographer-feedback.is-correct {
+    color: var(--color-success-light);
+}
+
+.lexicographer-feedback.is-incorrect {
+    color: var(--color-copper-pale);
+}
+
+.lexicographer-next {
+    margin-top: 0.6rem;
+}
+
+.lexicographer-result {
+    padding: clamp(2rem, 6vw, 3.5rem) 0.5rem 1rem;
+    text-align: center;
+}
+
+.lexicographer-result h2 {
+    margin: 0.35rem 0 0;
+    color: var(--color-copper-pale);
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+}
+
+.lexicographer-result-score {
+    margin: 0.7rem 0 0;
+    color: var(--color-snow);
+    font-size: 1.15rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.lexicographer-result-message {
+    max-width: 540px;
+    margin: 0.8rem auto 1.5rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+}
+
+.lexicographer-card.ink-breath {
+    animation: lexicographer-ink-breath 720ms ease-out;
+}
+
+@keyframes lexicographer-ink-breath {
+    0% {
+        box-shadow: var(--shadow-elevated), inset 0 1px 0 rgb(var(--rgb-snow) / 0.08);
+    }
+
+    45% {
+        box-shadow: var(--shadow-elevated), 0 0 42px rgb(var(--rgb-copper) / 0.25), inset 0 1px 0 rgb(var(--rgb-snow) / 0.16);
+    }
+
+    100% {
+        box-shadow: var(--shadow-elevated), inset 0 1px 0 rgb(var(--rgb-snow) / 0.08);
+    }
+}
+
+@media (max-width: 560px) {
+    .lexicographer-scorebar {
+        gap: 0.75rem;
+    }
+
+    .lexicographer-choices {
+        grid-template-columns: 1fr;
+        gap: 0.55rem;
+    }
+
+    .lexicographer-choice {
+        min-height: 50px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lexicographer-card.ink-breath {
+        animation: none;
+    }
+
+    .lexicographer-round progress::-webkit-progress-value {
+        transition: none;
+    }
+}

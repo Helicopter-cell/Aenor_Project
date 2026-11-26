@@ -4,7 +4,7 @@ from datetime import datetime
 
 from flask import Blueprint, jsonify, redirect, render_template, request, session, url_for
 
-from modules.utils import load_cours
+from modules.utils import flatten_lexicon_entries, load_cours
 from services.gemini_service import DB_FILE, FEEDBACK_TARGETS, get_admin_password
 
 main_bp = Blueprint('main', __name__)
@@ -41,6 +41,11 @@ def index():
 def cours():
     cours = load_cours()
     return render_template('cours.html', cours=cours)
+
+@main_bp.route('/minijeu')
+def lexicographer_game():
+    entries = flatten_lexicon_entries(load_cours())
+    return render_template('lexicographer_game.html', game_entries=entries)
 
 @main_bp.route('/grammaire_3')
 def grammaire_3():

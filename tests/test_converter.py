@@ -79,6 +79,28 @@ def test_rendered_lexicon_entries_include_safe_speech_data_attributes():
     assert 'data-ipa="[mɔt]"' in html
 
 
+def test_flatten_lexicon_entries_uses_nearest_category():
+    entries = utils.flatten_lexicon_entries({
+        "NOMS :": {
+            "vie quotidienne :": {
+                "mur": {
+                    "french": "mur",
+                    "aenor": "calun",
+                    "latin": "calun",
+                    "phonetic": "[kalun]",
+                },
+            },
+        },
+    })
+
+    assert entries == [{
+        "french": "mur",
+        "aenor": "calun",
+        "phonetic": "[kalun]",
+        "category": "vie quotidienne",
+    }]
+
+
 def test_lexicon_is_cached_per_file_version_and_can_be_invalidated(tmp_path, monkeypatch):
     lexicon_file = tmp_path / "lexicon.json"
     lexicon_file.write_text(json.dumps({"mot": "b"}), encoding="utf-8")

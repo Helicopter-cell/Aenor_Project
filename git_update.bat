@@ -5,7 +5,7 @@ powershell -Command "git add ."
 echo git add. effectué !
 pause
 
-powershell -Command "git commit -m 'ae_2.4 | Ajout d`un grain/texture SVG/CSS'"
+powershell -Command "git commit -m 'ae_2.4 | Ajout du Lexicographer'"
 echo git commit effectué !
 pause
 

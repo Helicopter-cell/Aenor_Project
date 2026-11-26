@@ -169,6 +169,34 @@ def enrich_lexicon(value):
     return value
 
 
+def flatten_lexicon_entries(value):
+    """Return enriched lexicon leaves with their nearest category for game content."""
+    entries = []
+    entry_fields = {'french', 'aenor', 'latin', 'phonetic'}
+
+    def visit(node, categories=()):
+        if isinstance(node, dict):
+            for key, child in node.items():
+                if isinstance(child, dict) and set(child) == entry_fields:
+                    fields = {name: clean_text(child[name]) for name in entry_fields}
+                    if all(isinstance(text, str) and text for text in fields.values()):
+                        category = categories[-1] if categories else 'Lexique'
+                        entries.append({
+                            'french': fields['french'],
+                            'aenor': fields['aenor'],
+                            'phonetic': fields['phonetic'],
+                            'category': clean_text(category).rstrip(' :') or 'Lexique',
+                        })
+                else:
+                    visit(child, categories + (clean_text(key),))
+        elif isinstance(node, list):
+            for child in node:
+                visit(child, categories)
+
+    visit(value)
+    return entries
+
+
 @lru_cache(maxsize=8)
 def _load_cours_cached(path, modified_ns, size):
     with Path(path).open(encoding='utf-8') as file_handle:

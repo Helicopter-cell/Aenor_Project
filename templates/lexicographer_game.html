@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="lexicographer-page" data-lexicographer-game aria-labelledby="lexicographer-title">
+    <header class="lexicographer-intro">
+        <p class="page-eyebrow">Une épreuve du Cabinet des voix</p>
+        <h1 class="section-heading" id="lexicographer-title" data-split="words">La Divination du Lexicographe</h1>
+        <p>Un glyphe, trois sens possibles. Écoutez l'écho des mots et retrouvez leur trace française.</p>
+    </header>
+
+    <section class="lexicographer-card" data-game-card aria-label="Manche en cours">
+        <div class="lexicographer-scorebar">
+            <div class="lexicographer-score">
+                <span class="page-eyebrow">Souffle d'encre</span>
+                <strong><span data-game-score>0</span><span class="lexicographer-score-divider"> / </span><span data-game-total>10</span></strong>
+            </div>
+            <div class="lexicographer-round">
+                <span data-game-round>Manche 1</span>
+                <progress data-game-progress max="10" value="0" aria-label="Progression de la partie"></progress>
+            </div>
+        </div>
+
+        <div class="lexicographer-question" data-game-question>
+            <div class="lexicographer-seal" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none">
+                    <circle cx="32" cy="32" r="25"></circle>
+                    <path d="M32 13v38M21 39l11-22 11 22M24 32h16"></path>
+                </svg>
+            </div>
+            <p class="lexicographer-prompt">Quelle voix française se cache derrière ce glyphe&nbsp;?</p>
+            <p class="lexicographer-glyph" data-game-glyph lang="und"></p>
+            <p class="lexicographer-phonetic" data-game-phonetic></p>
+
+            <div class="lexicographer-hints" aria-label="Indices">
+                <button class="lexicographer-hint-button" type="button" data-game-hint="category" aria-expanded="false">
+                    Révéler la catégorie
+                </button>
+                <button class="lexicographer-hint-button" type="button" data-game-hint="initial" aria-expanded="false">
+                    Révéler l'initiale
+                </button>
+            </div>
+            <p class="lexicographer-hint" data-game-hint-output hidden></p>
+
+            <div class="lexicographer-choices" data-game-choices role="group" aria-label="Choisir la traduction française"></div>
+            <p class="lexicographer-feedback" data-game-feedback role="status" aria-live="polite"></p>
+            <button class="btn-IA-trad lexicographer-next" type="button" data-game-next hidden>Sceller cette réponse <span aria-hidden="true">→</span></button>
+        </div>
+
+        <section class="lexicographer-result" data-game-result aria-labelledby="lexicographer-result-title" hidden>
+            <p class="page-eyebrow">La dernière page du registre</p>
+            <h2 id="lexicographer-result-title" data-game-rank tabindex="-1"></h2>
+            <p class="lexicographer-result-score" data-game-result-score></p>
+            <p class="lexicographer-result-message" data-game-result-message></p>
+            <button class="btn-IA-trad" type="button" data-game-restart>Recommencer la divination <span aria-hidden="true">↻</span></button>
+        </section>
+    </section>
+</section>
+
+<script id="lexicographer-entries" type="application/json">{{ game_entries | tojson }}</script>
+<script src="{{ url_for('static', filename='js/lenis-scroll.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/lexicographer-game.js') }}" defer></script>
+{% endblock %}

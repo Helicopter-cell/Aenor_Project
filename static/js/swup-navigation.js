@@ -37,12 +37,14 @@
         window.AenorTranslator?.destroy();
         window.AenorHomeOrb?.destroy();
         window.AenorScenario?.destroy();
+        window.AenorLexicographerGame?.destroy();
     }
 
     function initializePage() {
         updateActiveNavigation();
         window.AenorLexiqueControls?.init();
         window.AenorMotion?.init();
+        window.AenorLexicographerGame?.init();
         document.querySelector('#main-content')?.focus({ preventScroll: true });
         window.AenorAmbientCurves?.refresh();
     }
